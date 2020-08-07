@@ -67,7 +67,8 @@
             android:id="@+id/btn_detox_analysis"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="해독 시간 분석"/>
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:text="해독 시간 분석" />
 
     </LinearLayout>
 
