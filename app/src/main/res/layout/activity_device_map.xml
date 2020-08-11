@@ -6,4 +6,306 @@
     android:layout_height="match_parent"
     tools:context=".DeviceMapActivity">
 
+    <com.naver.maps.map.MapView
+
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navermap_latitude="37.495602"
+        app:navermap_longitude="126.959241">
+
+    </com.naver.maps.map.MapView>
+
+    <Button
+        android:id="@+id/btn_home_lend"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/rec_btn_home"
+        android:fontFamily="@font/nanum_square_round_extra_bold"
+        android:text="대여하기"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@android:color/white"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/logo"
+            android:text="불고타"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_menu"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/menu_circle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_model_info"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:background="@drawable/rec_corner_info"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_model_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/nanum_square_round_extra_bold"
+            android:text="TextView"
+            android:textColor="#040303"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_battery"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/tv_model_num"
+            app:layout_constraintTop_toBottomOf="@id/tv_model_num"
+            app:srcCompat="@drawable/battery" />
+
+        <TextView
+            android:id="@+id/tv_battery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:text="배터리 상태"
+            android:textColor="#7E7E7E"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/img_battery"
+            app:layout_constraintStart_toEndOf="@id/img_battery"
+            app:layout_constraintTop_toTopOf="@id/img_battery" />
+
+        <TextView
+            android:id="@+id/tv_battery_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:text="배터리 값"
+            android:textColor="#515151"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_battery"
+            app:layout_constraintStart_toEndOf="@id/tv_battery"
+            app:layout_constraintTop_toTopOf="@id/tv_battery" />
+
+        <ImageView
+            android:id="@+id/img_time"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@id/img_battery"
+            app:layout_constraintTop_toBottomOf="@id/img_battery"
+            app:srcCompat="@drawable/stopwatch" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:text="사용 가능한 시간"
+            android:textColor="#7E7E7E"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_time"
+            app:layout_constraintStart_toEndOf="@+id/img_time"
+            app:layout_constraintTop_toTopOf="@+id/img_time" />
+
+        <TextView
+            android:id="@+id/tv_time_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:text="남은 시간 값"
+            android:textColor="#515151"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_time"
+            app:layout_constraintStart_toEndOf="@+id/tv_time"
+            app:layout_constraintTop_toTopOf="@+id/tv_time" />
+
+        <ImageView
+            android:id="@+id/img_kickboard"
+            android:layout_width="95dp"
+            android:layout_height="95dp"
+            android:layout_marginEnd="35dp"
+            android:layout_marginRight="35dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_model_num"
+            app:srcCompat="@drawable/model_img" />
+
+        <ImageView
+            android:id="@+id/img_info_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:background="#CACACA"
+            app:layout_constraintEnd_toEndOf="@id/img_kickboard"
+            app:layout_constraintStart_toStartOf="@id/img_time"
+            app:layout_constraintTop_toBottomOf="@id/img_kickboard" />
+
+        <ImageView
+            android:id="@+id/img_fee"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="@id/img_info_line"
+            app:layout_constraintTop_toBottomOf="@id/img_info_line"
+            app:srcCompat="@drawable/coin" />
+
+        <TextView
+            android:id="@+id/tv_fee_init"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:text="기본요금"
+            android:textColor="#7E7E7E"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/img_fee"
+            app:layout_constraintStart_toEndOf="@id/img_fee"
+            app:layout_constraintTop_toTopOf="@id/img_fee" />
+
+        <TextView
+            android:id="@+id/tv_fee_init_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:text="1000원"
+            android:textColor="#515151"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_fee_init"
+            app:layout_constraintStart_toEndOf="@id/tv_fee_init"
+            app:layout_constraintTop_toTopOf="@id/tv_fee_init" />
+
+        <TextView
+            android:id="@+id/tv_fee_init_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:fontFamily="@font/nanum_square_round_regular"
+            android:text="10분이용"
+            android:textColor="#7E7E7E"
+            android:textSize="8sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_fee_init_value"
+            app:layout_constraintStart_toEndOf="@id/tv_fee_init_value" />
+
+        <TextView
+            android:id="@+id/tv_fee_ride"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:text="주행요금"
+            android:textColor="#7E7E7E"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_fee_init"
+            app:layout_constraintStart_toEndOf="@id/tv_fee_init_time"
+            app:layout_constraintTop_toTopOf="@id/tv_fee_init" />
+
+        <TextView
+            android:id="@+id/tv_fee_ride_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:text="100원"
+            android:textColor="#515151"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_fee_ride"
+            app:layout_constraintStart_toEndOf="@id/tv_fee_ride"
+            app:layout_constraintTop_toTopOf="@id/tv_fee_ride" />
+
+        <TextView
+            android:id="@+id/tv_fee_ride_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:fontFamily="@font/nanum_square_round_regular"
+            android:text="1분 마다"
+            android:textColor="#7E7E7E"
+            android:textSize="8sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_fee_ride_value"
+            app:layout_constraintStart_toEndOf="@id/tv_fee_ride_value" />
+
+
+        <Button
+            android:id="@+id/btn__info_lend"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginEnd="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/rec_btn_info"
+            android:fontFamily="@font/nanum_square_round_extra_bold"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="대여하기"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/cl_model_info"
+            app:layout_constraintEnd_toEndOf="@id/cl_model_info"
+            app:layout_constraintStart_toStartOf="@id/cl_model_info" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
