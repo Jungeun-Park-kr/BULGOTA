@@ -8,7 +8,7 @@
     android:background="@color/colorPrimary">
 
     <TextView
-        android:id="@+id/splashTitle"
+        android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="180dp"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/splashReference"
+        android:id="@+id/tv_reference"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="135dp"
