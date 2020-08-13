@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button detoxAnalysisBtn;
     Button QRCodeScanBtn;
     Button certCompletionBtn;
+    Button splashActivityBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         detoxAnalysisBtn = findViewById(R.id.btn_detox_analysis);
         QRCodeScanBtn = findViewById(R.id.btn_QRcode_scan);
         certCompletionBtn = findViewById(R.id.btn_cert_completion);
+        splashActivityBtn = findViewById(R.id.btn_splash);
 
         deviceMapBtn.setOnClickListener(this);
         breatheTestInfoBtn.setOnClickListener(this);
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         detoxAnalysisBtn.setOnClickListener(this);
         QRCodeScanBtn.setOnClickListener(this);
         certCompletionBtn.setOnClickListener(this);
-
+        splashActivityBtn.setOnClickListener(this);
     } //view 객체 획득
 
     @Override
@@ -57,7 +59,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (v == certCompletionBtn) {
             Intent intent = new Intent(this,CertCompletionActivity.class);
             startActivity(intent);
+        } else if (v == splashActivityBtn) {
+            Intent intent = new Intent(this,CertCompletionActivity.class);
+            startActivity(intent);
         }
+
 
     }
 }

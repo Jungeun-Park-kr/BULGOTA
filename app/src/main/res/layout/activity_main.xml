@@ -70,6 +70,14 @@
             android:fontFamily="@font/nanum_square_round_bold"
             android:text="해독 시간 분석" />
 
+        <Button
+            android:id="@+id/btn_splash"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:text="스플래시"
+            android:layout_marginLeft="12dp" />
+
     </LinearLayout>
 
 
