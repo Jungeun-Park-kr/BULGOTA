@@ -1,21 +1,15 @@
 package com.example.bulgota;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.annotation.UiThread;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.graphics.ColorUtils;
 
 import android.graphics.Color;
 import android.graphics.PointF;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,14 +17,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bulgota.api.MarkerService;
 import com.example.bulgota.api.Marker_list;
 import com.example.bulgota.api.ResponseWithMarkerData;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraAnimation;
-import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapView;
@@ -41,7 +33,7 @@ import com.naver.maps.map.overlay.CircleOverlay;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
-import com.naver.maps.map.overlay.Overlay;
+import com.naver.maps.map.widget.LocationButtonView;
 
 import java.util.ArrayList;
 
@@ -64,9 +56,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     private Marker lastMarker;
     private Marker[] markerItems;
-    private boolean initMapLoad = true;
-    private Button btnHomeLocation;
-    private Button btnInfoLocation;
+
     private Button btnHomeZoomIn;
     private Button btnHomeZoomOut;
     private Button btnInfoZoomIn;
@@ -85,9 +75,16 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private Animation translateRightAim;
     private Animation translateLeftAim;
 
+    private boolean initMapLoad = true;
     private boolean isInfoPageOpen = false;
     private boolean isHambergerOpen = false;
+
+    private LocationButtonView btnHomeLocation;
+    private LocationButtonView btnInfoLocation;
+
     private int pageValue;
+
+    private SlidingPageAnimationListener animationListener;
 
 
 
@@ -105,20 +102,20 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
+
         mapView.getMapAsync(this::onMapReady);
 
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+
     }
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         if(isHambergerOpen) {
             viewLayer.performClick();
             return;
         } else if(isInfoPageOpen) {
             map.getOnMapClickListener().onMapClick(new PointF(10,10), lastMarker.getPosition());
-            //return;
         } else {
             super.onBackPressed();
         }
@@ -195,11 +192,13 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         map = naverMap;
+        animationListener = new SlidingPageAnimationListener();
+
+        mapLoad();
         setHamberger();
         makeUiSetting();
         getMarker();
         makeCircle();
-        mapLoad();
     }
 
     private void makeUiSetting() {
@@ -216,13 +215,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         uiSettings.setScaleBarEnabled(false);
         uiSettings.setZoomControlEnabled(false);
 
-        btnHomeLocation.setOnClickListener(l -> {
-            btnLocationClickEvent(btnHomeLocation);
-        });
-
-        btnInfoLocation.setOnClickListener(l -> {
-            btnLocationClickEvent(btnInfoLocation);
-        });
+        btnHomeLocation.setMap(map);
 
         btnHomeZoomIn.setOnClickListener(l -> {
             btnZoomClickEvent(btnHomeZoomIn, true);
@@ -241,16 +234,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         });
     }
 
-    private void btnLocationClickEvent(Button button) {
-        button.setOnClickListener(l -> {
-            if(locationSource.getLastLocation() != null) {
-                map.moveCamera(CameraUpdate.scrollAndZoomTo(new LatLng(locationSource.getLastLocation().getLatitude(), locationSource.getLastLocation().getLongitude()), 15)
-                        .animate(CameraAnimation.Linear, 3000));
-                map.setLocationTrackingMode(LocationTrackingMode.Follow);
-            }
-        });
-    }
-
     private void btnZoomClickEvent(Button button, boolean zoom) {
         if(zoom) {
             map.moveCamera(CameraUpdate.zoomIn().animate(CameraAnimation.Easing, 1500));
@@ -262,8 +245,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     protected void getMarker() {
         //애니메이션 준비
         translateUpAim = AnimationUtils.loadAnimation(this, R.anim.translate_up);
-        SlidingPageAnimationListener animationListener = new SlidingPageAnimationListener();
-
         clModelInfo = findViewById(R.id.cl_model_info);
 
         TextView tvModelNum = findViewById(R.id.tv_model_num);
@@ -288,13 +269,12 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                     markerItems = new Marker[markerDataList.size()];
 
                     for (int i = 0; i < markerDataList.size(); i++) {
-                        Log.e("data" + i, markerDataList.get(i).getModel() + "");
                         markerItems[i] = new Marker();
                         markerItems[i].setTag(i + 1);
                         markerItems[i].setPosition(new LatLng(markerDataList.get(i).getLatitude(), markerDataList.get(i).getLongitude()));
                         markerItems[i].setIcon(OverlayImage.fromResource(R.drawable.normal_marker));
-                        markerItems[i].setWidth(60);
-                        markerItems[i].setHeight(60);
+                        markerItems[i].setWidth(70);
+                        markerItems[i].setHeight(70);
                         markerItems[i].setMap(map);
 
                         int finalI = i;
@@ -310,8 +290,8 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                                         lastMarker.setIcon(OverlayImage.fromResource(R.drawable.normal_marker));
                                     }
                                     markerItems[finalI].setIcon(OverlayImage.fromResource(R.drawable.selected_marker));
-                                    markerItems[finalI].setWidth(80);
-                                    markerItems[finalI].setHeight(80);
+                                    markerItems[finalI].setWidth(90);
+                                    markerItems[finalI].setHeight(90);
                                     lastMarker = markerItems[finalI];
                                 } else {
                                     markerItems[finalI].setIcon(OverlayImage.fromResource(R.drawable.normal_marker));
@@ -350,11 +330,8 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void mapLoad() {
-        //애니메이션 준비
-        translateDownAim = AnimationUtils.loadAnimation(this, R.anim.translate_down);
-        SlidingPageAnimationListener animationListener = new SlidingPageAnimationListener();
-
         map.setLocationSource(locationSource);
+
 
         map.addOnLocationChangeListener(location -> {
             if(initMapLoad) {
@@ -373,24 +350,21 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         map.setOnMapClickListener((point, coord) -> {
             //애니메이션
             if(isInfoPageOpen) {
+                //애니메이션 준비
+                translateDownAim = AnimationUtils.loadAnimation(this, R.anim.translate_down);
                 translateDownAim.setAnimationListener(animationListener);
                 pageValue = PAGE_DOWN;
                 clModelInfo.startAnimation(translateDownAim);
 
                 lastMarker.setIcon(OverlayImage.fromResource(R.drawable.normal_marker));
-                lastMarker.setWidth(60);
-                lastMarker.setHeight(60);
-
-                map.moveCamera(CameraUpdate.zoomTo(14)
-                        .animate(CameraAnimation.Fly, 2000));
+                lastMarker.setWidth(70);
+                lastMarker.setHeight(70);
+                lastMarker = null;
             }
         });
     }
 
     private void setHamberger() {
-        translateLeftAim = AnimationUtils.loadAnimation(this, R.anim.translate_left);
-        SlidingPageAnimationListener animationListener = new SlidingPageAnimationListener();
-
         clHamberger = findViewById(R.id.cl_hamberger);
         clToolbar = findViewById(R.id.cl_toolbar);
         btnHamberger = findViewById(R.id.btn_hamberger);
@@ -401,7 +375,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
             translateRightAim = AnimationUtils.loadAnimation(this, R.anim.translate_right);
             translateRightAim.setAnimationListener(animationListener);
 
-            Log.e("hamberger", "클릭");
             pageValue = PAGE_RIGHT;
             clHamberger.setAnimation(translateRightAim);
             clHamberger.setVisibility(View.VISIBLE);
@@ -411,6 +384,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         });
 
         viewLayer.setOnClickListener((l -> {
+            translateLeftAim = AnimationUtils.loadAnimation(this, R.anim.translate_left);
             translateLeftAim.setAnimationListener(animationListener);
 
             pageValue = PAGE_LEFT;
@@ -460,6 +434,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                     btnInfoLocation.setVisibility(View.VISIBLE);
                     btnInfoZoomIn.setVisibility(View.VISIBLE);
                     btnInfoZoomOut.setVisibility(View.VISIBLE);
+                    btnInfoLocation.setMap(map);
                     break;
                 }
                 case PAGE_LEFT : {
@@ -467,7 +442,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                     break;
                 }
                 case PAGE_RIGHT : {
-                    Log.e("why", "why");
                     clHamberger.setVisibility(View.VISIBLE);
                 }
             }
