@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.bulgota.api.MarkerService;
+import com.example.bulgota.api.BullgoTAService;
 import com.example.bulgota.api.Marker_list;
 import com.example.bulgota.api.ResponseWithMarkerData;
 import com.naver.maps.geometry.LatLng;
@@ -252,11 +252,11 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         TextView tvTimeValue = findViewById(R.id.tv_time_value);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(MarkerService.BASE_URL)
+                .baseUrl(BullgoTAService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        MarkerService markerService = retrofit.create(MarkerService.class);
-        markerService.getMarkerAll().enqueue(new Callback<ResponseWithMarkerData>() {
+        BullgoTAService bullgoTAService = retrofit.create(BullgoTAService.class);
+        bullgoTAService.getMarkerAll().enqueue(new Callback<ResponseWithMarkerData>() {
             @Override
             public void onResponse(Call<ResponseWithMarkerData> call, Response<ResponseWithMarkerData> response) {
                 if (response.body().getSuccess()) {
