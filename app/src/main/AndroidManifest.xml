@@ -13,7 +13,6 @@
         <activity android:name=".QRCodeScanActivity" />
         <activity android:name=".DetoxAnalysisActivity" />
         <activity android:name=".BreathTestingActivity" />
-        <activity android:name=".BreathTestInfoActivity" />
         <activity android:name=".DeviceMapActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
