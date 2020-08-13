@@ -1,151 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DeviceMapActivity">
 
-    <com.naver.maps.map.MapView
-
-        android:id="@+id/map_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navermap_logoGravity="top|left"
-        app:navermap_logoMargin="12dp"
-        >
+        android:layout_gravity="center"
+        android:clickable="true">
 
-    </com.naver.maps.map.MapView>
-
-    <Button
-        android:id="@+id/btn_home_location"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/btn_location"
-        app:layout_constraintBottom_toTopOf="@id/btn_home_lend"
-        app:layout_constraintStart_toStartOf="@id/btn_home_lend" />
-
-    <Button
-        android:id="@+id/btn_home_zoom_in"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/btn_zoom_in"
-        app:layout_constraintBottom_toTopOf="@id/btn_home_zoom_out"
-        app:layout_constraintEnd_toEndOf="@id/btn_home_zoom_out" />
-
-    <Button
-        android:id="@+id/btn_home_zoom_out"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/btn_zoom_out"
-        app:layout_constraintBottom_toTopOf="@id/btn_home_lend"
-        app:layout_constraintEnd_toEndOf="@id/btn_home_lend" />
-
-    <Button
-        android:id="@+id/btn_home_lend"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/rec_btn_home"
-        android:fontFamily="@font/nanum_square_round_extra_bold"
-        android:text="대여하기"
-        android:textColor="@color/colorPrimary"
-        android:textSize="12sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@android:color/white"
-        android:clickable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/tv_toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/logo"
-            android:text="불고타"
-            android:textColor="@color/colorPrimary"
-            android:textSize="24sp"
+        <com.naver.maps.map.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:navermap_logoGravity="bottom"
+            app:navermap_logoMargin="40dp">
+        </com.naver.maps.map.MapView>
+
+        <com.naver.maps.map.widget.LocationButtonView
+            android:id="@+id/btn_home_location"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="20dp"
+            android:foreground="@drawable/btn_location"
+            app:layout_constraintBottom_toTopOf="@id/btn_home_lend"
+            app:layout_constraintStart_toStartOf="@id/btn_home_lend" />
 
         <ImageView
-            android:id="@+id/btn_hamberger"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="15dp"
+            android:id="@+id/btn_home_location_layer"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:foreground="@drawable/btn_location"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/btn_home_lend"
+            app:layout_constraintStart_toStartOf="@id/btn_home_lend" />
+
+        <Button
+            android:id="@+id/btn_home_zoom_in"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_zoom_in"
+            app:layout_constraintBottom_toTopOf="@id/btn_home_zoom_out"
+            app:layout_constraintEnd_toEndOf="@id/btn_home_zoom_out" />
+
+        <Button
+            android:id="@+id/btn_home_zoom_out"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/btn_zoom_out"
+            app:layout_constraintBottom_toTopOf="@id/btn_home_lend"
+            app:layout_constraintEnd_toEndOf="@id/btn_home_lend" />
+
+        <Button
+            android:id="@+id/btn_home_lend"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rec_btn_home"
+            android:fontFamily="@font/nanum_square_round_extra_bold"
+            android:text="대여하기"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/menu_circle" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_info_zoom_out"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="175dp"
+            android:background="@drawable/btn_zoom_out"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/btn_home_lend"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/btn_info_zoom_in"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_zoom_in"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/btn_info_zoom_out"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.naver.maps.map.widget.LocationButtonView
+            android:id="@+id/btn_info_location"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="175dp"
+            android:foreground="@drawable/btn_location"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/btn_home_lend"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <Button
-        android:id="@+id/btn_info_location"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/btn_location"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/cl_model_info"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btn_info_zoom_in"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/btn_zoom_in"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/btn_info_zoom_out"
-        app:layout_constraintEnd_toEndOf="@id/btn_info_zoom_out" />
-
-    <Button
-        android:id="@+id/btn_info_zoom_out"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/btn_zoom_out"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/cl_model_info"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_model_info"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:background="@drawable/rec_corner_info"
         android:clickable="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:visibility="invisible">
 
         <TextView
             android:id="@+id/tv_model_num"
@@ -153,7 +135,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"
             android:layout_marginLeft="35dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/nanum_square_round_extra_bold"
             android:text="TextView"
             android:textColor="#040303"
@@ -249,7 +231,7 @@
             android:id="@+id/img_info_line"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:background="#676767"
             app:layout_constraintEnd_toEndOf="@id/img_kickboard"
             app:layout_constraintStart_toStartOf="@id/img_time"
@@ -365,20 +347,54 @@
             android:layout_height="40dp"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rec_btn_info"
             android:fontFamily="@font/nanum_square_round_extra_bold"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
             android:text="대여하기"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/cl_model_info"
             app:layout_constraintEnd_toEndOf="@id/cl_model_info"
-            app:layout_constraintStart_toStartOf="@id/cl_model_info" />
+            app:layout_constraintStart_toStartOf="@id/cl_model_info"
+            app:layout_constraintTop_toBottomOf="@+id/img_fee_init" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="top"
+        android:background="@android:color/white"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/logo"
+            android:text="불고타"
+            android:textColor="@color/colorPrimary"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/btn_hamberger"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/menu" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -395,17 +411,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_hamberger"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="130dp"
-        android:layout_marginRight="130dp"
+        android:layout_gravity="left"
+        android:layout_marginRight="150dp"
         android:background="#FFFFFF"
         android:clickable="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_hamberger_title"
@@ -415,7 +427,6 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="40dp"
             android:fontFamily="@font/logo"
-            android:lineSpacingExtra="8sp"
             android:text="불고타"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
@@ -448,17 +459,16 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_tab_list"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/img_hamberger_line"
             app:layout_constraintTop_toBottomOf="@+id/img_hamberger_line">
 
             <ImageView
                 android:id="@+id/img_tab_list_1"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -473,15 +483,15 @@
                 android:fontFamily="@font/nanum_square_round_bold"
                 android:text="기획배경"
                 android:textColor="@color/colorText"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_tab_list_1"
                 app:layout_constraintStart_toEndOf="@+id/img_tab_list_1"
                 app:layout_constraintTop_toTopOf="@+id/img_tab_list_1" />
 
             <ImageView
                 android:id="@+id/img_tab_list_2"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
                 android:layout_marginTop="40dp"
                 app:layout_constraintStart_toStartOf="@id/img_tab_list_1"
                 app:layout_constraintTop_toBottomOf="@id/img_tab_list_1"
@@ -496,15 +506,15 @@
                 android:fontFamily="@font/nanum_square_round_bold"
                 android:text="음주관련법규"
                 android:textColor="@color/colorText"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_tab_list_2"
                 app:layout_constraintStart_toEndOf="@+id/img_tab_list_2"
                 app:layout_constraintTop_toTopOf="@+id/img_tab_list_2" />
 
             <ImageView
                 android:id="@+id/img_tab_list_3"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
                 android:layout_marginTop="40dp"
                 app:layout_constraintStart_toStartOf="@id/img_tab_list_2"
                 app:layout_constraintTop_toBottomOf="@id/img_tab_list_2"
@@ -519,7 +529,7 @@
                 android:fontFamily="@font/nanum_square_round_bold"
                 android:text="음주측정기 사용가이드"
                 android:textColor="@color/colorText"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_tab_list_3"
                 app:layout_constraintStart_toEndOf="@+id/img_tab_list_3"
                 app:layout_constraintTop_toTopOf="@+id/img_tab_list_3" />
@@ -527,4 +537,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
