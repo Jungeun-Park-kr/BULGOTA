@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <font-family xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!--    regular -->
+    <!--   logo -->
+    <font
+        android:font="@font/logo"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        app:font="@font/logo"
+        app:fontStyle="normal"
+        app:fontWeight="400"
+        />
+
+    <!--   regular -->
     <font
         android:font="@font/nanum_square_round_regular"
         android:fontStyle="normal"

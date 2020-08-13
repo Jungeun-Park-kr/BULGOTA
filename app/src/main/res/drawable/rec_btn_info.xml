@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <item android:drawable="@drawable/normal_rec_btn_info" android:state_pressed="false"></item>
+    <item android:drawable="@drawable/pressed_rec_btn_info" android:state_pressed="true"></item>
+</selector>
