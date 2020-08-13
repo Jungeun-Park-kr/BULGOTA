@@ -2,20 +2,18 @@ package com.example.bulgota;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 
-public class BreathTestingActivity extends AppCompatActivity {
+public class BreatheTestingActivity extends AppCompatActivity {
 
     public static LottieAnimationView lottieBreathTesting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_breath_testing);
+        setContentView(R.layout.activity_breathe_testing);
 
 //        TextView tvTestingTitle = findViewById(R.id.tv_testing_title);
 //        TextView tvTestingInfo = findViewById(R.id.tv_breathe_testing_info);

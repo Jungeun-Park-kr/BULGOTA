@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this,DeviceMapActivity.class);
             startActivity(intent);
         }  else if (v == breathTestingBtn) {
-            Intent intent = new Intent(this,BreathTestingActivity.class);
+            Intent intent = new Intent(this, BreatheTestingActivity.class);
             startActivity(intent);
         } else if (v == detoxAnalysisBtn) {
             Intent intent = new Intent(this,DetoxAnalysisActivity.class);
