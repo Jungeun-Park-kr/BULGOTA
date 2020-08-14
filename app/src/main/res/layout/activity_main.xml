@@ -4,73 +4,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+
+    <Button
+        android:id="@+id/btn_device_map"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="(홈)지도화면" />
 
-        <Button
-            android:id="@+id/btn_device_map"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="(홈)지도화면"
-            />
-
-    </LinearLayout>
-
-
-    <LinearLayout
+    <Button
+        android:id="@+id/btn_breath_testing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="측정 중"
+        android:layout_marginLeft="12dp"/>
 
-        <Button
-            android:id="@+id/btn_breath_test_info"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="측정(방법)안내"/>
-
-        <Button
-            android:id="@+id/btn_breath_testing"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="측정 중"
-            android:layout_marginLeft="12dp"/>
-    </LinearLayout>
-
-    <LinearLayout
+    <Button
+        android:id="@+id/btn_QRcode_scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="QR코드촬영"/>
 
-        <Button
-            android:id="@+id/btn_QRcode_scan"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="QR코드촬영"/>
-
-        <Button
-            android:id="@+id/btn_cert_completion"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="인증 완료"
-            android:layout_marginLeft="12dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <Button
+        android:id="@+id/btn_cert_completion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="인증 완료"
+        android:layout_marginLeft="12dp"/>
 
-        <Button
-            android:id="@+id/btn_detox_analysis"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nanum_square_round_bold"
-            android:text="해독 시간 분석" />
-
-    </LinearLayout>
-
+    <Button
+        android:id="@+id/btn_detox_analysis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:text="해독 시간 분석" />
 
 </LinearLayout>
