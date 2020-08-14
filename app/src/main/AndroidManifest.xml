@@ -24,6 +24,7 @@
         <activity android:name=".CertCompletionActivity"></activity>
         <activity android:name=".QRCodeScanActivity" />
         <activity android:name=".DetoxAnalysisActivity" />
+        <activity android:name=".SplashActivity" />
         <activity android:name=".BreatheTestingActivity" />
         <activity
             android:name=".DeviceMapActivity"

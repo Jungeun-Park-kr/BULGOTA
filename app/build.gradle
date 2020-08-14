@@ -54,5 +54,4 @@ dependencies {
     //QR코드스캔 Library
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
 
-
 }
