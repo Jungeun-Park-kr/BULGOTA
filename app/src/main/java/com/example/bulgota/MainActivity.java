@@ -9,7 +9,6 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button deviceMapBtn;
-    Button breatheTestInfoBtn;
     Button breathTestingBtn;
     Button detoxAnalysisBtn;
     Button QRCodeScanBtn;
@@ -22,7 +21,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         deviceMapBtn = findViewById(R.id.btn_device_map);
-        breatheTestInfoBtn = findViewById(R.id.btn_breath_test_info);
         breathTestingBtn = findViewById(R.id.btn_breath_testing);
         detoxAnalysisBtn = findViewById(R.id.btn_detox_analysis);
         QRCodeScanBtn = findViewById(R.id.btn_QRcode_scan);
@@ -30,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         splashActivityBtn = findViewById(R.id.btn_splash);
 
         deviceMapBtn.setOnClickListener(this);
-        breatheTestInfoBtn.setOnClickListener(this);
         breathTestingBtn.setOnClickListener(this);
         detoxAnalysisBtn.setOnClickListener(this);
         QRCodeScanBtn.setOnClickListener(this);
@@ -44,11 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(v == deviceMapBtn) {
             Intent intent = new Intent(this,DeviceMapActivity.class);
             startActivity(intent);
-        } else if (v == breatheTestInfoBtn) {
-            Intent intent = new Intent(this,BreathTestInfoActivity.class);
-            startActivity(intent);
-        } else if (v == breathTestingBtn) {
-            Intent intent = new Intent(this,BreathTestingActivity.class);
+        }  else if (v == breathTestingBtn) {
+            Intent intent = new Intent(this, BreatheTestingActivity.class);
             startActivity(intent);
         } else if (v == detoxAnalysisBtn) {
             Intent intent = new Intent(this,DetoxAnalysisActivity.class);
