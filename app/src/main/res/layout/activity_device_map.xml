@@ -10,20 +10,13 @@
         android:id="@+id/cl_map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-<<<<<<< HEAD
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:navermap_latitude="37.495602"
-        app:navermap_longitude="126.959241">
-=======
         android:layout_gravity="center"
         android:clickable="true">
->>>>>>> 3a93b357b147af5d85719ec426c25e38e087d517
 
         <com.naver.maps.map.MapView
             android:id="@+id/map_view"

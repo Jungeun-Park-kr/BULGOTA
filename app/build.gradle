@@ -51,13 +51,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
 
-<<<<<<< HEAD
-    //Lottie
-    implementation 'com.airbnb.android:lottie:2.5.5'
-=======
     //QR코드스캔 Library
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
-
->>>>>>> 3a93b357b147af5d85719ec426c25e38e087d517
 
 }

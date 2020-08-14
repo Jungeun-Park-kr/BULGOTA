@@ -24,14 +24,8 @@
         <activity android:name=".CertCompletionActivity"></activity>
         <activity android:name=".QRCodeScanActivity" />
         <activity android:name=".DetoxAnalysisActivity" />
-<<<<<<< HEAD
-        <activity android:name=".BreathTestingActivity" />
-        <activity android:name=".BreathTestInfoActivity" />
         <activity android:name=".SplashActivity" />
-
-=======
         <activity android:name=".BreatheTestingActivity" />
->>>>>>> 3a93b357b147af5d85719ec426c25e38e087d517
         <activity
             android:name=".DeviceMapActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
