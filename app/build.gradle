@@ -26,6 +26,10 @@ android {
     }
 }
 
+repositories{
+    maven {url 'https://jitpack.io'}
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -54,4 +58,6 @@ dependencies {
     //QR코드스캔 Library
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    //그래프 차트
 }
