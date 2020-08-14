@@ -26,6 +26,7 @@
         <activity android:name=".DetoxAnalysisActivity" />
         <activity android:name=".BreathTestingActivity" />
         <activity android:name=".BreathTestInfoActivity" />
+        <activity android:name=".SplashActivity" />
 
         <activity
             android:name=".DeviceMapActivity"
