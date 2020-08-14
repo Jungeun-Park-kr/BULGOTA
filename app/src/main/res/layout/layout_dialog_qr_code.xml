@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+   >
+
+    <ImageView
+        android:id="@+id/img_code_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@drawable/zoom_in_code" />
+
+    <TextView
+        android:id="@+id/tv_code_intro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:gravity="center"
+        android:text="킥보드에 부착된\nQR코드 번호를 입력해주세요"
+        android:textColor="@color/colorAccentDark"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/nanum_square_round_regular"
+        android:paddingLeft="10dp"
+        android:text="유효하지않은 제품번호입니다. 다시입력해주세요."
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="8sp"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/edt_model"
+        android:layout_width="250dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/rec_corner_primary"
+        android:ems="10"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:hint="BGT_XXX "
+        android:inputType="textPersonName"
+        android:paddingLeft="10dp"
+        android:textColor="@color/colorAccentDark"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancle"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:gravity="right|center_vertical"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="취소"
+            android:textColor="@color/colorAccentDark"
+            android:textSize="14sp" />
+
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:gravity="right|center_vertical"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="확인"
+            android:textColor="@color/colorAccentDark"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/img_line_code_view"
+            app:layout_constraintStart_toStartOf="@+id/img_code_line_vert"
+            app:layout_constraintTop_toBottomOf="@+id/img_line_code_view" />
+    </LinearLayout>
+
+</LinearLayout>
+

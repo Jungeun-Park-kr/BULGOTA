@@ -1,27 +1,18 @@
 package com.example.bulgota;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bulgota.api.BullgoTAService;
-import com.example.bulgota.api.Marker_list;
 import com.example.bulgota.api.ResponseSelectModel;
-import com.example.bulgota.api.ResponseWithMarkerData;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +25,13 @@ public class QReaderActivity extends AppCompatActivity implements DecoratedBarco
     private boolean isFlashOn = false;
 
     private Button btFlash;
+    private Button btCode;
     private DecoratedBarcodeView barcodeView;
+
+    private String value = "";
+
+    private boolean correct = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,18 +57,35 @@ public class QReaderActivity extends AppCompatActivity implements DecoratedBarco
                 }
             }
         });
-    }
 
+        btCode = findViewById(R.id.btn_code);
+
+        btCode.setOnClickListener(l -> {
+            QRCodeDialog dialog = new QRCodeDialog(this);
+            dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+            dialog.setDialogListener(new QRCodeDialog.CustomDialogListener() {
+                @Override
+                public void onPositiveClicked(String model) {
+                    Intent intent = new Intent(QReaderActivity.this, CertCompletionActivity.class);
+                    startActivity(intent);
+                }
+                @Override
+                public void onNegativeClicked() {
+                }
+            });
+            dialog.show();
+        });
+    }
 
     @Override
     public void onTorchOn() {
-        Log.e("onTorchOn", "플래시 켜짐");
+        Log.e("onTorchOn", value);
         isFlashOn=true;
     }
 
     @Override
     public void onTorchOff() {
-        Log.e("onTorchOn", "플래시 꺼짐");
+        Log.e("onTorchOn", value);
         isFlashOn = false;
     }
 
