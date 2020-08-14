@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <com.journeyapps.barcodescanner.BarcodeView
+        android:id="@+id/zxing_barcode_surface"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/zxing_viewfinder_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:zxing_framing_rect_height="230dp"
+        app:zxing_framing_rect_width="230dp">
+
+    </com.journeyapps.barcodescanner.BarcodeView>
+
+    <com.journeyapps.barcodescanner.ViewfinderView
+        android:id="@+id/zxing_viewfinder_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:zxing_possible_result_points="@color/zxing_custom_possible_result_points"
+        app:zxing_result_view="@android:color/white"
+        app:zxing_viewfinder_laser="@color/colorPrimary"
+        app:zxing_viewfinder_mask="@color/zxing_viewfinder_mask" />
+
+    <ImageView
+        android:id="@+id/img_qr_person"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="65dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/qr_icon" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/img_qr_person"
+        app:layout_constraintStart_toStartOf="@+id/img_qr_person"
+        app:layout_constraintTop_toBottomOf="@+id/img_qr_person">
+
+        <TextView
+            android:id="@+id/tv_qr_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:gravity="center"
+            android:text="킥보드에 부착된\nQR코드를 스캔해주세요"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/img_qr_icon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="@drawable/qr_code" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_flash"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginBottom="120dp"
+        android:background="@drawable/circle_light"
+        app:layout_constraintBottom_toBottomOf="@+id/zxing_barcode_surface"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_keyboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/nanum_square_round_regular"
+        android:text="코드입력"
+        android:textColor="@color/colorPrimary"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_code"
+        app:layout_constraintStart_toStartOf="@+id/btn_code"
+        app:layout_constraintTop_toBottomOf="@+id/btn_code" />
+
+    <Button
+        android:id="@+id/btn_code"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:background="@drawable/circle_keyboard"
+        app:layout_constraintBottom_toBottomOf="@id/btn_flash"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_flash" />
+
+    <TextView
+        android:id="@+id/tv_flash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/nanum_square_round_regular"
+        android:text="플래시"
+        android:textColor="@color/colorPrimary"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_flash"
+        app:layout_constraintStart_toStartOf="@+id/btn_flash"
+        app:layout_constraintTop_toBottomOf="@+id/btn_flash" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
