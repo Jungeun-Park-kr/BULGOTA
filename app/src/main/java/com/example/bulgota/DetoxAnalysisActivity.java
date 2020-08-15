@@ -54,7 +54,6 @@ public class DetoxAnalysisActivity extends AppCompatActivity {
         lineChart.setData(chartData);
         lineChart.invalidate();
 
-        Log.e("되라", "좀!!!");
     }
 
     class MyTimer extends CountDownTimer

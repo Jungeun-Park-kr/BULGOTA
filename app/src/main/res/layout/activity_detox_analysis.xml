@@ -31,12 +31,12 @@
             android:id="@+id/tv_alchol_level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/nanum_square_round_font_family"
-            android:paddingTop="30dp"
-            android:layout_gravity="center"
+            android:text="0.06"
+            android:textSize="40sp"
             android:textColor="@android:color/holo_red_light"
-            android:textSize="30sp"
-            android:text="0.06"/>
+            android:paddingTop="40dp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/nanum_square_round_bold" />
 
         <LinearLayout
             android:id="@+id/ll_state"
@@ -71,7 +71,7 @@
             android:id="@+id/tv_lefttime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="50dp"
             android:layout_gravity="center"
             android:fontFamily="@font/nanum_square_round_bold"
             android:textSize="20sp"
@@ -96,7 +96,6 @@
             android:paddingBottom="50dp"
             android:scaleType="centerInside"
             android:layout_gravity="center"/>
-            <!--android:src="@drawable/btn_warning"-->/>
 
         <RelativeLayout
             android:id="@+id/rl_alarm"
@@ -113,8 +112,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginRight="5dp"
                 android:fontFamily="@font/nanum_square_round_bold"
-                android:textSize="20sp"
-                android:text="주행가능 시 알람받기" />
+                android:text="주행가능 시 알람받기"
+                android:textSize="20sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
