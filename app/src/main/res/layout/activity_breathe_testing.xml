@@ -46,6 +46,23 @@
             android:layout_marginBottom="30dp" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btn_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center"
+        android:text="측정(연결)하기"/>
+
+    <TextView
+        android:id="@+id/tv_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="50sp"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="center"
+        android:hint="결과값"/>
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_breathe_testing"
         android:layout_gravity="center"
