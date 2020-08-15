@@ -11,12 +11,12 @@
 
 
     <LinearLayout
-        android:id="@+id/notice_view"
+        android:id="@+id/ll_notice_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:elevation="15dp"
         android:padding="3dp"
+        android:background="@drawable/round_square_shape2"
         android:weightSum="100"
         android:layout_weight="60">
 
@@ -25,6 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nanum_square_round_bold"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="20dp"
             android:text="현재 '나'의 알콜수치"/>
 
         <TextView
@@ -34,7 +36,7 @@
             android:text="0.06"
             android:textSize="40sp"
             android:textColor="@android:color/holo_red_light"
-            android:paddingTop="40dp"
+            android:paddingTop="25dp"
             android:layout_gravity="center"
             android:fontFamily="@font/nanum_square_round_bold" />
 
@@ -71,7 +73,7 @@
             android:id="@+id/tv_lefttime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:layout_gravity="center"
             android:fontFamily="@font/nanum_square_round_bold"
             android:textSize="20sp"
@@ -81,7 +83,6 @@
             android:id="@+id/tv_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:fontFamily="@font/nanum_square_round_bold"
             android:textSize="30sp"
@@ -93,16 +94,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
-            android:paddingBottom="50dp"
+            android:paddingBottom="30dp"
             android:scaleType="centerInside"
             android:layout_gravity="center"/>
 
         <RelativeLayout
             android:id="@+id/rl_alarm"
-            android:layout_width="match_parent"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:gravity="bottom"
+            android:background="@drawable/rec_corner_box2"
             android:orientation="horizontal"
+            android:layout_gravity="center"
             android:clickable="true">
 
             <TextView
@@ -113,18 +116,18 @@
                 android:layout_marginRight="5dp"
                 android:fontFamily="@font/nanum_square_round_bold"
                 android:text="주행가능 시 알람받기"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="6dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="3dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_toRightOf="@+id/tv_alarm_text"
                 android:layout_centerInParent="true"
-                android:scaleType="fitCenter"/>
+                android:src="@drawable/img_alarmbell" />
 
         </RelativeLayout>
 
