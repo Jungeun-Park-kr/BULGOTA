@@ -27,7 +27,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void setUpAnimation(LottieAnimationView animview) {
         //재생할 애니메이션
-        animview.setAnimation("splashani.json");
+        animview.setAnimation("splashani3.json");
         //반복횟수 지정 : 무한
         animview.setRepeatCount(LottieDrawable.RESTART); //아니면 횟수 지정
         //시작
