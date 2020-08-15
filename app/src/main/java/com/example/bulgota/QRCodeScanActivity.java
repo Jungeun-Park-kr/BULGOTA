@@ -1,10 +1,12 @@
 package com.example.bulgota;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +18,8 @@ import com.example.bulgota.api.ResponseSelectModel;
 import com.example.bulgota.api.ResponseWithMarkerData;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.CaptureManager;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.ArrayList;
 
@@ -31,7 +35,12 @@ public class QRCodeScanActivity extends AppCompatActivity {
     private TextView textView;
 
     //qr code scanner object
-    private IntentIntegrator qrScan;
+
+    private CaptureManager manager;
+    private boolean isFlashOn = false;
+
+    private Button btFlash;
+    private DecoratedBarcodeView barcodeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +52,15 @@ public class QRCodeScanActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.textView);
 
         //initializing scan object
-        qrScan = new IntentIntegrator(this);
+        IntentIntegrator qrScan = new IntentIntegrator(this);
 
         //button onClick
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //scan option
-                qrScan.setPrompt("킥보드에 부착된 QR코드를 스캔해주세요.");
+                qrScan.setBeepEnabled(false);
+                qrScan.setCaptureActivity(QReaderActivity.class);
                 qrScan.setOrientationLocked(false);
                 qrScan.initiateScan();
             }
@@ -77,10 +87,12 @@ public class QRCodeScanActivity extends AppCompatActivity {
                     public void onResponse(Call<ResponseSelectModel> call, Response<ResponseSelectModel> response) {
                         if (response.body().getSuccess()) {
                             //유효한 모델이면
-                            Toast.makeText(QRCodeScanActivity.this, "스캔완료!", Toast.LENGTH_SHORT).show();
-                            textView.setText(result.getContents());
+                            Log.e("in", "들어옴");
+                            Intent intent = new Intent(QRCodeScanActivity.this, CertCompletionActivity.class);
+                            startActivity(intent);
+                            finish();
                         } else {
-                            textView.setText("존재하지 않는 모델명입니다.");
+                            Toast.makeText(QRCodeScanActivity.this, "유효하지 않은 QR CODE입니다.", Toast.LENGTH_LONG);
                         }
                     }
                     @Override

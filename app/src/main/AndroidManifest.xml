@@ -24,9 +24,8 @@
         <activity android:name=".CertCompletionActivity"></activity>
         <activity android:name=".QRCodeScanActivity" />
         <activity android:name=".DetoxAnalysisActivity" />
-        <activity android:name=".BreathTestingActivity" />
-        <activity android:name=".BreathTestInfoActivity" />
-
+        <activity android:name=".SplashActivity" />
+        <activity android:name=".BreatheTestingActivity" />
         <activity
             android:name=".DeviceMapActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
@@ -41,6 +40,7 @@
         <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation"/>
+        <activity android:name=".QReaderActivity" />
     </application>
 
 </manifest>
