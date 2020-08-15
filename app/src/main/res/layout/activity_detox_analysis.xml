@@ -31,12 +31,12 @@
             android:id="@+id/tv_alchol_level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/nanum_square_round_font_family"
-            android:paddingTop="30dp"
-            android:layout_gravity="center"
+            android:fontFamily="@font/nanum_square_round_bold"
             android:textColor="@android:color/holo_red_light"
+            android:text="0.06"
+            android:paddingTop="30dp"
             android:textSize="30sp"
-            android:text="0.06"/>
+            android:layout_gravity="center" />
 
         <LinearLayout
             android:id="@+id/ll_state"
@@ -51,6 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="현재 내 상태는"/>
+
             <TextView
                 android:id="@+id/tv_my_state"
                 android:layout_width="wrap_content"
@@ -59,6 +60,7 @@
                 android:textSize="15sp"
                 android:textColor="@android:color/holo_red_light"
                 android:text="주행불가"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,17 +95,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
-            android:paddingBottom="50dp"
+            android:paddingBottom="30dp"
             android:scaleType="centerInside"
+            android:src="@drawable/btn_warning"
             android:layout_gravity="center"/>
-            <!--android:src="@drawable/btn_warning"-->/>
 
         <RelativeLayout
             android:id="@+id/rl_alarm"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:gravity="bottom"
+            android:layout_gravity="center"
             android:orientation="horizontal"
+            android:background="@drawable/rec_btn_alarm"
             android:clickable="true">
 
             <TextView
@@ -113,7 +117,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginRight="5dp"
                 android:fontFamily="@font/nanum_square_round_bold"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:text="주행가능 시 알람받기" />
 
             <ImageView
@@ -123,9 +127,9 @@
                 android:layout_marginLeft="6dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
+                android:src="@drawable/img_alarmbell"
                 android:layout_toRightOf="@+id/tv_alarm_text"
-                android:layout_centerInParent="true"
-                android:scaleType="fitCenter"/>
+                android:layout_centerInParent="true" />
 
         </RelativeLayout>
 
