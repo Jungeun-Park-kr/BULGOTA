@@ -7,6 +7,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
@@ -43,12 +44,17 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     private static final int PAGE_UP = 8;
     private static final int PAGE_LEFT = 4;
     private static final int PAGE_RIGHT = 6;
     private static final int PAGE_DOWN = 2;
+
+    //상수로 넘어갈 공지사항 페이지 넘버 설정
+    private static final int PLAN_BACKGROUND = 0;
+    private static final int LEGAL = 1;
+    private static final int GUIDE = 2;
 
     private MapView mapView;
     private FusedLocationSource locationSource;
@@ -86,6 +92,10 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     private SlidingPageAnimationListener animationListener;
 
+    //기획 배경 등 텍스트를 클릭하면 해당 항목의 공지사항으로 이동할 예정.
+    private TextView tvPlanBackground;
+    private TextView tvLegal;
+    private TextView tvGuide;
 
 
     @Override
@@ -93,6 +103,16 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_device_map);
+
+        //기획 배경 등 텍스트를 클릭하면 해당 항목의 공지사항으로 이동할 예정.
+        tvPlanBackground = (TextView)findViewById(R.id.tv_tab_list_1);
+        tvPlanBackground.setOnClickListener(this);
+        tvLegal = (TextView)findViewById(R.id.tv_tab_list_2);
+        tvLegal.setOnClickListener(this);
+        tvGuide = (TextView)findViewById(R.id.tv_tab_list_3);
+        tvGuide.setOnClickListener(this);
+
+
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -390,6 +410,26 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
             pageValue = PAGE_LEFT;
             clHamberger.startAnimation(translateLeftAim);
         }));
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == tvPlanBackground){
+            Intent intent = new Intent(this,NoticeActivity.class);
+            intent.putExtra("tag", PLAN_BACKGROUND);
+            viewLayer.performClick();
+            startActivity(intent);
+        } else if(v == tvLegal){
+            Intent intent = new Intent(this,NoticeActivity.class);
+            intent.putExtra("tag", LEGAL);
+            viewLayer.performClick();
+            startActivity(intent);
+        } else if(v == tvGuide){
+            Intent intent = new Intent(this,NoticeActivity.class);
+            intent.putExtra("tag", GUIDE);
+            viewLayer.performClick();
+            startActivity(intent);
+        }
     }
 
     private class SlidingPageAnimationListener implements Animation.AnimationListener {
