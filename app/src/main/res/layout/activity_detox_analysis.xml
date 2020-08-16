@@ -96,6 +96,7 @@
             android:paddingTop="15dp"
             android:paddingBottom="30dp"
             android:scaleType="centerInside"
+            android:src="@drawable/btn_warning"
             android:layout_gravity="center"/>
 
         <RelativeLayout

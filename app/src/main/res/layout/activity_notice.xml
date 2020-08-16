@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/sv_contents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp">
+
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="top"
+        android:background="@android:color/white"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/logo"
+            android:text="불고타"
+            android:textColor="@color/colorPrimary"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/btn_hamberger"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/menu" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view_layer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#ADECECEC"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_hamberger"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:layout_marginRight="150dp"
+        android:background="#FFFFFF"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_hamberger_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/logo"
+            android:text="불고타"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_hamberger_intro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/nanum_square_round_regular"
+            android:text="OO한\n킥보드 공유 플랫폼"
+            android:textColor="@color/colorText"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_hamberger_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_hamberger_title" />
+
+        <ImageView
+            android:id="@+id/img_hamberger_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_hamberger_intro"
+            app:layout_constraintTop_toBottomOf="@id/tv_hamberger_intro" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_tab_list"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/img_hamberger_line"
+            app:layout_constraintTop_toBottomOf="@+id/img_hamberger_line">
+
+            <ImageView
+                android:id="@+id/img_tab_list_1"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/list_hamberger" />
+
+            <TextView
+                android:id="@+id/tv_tab_list_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="@font/nanum_square_round_bold"
+                android:text="기획배경"
+                android:textColor="@color/colorText"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_tab_list_1"
+                app:layout_constraintStart_toEndOf="@+id/img_tab_list_1"
+                app:layout_constraintTop_toTopOf="@+id/img_tab_list_1" />
+
+            <ImageView
+                android:id="@+id/img_tab_list_2"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:clickable="true"
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toStartOf="@id/img_tab_list_1"
+                app:layout_constraintTop_toBottomOf="@id/img_tab_list_1"
+                app:srcCompat="@drawable/list_hamberger" />
+
+            <TextView
+                android:id="@+id/tv_tab_list_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:clickable="true"
+                android:fontFamily="@font/nanum_square_round_bold"
+                android:text="음주관련법규"
+                android:textColor="@color/colorText"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_tab_list_2"
+                app:layout_constraintStart_toEndOf="@+id/img_tab_list_2"
+                app:layout_constraintTop_toTopOf="@+id/img_tab_list_2" />
+
+            <ImageView
+                android:id="@+id/img_tab_list_3"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toStartOf="@id/img_tab_list_2"
+                app:layout_constraintTop_toBottomOf="@id/img_tab_list_2"
+                app:srcCompat="@drawable/list_hamberger" />
+
+            <TextView
+                android:id="@+id/tv_tab_list_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:clickable="true"
+                android:fontFamily="@font/nanum_square_round_bold"
+                android:text="음주측정기 사용가이드"
+                android:textColor="@color/colorText"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_tab_list_3"
+                app:layout_constraintStart_toEndOf="@+id/img_tab_list_3"
+                app:layout_constraintTop_toTopOf="@+id/img_tab_list_3" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
