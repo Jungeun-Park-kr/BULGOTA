@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".BreatheTestingActivity">
 
     <TextView
         android:id="@+id/tv_testing_title"
@@ -23,14 +25,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="15dp"
-        android:padding="10dp"
-        android:background="@drawable/round_square_shape"
+        android:padding="10dp">
+        //android:background="@drawable/round_square_shape"
         android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="250dp"
-            android:background="@drawable/iv_breath_testing_icon"/>
+            android:layout_height="250dp"/>
+            //android:background="@drawable/iv_breath_testing_icon"/>
 
         <TextView
             android:id="@+id/tv_breathe_testing_info"
