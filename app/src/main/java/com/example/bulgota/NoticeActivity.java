@@ -116,8 +116,9 @@ public class NoticeActivity extends AppCompatActivity {
             translateLeftAim.setAnimationListener(animationListener);
 
             pageValue = PAGE_LEFT;
-            viewLayer.setVisibility(View.GONE);
             clHamberger.startAnimation(translateLeftAim);
+            clHamberger.setVisibility(View.GONE);
+            viewLayer.setVisibility(View.GONE);
         }));
     }
 
@@ -153,7 +154,7 @@ public class NoticeActivity extends AppCompatActivity {
                 }
                 case PAGE_LEFT : {
                     clHamberger.setVisibility(View.GONE);
-                    viewLayer.setVisibility(View.GONE);
+                    //viewLayer.setVisibility(View.GONE);
                     break;
                 }
                 case PAGE_RIGHT : {
