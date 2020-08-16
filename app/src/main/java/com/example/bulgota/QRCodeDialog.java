@@ -2,9 +2,7 @@ package com.example.bulgota;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,7 +47,7 @@ public class QRCodeDialog extends Dialog implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_dialog_qr_code);
+        setContentView(R.layout.dialog_qr_code);
 
         //init
         btnOk = (Button)findViewById(R.id.btn_ok);

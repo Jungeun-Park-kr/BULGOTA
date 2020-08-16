@@ -31,7 +31,7 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="250dp"/>
+            android:layout_height="100dp"/>
             //android:background="@drawable/iv_breath_testing_icon"/>
 
         <TextView
@@ -49,27 +49,41 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_measure"
+        android:id="@+id/btn_retry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_gravity="center"
-        android:text="측정(연결)하기"/>
-
+        android:text="다시연결시도"/>
     <TextView
-        android:id="@+id/tv_value"
+        android:id="@+id/tv_bluetooth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="50sp"
+        android:textSize="14sp"
         android:textColor="@color/colorPrimary"
         android:layout_gravity="center"
-        android:hint="결과값"/>
+        android:hint="블루투스"/>
+
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_breathe_testing"
         android:layout_gravity="center"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+
+    <Button
+        android:id="@+id/btn_test"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="음주측정하기" />
+
+    <TextView
+        android:id="@+id/tv_test_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="음주측정하기" />
     <!--        app:lottie_autoPlay="true"-->
     <!--        app:lottie_fileName="liv_loading.json"-->
     <!--        app:lottie_loop="true"-->

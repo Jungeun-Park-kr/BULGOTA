@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +33,10 @@ import java.util.UUID;
 
 
 public class BreatheTestingActivity extends AppCompatActivity {
-    TextView tvValue;
-    Button btnMeasure;//측정하기 화면 이동 버튼
+    TextView tvBluetooth;
+    TextView tvTestResult;
+    Button btnTest;
+    Button btnRetry;//측정하기 화면 이동 버튼
 
     BluetoothAdapter bluetoothAdapter;
     Set<BluetoothDevice> pairedDevices;
@@ -54,50 +57,61 @@ public class BreatheTestingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_breathe_testing);
+
        LottieAnimationView lottieTesting = findViewById(R.id.lottie_breathe_testing);
        setUpAnimation(lottieTesting);
 
-       tvValue = findViewById(R.id.tv_value);
-       btnMeasure = findViewById(R.id.btn_measure);
+       tvBluetooth = findViewById(R.id.tv_bluetooth);
+       tvTestResult = findViewById(R.id.tv_test_result);
+       tvTestResult.setVisibility(View.INVISIBLE);
+
+       btnTest = findViewById(R.id.btn_test);
+       btnRetry = findViewById(R.id.btn_retry);
 
        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-       btnMeasure.setOnClickListener(l -> {
+       btnRetry.setOnClickListener(l -> {
            listPairedDevices();
        });
+
+       btnTest.setOnClickListener(l -> {
+           tvTestResult.setVisibility(View.VISIBLE);
+       });
+
 
        bluetoothHandler = new Handler(){
            public void handleMessage(android.os.Message msg){
                if(msg.what == BT_MESSAGE_READ){
+                   tvTestResult = findViewById(R.id.tv_test_result);
+
                    String readMessage = null;
                    try {
                        readMessage = new String((byte[]) msg.obj, "UTF-8");
                    } catch (UnsupportedEncodingException e) {
                        e.printStackTrace();
                    }
-                   tvValue.setText(readMessage);
+
+                   tvBluetooth.setText("연동완료");
+                   tvTestResult.setText(readMessage);
+
                }
-               lottieTesting.cancelAnimation();
            }
        };
 
-
-//       LottieAnimationView lottieTesting = findViewById(R.id.lottie_breathe_testing);
-//       setUpAnimation(lottieTesting); //애니메이션 등록
    }
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case BT_REQUEST_ENABLE:
-                if (resultCode == RESULT_OK) { // 블루투스 활성화를 확인을 클릭하였다면
-                    Toast.makeText(getApplicationContext(), "블루투스 활성화", Toast.LENGTH_LONG).show();
-                } else if (resultCode == RESULT_CANCELED) { // 블루투스 활성화를 취소를 클릭하였다면
-                    Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_LONG).show();
-                }
-                break;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-
-    }
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (requestCode) {
+//            case BT_REQUEST_ENABLE:
+//                if (resultCode == RESULT_OK) { // 블루투스 활성화를 확인을 클릭하였다면
+//                    Toast.makeText(getApplicationContext(), "블루투스 활성화", Toast.LENGTH_LONG).show();
+//                } else if (resultCode == RESULT_CANCELED) { // 블루투스 활성화를 취소를 클릭하였다면
+//                    Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_LONG).show();
+//                }
+//                break;
+//        }
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//    }
 
     void listPairedDevices() {
         if (bluetoothAdapter.isEnabled()) {
@@ -123,6 +137,19 @@ public class BreatheTestingActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        btnRetry.performClick();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
     void connectSelectedDevice(String selectedDeviceName) {
         for(BluetoothDevice tempDevice : pairedDevices) {
             if (selectedDeviceName.equals(tempDevice.getName())) {
@@ -138,6 +165,7 @@ public class BreatheTestingActivity extends AppCompatActivity {
             threadConnectedBluetooth = new ConnectedBluetoothThread(bluetoothSocket);
             threadConnectedBluetooth.start();
             bluetoothHandler.obtainMessage(BT_CONNECTING_STATUS, 1, -1).sendToTarget();
+
             Log.e("click4", String.valueOf(bluetoothSocket));
 
 //            if(tvValue != null) {
