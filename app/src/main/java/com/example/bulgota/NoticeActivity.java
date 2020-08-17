@@ -6,6 +6,7 @@ import androidx.annotation.UiThread;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -30,7 +32,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class NoticeActivity extends AppCompatActivity {
+public class NoticeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int PAGE_UP = 8;
     private static final int PAGE_LEFT = 4;
@@ -60,18 +62,30 @@ public class NoticeActivity extends AppCompatActivity {
 
     private SlidingPageAnimationListener animationListener;
 
+    //기획 배경 등 텍스트를 클릭하면 해당 항목의 공지사항으로 이동할 예정.
+    private TextView tvPlanBackground;
+    private TextView tvLegal;
+    private TextView tvGuide;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_notice);
 
+        //기획 배경 등 텍스트를 클릭하면 해당 항목의 공지사항으로 이동할 예정.
+        tvPlanBackground = (TextView)findViewById(R.id.tv_tab_list_1);
+        tvPlanBackground.setOnClickListener(this);
+        tvLegal = (TextView)findViewById(R.id.tv_tab_list_2);
+        tvLegal.setOnClickListener(this);
+        tvGuide = (TextView)findViewById(R.id.tv_tab_list_3);
+        tvGuide.setOnClickListener(this);
 
         Intent intent = getIntent();
 
         tag = intent.getIntExtra("tag", 0);
 
-
+        setContent(tag);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -131,7 +145,7 @@ public class NoticeActivity extends AppCompatActivity {
                 case PAGE_UP : {
                     break;
                 }
-                    case PAGE_LEFT : {
+                case PAGE_LEFT : {
                     clHamberger.setVisibility(View.GONE);
                     viewLayer.setVisibility(View.GONE);
                     isHambergerOpen = false;
@@ -167,9 +181,47 @@ public class NoticeActivity extends AppCompatActivity {
         public void onAnimationRepeat(Animation animation) {
 
         }
+    }
 
-        public void setContent(int tag) {
+    @Override
+    public void onClick(View v) {
+        if(v == tvPlanBackground){
+            tag = PLAN_BACKGROUND;
+        } else if(v == tvLegal){
+            tag = LEGAL;
+        } else if(v == tvGuide){
+            tag = GUIDE;
+        }
+        setContent(tag);
+    }
 
+    public void setContent(int tag) {
+        tvPlanBackground.setTextColor(0xFF000000);
+        tvLegal.setTextColor(0xFF000000);
+        tvGuide.setTextColor(0xFF000000);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        if(tag == PLAN_BACKGROUND){
+            tvPlanBackground.setTextColor(0xFF4EBFDE);
+            PlanBackgroundFragment fr = new PlanBackgroundFragment();
+            transaction.replace(R.id.fl_content, fr);
+            transaction.commit();
+        } else if(tag == LEGAL){
+            tvLegal.setTextColor(0xFF4EBFDE);
+            LegalFragment fr = new LegalFragment();
+            transaction.replace(R.id.fl_content, fr);
+            transaction.commit();
+        } else if(tag == GUIDE){
+            tvGuide.setTextColor(0xFF4EBFDE);
+            GuideFragment fr = new GuideFragment();
+            transaction.replace(R.id.fl_content, fr);
+            transaction.commit();
+        }
+
+        if(isHambergerOpen == true) {
+            viewLayer.performClick();
+            isHambergerOpen = false;
         }
     }
 }
