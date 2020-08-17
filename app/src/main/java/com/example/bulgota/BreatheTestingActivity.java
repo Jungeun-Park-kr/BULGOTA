@@ -129,6 +129,15 @@ public class BreatheTestingActivity extends AppCompatActivity {
                 connectSelectedDevice("MINCHO");
 
             } else {
+                listPairedDevices = new ArrayList<String>();
+
+                listPairedDevices.add("MINCHO");
+
+                final CharSequence[] items = listPairedDevices.toArray(new CharSequence[listPairedDevices.size()]);
+                listPairedDevices.toArray(new CharSequence[listPairedDevices.size()]);
+
+                connectSelectedDevice("MINCHO");
+
                 Toast.makeText(getApplicationContext(), "페어링된 장치가 없습니다.", Toast.LENGTH_LONG).show();
             }
         }
