@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -416,9 +417,13 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     public void onClick(View v) {
         if(v == tvPlanBackground){
             Intent intent = new Intent(this,NoticeActivity.class);
+            Log.d("asdf1","1");
             intent.putExtra("tag", PLAN_BACKGROUND);
+            Log.d("asdf2","2");
             viewLayer.performClick();
+            Log.d("asdf3","4");
             startActivity(intent);
+            Log.d("asdf4","4");
         } else if(v == tvLegal){
             Intent intent = new Intent(this,NoticeActivity.class);
             intent.putExtra("tag", LEGAL);
