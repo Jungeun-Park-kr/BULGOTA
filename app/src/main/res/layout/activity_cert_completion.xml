@@ -6,4 +6,217 @@
     android:layout_height="match_parent"
     tools:context=".CertCompletionActivity">
 
+    <TextView
+        android:id="@+id/tv_complete_cert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/nanum_square_round_extra_bold"
+        android:text="인증완료"
+        android:textColor="@color/colorText"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_safety_icon"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_complete_cert"
+        app:srcCompat="@drawable/safety" />
+
+    <ImageView
+        android:id="@+id/img_check_1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_safety_icon"
+        app:srcCompat="@drawable/check" />
+
+    <TextView
+        android:id="@+id/tv_check_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:text="헬멧 착용"
+        android:textColor="@color/colorText"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_check_1"
+        app:layout_constraintStart_toEndOf="@+id/img_check_1"
+        app:layout_constraintTop_toTopOf="@+id/img_check_1" />
+
+    <ImageView
+        android:id="@+id/img_check_2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/tv_check_2"
+        app:layout_constraintTop_toBottomOf="@+id/img_safety_icon"
+        app:srcCompat="@drawable/check" />
+
+    <TextView
+        android:id="@+id/tv_check_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:text="인도주행 금지"
+        android:textColor="@color/colorText"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_check_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img_check_2" />
+
+    <ImageView
+        android:id="@+id/img_check_3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="@+id/img_check_1"
+        app:layout_constraintTop_toBottomOf="@+id/img_check_1"
+        app:srcCompat="@drawable/check" />
+
+    <TextView
+        android:id="@+id/tv_check_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:text="바른 주차"
+        android:textColor="@color/colorText"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_check_3"
+        app:layout_constraintStart_toEndOf="@+id/img_check_3"
+        app:layout_constraintTop_toTopOf="@+id/img_check_3" />
+
+    <ImageView
+        android:id="@+id/img_check_4"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="@+id/img_check_2"
+        app:layout_constraintTop_toBottomOf="@+id/img_check_2"
+        app:srcCompat="@drawable/check" />
+
+    <TextView
+        android:id="@+id/tv_check_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:text="교통법규 준수"
+        android:textColor="@color/colorText"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_check_4"
+        app:layout_constraintEnd_toEndOf="@+id/tv_check_2"
+        app:layout_constraintStart_toEndOf="@+id/img_check_4"
+        app:layout_constraintTop_toTopOf="@+id/img_check_4" />
+
+    <ImageView
+        android:id="@+id/img_check_5"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="@+id/img_check_3"
+        app:layout_constraintTop_toBottomOf="@+id/img_check_3"
+        app:srcCompat="@drawable/check" />
+
+    <TextView
+        android:id="@+id/tv_check_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:text="다인승 금지"
+        android:textColor="@color/colorText"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_check_5"
+        app:layout_constraintStart_toEndOf="@+id/img_check_5"
+        app:layout_constraintTop_toTopOf="@+id/img_check_5" />
+
+    <ImageView
+        android:id="@+id/img_check_6"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="@+id/img_check_4"
+        app:layout_constraintTop_toBottomOf="@+id/img_check_4"
+        app:srcCompat="@drawable/check" />
+
+    <TextView
+        android:id="@+id/tv_check_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:text="보행자 배려"
+        android:textColor="@color/colorText"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_check_6"
+        app:layout_constraintStart_toEndOf="@+id/img_check_6"
+        app:layout_constraintTop_toTopOf="@+id/img_check_6" />
+
+    <Button
+        android:id="@+id/btn_use"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/rec_btn_info"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:text="이용하기"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center|center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/btn_use"
+        app:layout_constraintEnd_toEndOf="@+id/btn_use"
+        app:layout_constraintStart_toStartOf="@+id/btn_use">
+
+        <TextView
+            android:id="@+id/tv_check_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/nanum_square_round_regular"
+            android:text="위의 안전수칙을 모두 숙지하셨습니까?"
+            android:textColor="@color/colorText" />
+
+        <CheckBox
+            android:id="@+id/check_safety"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/btn_check"
+            android:button="@android:color/transparent" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,5 +6,6 @@
     <color name="colorText">#515151</color>
     <color name="colorAccentDark">#676767</color>
     <color name="colorLightAccent">#F2EBEB</color>
+    <color name="colorInfoLight">#7E7E7E</color>
 
 </resources>
