@@ -22,7 +22,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
 
-public class DetoxAnalysisActivity extends AppCompatActivity {
+public class DetoxAnalysisActivity extends AppCompatActivity{
 
     private LineChart lineChart;
     ArrayList<Entry> entry_chart;
