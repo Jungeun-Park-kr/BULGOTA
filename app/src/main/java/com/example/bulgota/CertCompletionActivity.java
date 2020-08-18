@@ -4,13 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CertCompletionActivity extends AppCompatActivity {
     CheckBox checkSafety;
-    TextView tvCheckWarning;
+    ImageView imgCheckLine;
     Button btnUse;
 
     @Override
@@ -19,12 +21,12 @@ public class CertCompletionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cert_completion);
 
         checkSafety = findViewById(R.id.check_safety);
-        tvCheckWarning = findViewById(R.id.tv_check_warning);
         btnUse = findViewById(R.id.btn_use);
+        imgCheckLine = findViewById(R.id.img_check_line);
 
         btnUse.setOnClickListener(l -> {
             if(!checkSafety.isChecked()) {
-                tvCheckWarning.setTextColor(Color.RED);
+                imgCheckLine.setVisibility(View.VISIBLE);
             } else {
 
             }

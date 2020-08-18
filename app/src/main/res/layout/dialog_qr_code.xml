@@ -72,13 +72,13 @@
             android:layout_width="55dp"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/nanum_square_round_bold"
+            android:fontFamily="@font/nanum_square_round_regular"
             android:gravity="right|center_vertical"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="취소"
             android:textColor="@color/colorAccentDark"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
 
         <Button
@@ -87,13 +87,13 @@
             android:layout_height="match_parent"
             android:layout_marginRight="20dp"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/nanum_square_round_bold"
+            android:fontFamily="@font/nanum_square_round_regular"
             android:gravity="right|center_vertical"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="확인"
             android:textColor="@color/colorAccentDark"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/img_line_code_view"
             app:layout_constraintStart_toStartOf="@+id/img_code_line_vert"
