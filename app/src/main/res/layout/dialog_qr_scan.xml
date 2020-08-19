@@ -7,38 +7,39 @@
     >
 
     <ImageView
-        android:id="@+id/img_code_view"
+        android:id="@+id/img_error"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_gravity="center|top"
         android:layout_marginTop="15dp"
-        app:srcCompat="@drawable/normal_marker" />
+        app:srcCompat="@drawable/error" />
 
     <TextView
-        android:id="@+id/tv_code_intro"
+        android:id="@+id/tv_scan_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="40dp"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/nanum_square_round_bold"
         android:gravity="center"
-        android:text="지도에 표시된 킥보드 중\n대여를 희망하시는 킥보드를 선택해주세요"
+        android:text="유효하지 않은 QR코드입니다.\n다시 확인해주세요."
         android:textColor="@color/colorAccentDark"
         android:textSize="12sp" />
 
-    <TextView
+    <Button
         android:id="@+id/btn_retry"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="15dp"
         android:fontFamily="@font/nanum_square_round_bold"
         android:gravity="center"
-        android:text="확인"
-        android:textColor="@color/colorPrimary"
+        android:background="@drawable/rec_btn_info"
+        android:text="다시시도"
+        android:textColor="@android:color/white"
         android:textSize="12sp" />
 
 </LinearLayout>

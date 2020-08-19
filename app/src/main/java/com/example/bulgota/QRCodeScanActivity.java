@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +44,8 @@ public class QRCodeScanActivity extends AppCompatActivity {
     private Button btFlash;
     private DecoratedBarcodeView barcodeView;
 
+    private IntentIntegrator qrScan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +56,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.textView);
 
         //initializing scan object
-        IntentIntegrator qrScan = new IntentIntegrator(this);
+        qrScan = new IntentIntegrator(this);
 
         //button onClick
         button.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +79,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
         if(result != null) {
             //qrcode가 없으면
             if (result.getContents() == null) {
-                Toast.makeText(QRCodeScanActivity.this, "취소!", Toast.LENGTH_SHORT).show();
+
             } else {
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl(BullgoTAService.BASE_URL)
@@ -83,16 +87,29 @@ public class QRCodeScanActivity extends AppCompatActivity {
                         .build();
                 BullgoTAService bullgoTAService = retrofit.create(BullgoTAService.class);
                 bullgoTAService.checkModel(result.getContents()).enqueue(new Callback<ResponseSelectModel>() {
+
                     @Override
                     public void onResponse(Call<ResponseSelectModel> call, Response<ResponseSelectModel> response) {
                         if (response.body().getSuccess()) {
                             //유효한 모델이면
-                            Log.e("in", "들어옴");
                             Intent intent = new Intent(QRCodeScanActivity.this, CertCompletionActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
-                            Toast.makeText(QRCodeScanActivity.this, "유효하지 않은 QR CODE입니다.", Toast.LENGTH_LONG);
+                            QRScanDialog qrScanDialog = new QRScanDialog(QRCodeScanActivity.this);
+                            qrScanDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+                            qrScanDialog.setDialogListener(new QRScanDialog.QRScanDialogListener() {
+                                @Override
+                                public void onRetryClicked() {
+                                    button.performClick();
+                                }
+
+                                @Override
+                                public void onCancleClicked() {
+                                    qrScanDialog.dismiss();
+                                }
+                            });
+                            qrScanDialog.show();
                         }
                     }
                     @Override
