@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="300dp"
+    android:orientation="vertical"
+    >
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/img_bluetooth"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center|left"
+            app:srcCompat="@drawable/bluetooth" />
+
+        <TextView
+            android:id="@+id/tv_bluetooth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:gravity="center"
+            android:text="블루투스"
+            android:textColor="@color/colorText"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center|right"
+            android:layout_marginLeft="100dp"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/rec_btn_info"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:gravity="center"
+            android:text="검색"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_bluetooth_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:fontFamily="@font/nanum_square_round_regular"
+        android:textColor="@android:color/holo_red_dark"
+        android:text="블루투스를 활성화한 후 다시 검색해주세요."
+        android:visibility="gone"
+        android:layout_marginBottom="5dp"
+        android:textSize="8sp" />
+
+    <TextView
+        android:id="@+id/tv_bluetooth_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:fontFamily="@font/nanum_square_round_regular"
+        android:text="연결 가능한 디바이스"
+        android:textSize="10sp" />
+
+    <ListView
+        android:id="@+id/list_bluetooth"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        />
+
+</LinearLayout>
+
