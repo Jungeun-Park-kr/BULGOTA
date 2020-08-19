@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "154198036635",
+    "firebase_url": "https://bugota-6b09b.firebaseio.com",
+    "project_id": "bugota-6b09b",
+    "storage_bucket": "bugota-6b09b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154198036635:android:60ed0dd8f332e4753df63e",
+        "android_client_info": {
+          "package_name": "com.example.bulgota"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154198036635-3ngeuuho4or5t74ja8funu2ogocc4lvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0XGNHWAHOYUalpm3XaLF9TJvnJQvCN5U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "154198036635-3ngeuuho4or5t74ja8funu2ogocc4lvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
