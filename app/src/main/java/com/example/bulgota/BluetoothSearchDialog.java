@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,21 +24,32 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class BluetoothSearchDialog extends Dialog {
 
     private final Context context;
 
+    BluetoothDevice device;
+    BluetoothDevice paired;
     BluetoothAdapter bluetoothAdapter;
     BluetoothSocket bluetoothSocket;
+    Handler bluetoothHandler;
+    ConnectedBluetoothThread threadConnectedBluetooth;
 
-    final static int BLUETOOTH_REQUEST_CODE = 100;
+    final static int BT_MESSAGE_READ = 2;
+    final static int BT_CONNECTING_STATUS = 3;
+    final static UUID BT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     //UI
     private TextView tvBluetooth;
@@ -53,10 +65,10 @@ public class BluetoothSearchDialog extends Dialog {
     List<Map<String,String>> dataPaired;
     List<Map<String, String>> dataBluetooth;
     List<BluetoothDevice> bluetoothDevices;
+    Set<BluetoothDevice> pairedDevices;
     int selectDevice;
 
     private BluetoothSearchDialogListener bluetoothSearchDialogListener;
-    final static UUID BT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     public BluetoothSearchDialog(Context context) {
         super(context);
@@ -102,6 +114,15 @@ public class BluetoothSearchDialog extends Dialog {
             OnBluetoothSearch();
         });
 
+        bluetoothHandler = new Handler(){
+            public void handleMessage(android.os.Message msg){
+                if(msg.what == 1){
+                    Log.e("connect success", "연결 성공");
+
+                }
+            }
+        };
+
         //블루투스 지원하지 않으면 null 리턴
         if(bluetoothAdapter == null) {
             tvBluetoothError.setText("블루투스를 지원하지 않는 단말기입니다.");
@@ -127,7 +148,7 @@ public class BluetoothSearchDialog extends Dialog {
 
         //검색된 디바이스목록 클릭시 페어링 요청
         listBluetooth.setOnItemClickListener((parent, view, position, id) -> {
-            BluetoothDevice device = bluetoothDevices.get(position);
+            device = bluetoothDevices.get(position);
 
             try {
                 Method method = device.getClass().getMethod("createBond", (Class[]) null);
@@ -140,6 +161,7 @@ public class BluetoothSearchDialog extends Dialog {
                 e.printStackTrace();
             }
         });
+
     }
 
 
@@ -159,7 +181,7 @@ public class BluetoothSearchDialog extends Dialog {
                 //블루투스 디바이스 찾음
                 case BluetoothDevice.ACTION_FOUND:
                     //검색한 블루투스 디바이스의 객체를 구한다
-                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     //데이터 저장
                     Map map = new HashMap();
                     map.put("name", device.getName()); //device.getName() : 블루투스 디바이스의 이름
@@ -186,15 +208,16 @@ public class BluetoothSearchDialog extends Dialog {
                     break;
                 //블루투스 디바이스 페어링 상태 변화
                 case BluetoothDevice.ACTION_BOND_STATE_CHANGED:
-                    BluetoothDevice paired = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    paired = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     if(paired.getBondState()==BluetoothDevice.BOND_BONDED){
                         //데이터 저장
                         Log.e("paired", String.valueOf(paired));
+                        pairedDevices = bluetoothAdapter.getBondedDevices();
 //                        Map map2 = new HashMap();
 //                        map2.put("name", paired.getName()); //device.getName() : 블루투스 디바이스의 이름
 //                        map2.put("address", paired.getAddress()); //device.getAddress() : 블루투스 디바이스의 MAC 주소
 //                        dataPaired.add(map2);
-                        connectToSelectedDevice(paired);
+                        connectSelectedDevice(paired.getName());
 
                         //검색된 목록
                         if(selectDevice != -1){
@@ -210,17 +233,85 @@ public class BluetoothSearchDialog extends Dialog {
         }
     };
 
-    private void connectToSelectedDevice (final Object pairedDevice) {
-        @SuppressLint("HandlerLeak") final Handler handler = new Handler() {
-            public void handleMessage(Message msg) {
-                if( msg.what == 1) {
-                    Toast.makeText(context, "연결", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "연결 실패", Toast.LENGTH_SHORT).show();
+    void connectSelectedDevice(String selectedDeviceName) {
+        for(BluetoothDevice tempDevice : pairedDevices) {
+            if (selectedDeviceName.equals(tempDevice.getName())) {
+                Log.e("click3", tempDevice.getName());
+                paired = tempDevice;
+                break;
+            }
+        }
+        try {
+            bluetoothSocket = paired.createRfcommSocketToServiceRecord(BT_UUID);
+            bluetoothSocket.connect();
+            threadConnectedBluetooth = new ConnectedBluetoothThread(bluetoothSocket);
+            threadConnectedBluetooth.start();
+            bluetoothHandler.obtainMessage(BT_CONNECTING_STATUS, 1, -1).sendToTarget();
+
+            Log.e("click4", String.valueOf(bluetoothSocket));
+
+//            if(tvValue != null) {
+//                Log.e("result", "mincho");
+//                lottieBreathTesting.cancelAnimation();
+//
+//            }
+
+        } catch (IOException e) {
+            Toast.makeText(context, "블루투스 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private class ConnectedBluetoothThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
+
+        public ConnectedBluetoothThread(BluetoothSocket socket) {
+            mmSocket = socket;
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+
+            try {
+                tmpIn = socket.getInputStream();
+                tmpOut = socket.getOutputStream();
+            } catch (IOException e) {
+                Toast.makeText(context, "소켓 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+            }
+
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+            Log.e("bluetooth", "연결");
+
+        }
+        public void run() {
+            byte[] buffer = new byte[1024];
+            int bytes;
+
+            while (true) {
+                try {
+                    bytes = mmInStream.available();
+                    if (bytes != 0) {
+                        SystemClock.sleep(100);
+                        bytes = mmInStream.available();
+                        bytes = mmInStream.read(buffer, 0, bytes);
+                        bluetoothHandler.obtainMessage(BT_MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+                        Log.e("bluetooth2", "연결");
+
+                    }
+                } catch (IOException e) {
+                    break;
                 }
             }
         }
-    };
+
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) {
+                Toast.makeText(context, "소켓 해제 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
 
     //블루투스 검색 버튼 클릭*****************************
@@ -232,14 +323,18 @@ public class BluetoothSearchDialog extends Dialog {
         if(bluetoothAdapter.isDiscovering()){
             bluetoothAdapter.cancelDiscovery();
         }
-        //mBluetoothAdapter.startDiscovery() : 블루투스 검색 시작
+
+        if (bluetoothAdapter.isEnabled()) {
+            pairedDevices = bluetoothAdapter.getBondedDevices();
+        }
+            //mBluetoothAdapter.startDiscovery() : 블루투스 검색 시작
         bluetoothAdapter.startDiscovery();
     }
 
 
     @Override
     public void onBackPressed() {
-        bluetoothSearchDialogListener.onCancleClicked();
+        dismiss();
     }
 }
 
