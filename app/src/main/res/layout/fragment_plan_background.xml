@@ -15,13 +15,15 @@
         android:background="@color/colorPrimary"
         android:paddingLeft="17dp"
         android:paddingRight="17dp"
+        android:paddingTop="70dp"
+        android:paddingBottom="100dp"
         android:scrollbarAlwaysDrawVerticalTrack="true">
 
         <TextView
             android:id="@+id/pbg1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorLightAccent"
+            android:textColor="@color/colorWhite"
             android:text="전동 킥보드, 작고 편리한 교통 수단이죠. \n\n특히 전동 킥보드 공유 서비스는 큰 성장세를 보이며 무서운 속도로 규모가 커지고 있습니다."
             android:textSize="19dp"
             android:textAlignment="center"
@@ -66,7 +68,7 @@
         <ImageView
             android:id="@+id/pbg5"
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="330dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/so_we_think"
             app:layout_constraintTop_toBottomOf="@id/pbg4" />
