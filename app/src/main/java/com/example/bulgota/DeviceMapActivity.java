@@ -79,6 +79,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private Marker[] markerItems;
 
     private Button btnHomeLend;
+    private Button btnInfoLend;
     private Button btnHomeZoomIn;
     private Button btnHomeZoomOut;
     private Button btnInfoZoomIn;
@@ -288,6 +289,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void makeUiSetting() {
         btnHomeLend = findViewById(R.id.btn_home_lend);
+        btnInfoLend = findViewById(R.id.btn_info_lend);
         btnHomeLocation = findViewById(R.id.btn_home_location);
         btnInfoLocation = findViewById(R.id.btn_info_location);
         btnHomeZoomIn = findViewById(R.id.btn_home_zoom_in);
@@ -307,6 +309,12 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
             ChooseMarkerDialog dialog = new ChooseMarkerDialog(this);
             dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
             dialog.show();
+        });
+
+        btnInfoLend.setOnClickListener(l -> {
+            BluetoothSearchDialog bluetoothSearchDialog = new BluetoothSearchDialog(this);
+            bluetoothSearchDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+            bluetoothSearchDialog.show();
         });
 
         btnHomeZoomIn.setOnClickListener(l -> {

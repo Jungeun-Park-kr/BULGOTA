@@ -7,7 +7,7 @@
     >
 
     <ImageView
-        android:id="@+id/img_error"
+        android:id="@+id/imb_error"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_gravity="center|top"
@@ -15,7 +15,7 @@
         app:srcCompat="@drawable/error" />
 
     <TextView
-        android:id="@+id/tv_scan_error"
+        android:id="@+id/tv_bluetooth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
