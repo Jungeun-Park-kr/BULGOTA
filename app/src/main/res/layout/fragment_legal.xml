@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="17dp"
-        android:paddingRight="17dp">
+        android:paddingRight="17dp"
+        android:paddingTop="70dp"
+        android:paddingBottom="100dp">
 
         <TextView
             android:id="@+id/pbg1"
@@ -62,7 +64,7 @@
         <ImageView
             android:id="@+id/pbg5"
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="330dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/so_we_think"
             app:layout_constraintTop_toBottomOf="@id/pbg4" />
