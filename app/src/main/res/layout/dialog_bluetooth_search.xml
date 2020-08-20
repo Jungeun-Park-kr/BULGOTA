@@ -38,12 +38,21 @@
             android:textColor="@color/colorText"
             android:textSize="16sp" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_breathe_testing"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center|right"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="5dp"
+            android:foregroundGravity="fill" />
+
         <Button
             android:id="@+id/btn_search"
             android:layout_width="50dp"
             android:layout_height="40dp"
-            android:layout_gravity="center|right"
-            android:layout_marginLeft="100dp"
+            android:layout_gravity="center|end"
+            android:layout_marginLeft="0dp"
             android:layout_marginBottom="0dp"
             android:background="@drawable/rec_btn_info"
             android:fontFamily="@font/nanum_square_round_bold"

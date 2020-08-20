@@ -1,5 +1,6 @@
 package com.example.bulgota;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
@@ -22,6 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,6 +60,7 @@ public class BluetoothSearchDialog extends Dialog {
     private TextView tvBluetoothError;
     private Button btnSearch;
     private ListView listBluetooth;
+    public static LottieAnimationView lottieAnimationView; //(로딩모양)측정중 로띠띠
 
     //Adapter
     SimpleAdapter adapterBluetooth;
@@ -96,6 +101,7 @@ public class BluetoothSearchDialog extends Dialog {
         tvBluetoothError = findViewById(R.id.tv_bluetooth_error);
         btnSearch = findViewById(R.id.btn_search);
         listBluetooth = findViewById(R.id.list_bluetooth);
+        lottieAnimationView = findViewById(R.id.lottie_breathe_testing);
 
         //Adapter
         dataBluetooth = new ArrayList<>();
@@ -171,8 +177,10 @@ public class BluetoothSearchDialog extends Dialog {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             switch(action){
-                //블루투스 디바이스 검색 종료
+                //블루투스 디바이스 검색 시작
                 case BluetoothAdapter.ACTION_DISCOVERY_STARTED:
+                    setUpAnimation(lottieAnimationView);
+
                     dataBluetooth.clear();
                     bluetoothDevices.clear();
                     Log.e("search start", "검색 시작");
@@ -204,6 +212,7 @@ public class BluetoothSearchDialog extends Dialog {
                 //블루투스 디바이스 검색 종료
                 case BluetoothAdapter.ACTION_DISCOVERY_FINISHED:
                     //로띠종료 검색버튼 활성화
+                    lottieAnimationView.setVisibility(View.INVISIBLE);
                     btnSearch.setEnabled(true);
                     break;
                 //블루투스 디바이스 페어링 상태 변화
@@ -211,8 +220,9 @@ public class BluetoothSearchDialog extends Dialog {
                     paired = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     if(paired.getBondState()==BluetoothDevice.BOND_BONDED){
                         //데이터 저장
-                        Log.e("paired", String.valueOf(paired));
                         pairedDevices = bluetoothAdapter.getBondedDevices();
+                        Log.e("paired", String.valueOf(pairedDevices));
+
 //                        Map map2 = new HashMap();
 //                        map2.put("name", paired.getName()); //device.getName() : 블루투스 디바이스의 이름
 //                        map2.put("address", paired.getAddress()); //device.getAddress() : 블루투스 디바이스의 MAC 주소
@@ -329,6 +339,15 @@ public class BluetoothSearchDialog extends Dialog {
         }
             //mBluetoothAdapter.startDiscovery() : 블루투스 검색 시작
         bluetoothAdapter.startDiscovery();
+    }
+
+    private void setUpAnimation(LottieAnimationView animview) { //로띠 애니메이션 설정
+        //재생할 애니메이션
+        animview.setAnimation("lottie_breathe_testing.json");
+        //반복횟수 지정 : 무한
+        animview.setRepeatCount(LottieDrawable.INFINITE); //아니면 횟수 지정
+        //시작
+        animview.playAnimation();
     }
 
 
