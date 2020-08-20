@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button deviceMapBtn;
@@ -34,15 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         QRCodeScanBtn.setOnClickListener(this);
         certCompletionBtn.setOnClickListener(this);
         splashActivityBtn.setOnClickListener(this);
-
-
-        Intent intent = getIntent();
-        if(intent != null) {//푸시알림을 선택해서 실행한것이 아닌경우 예외처리
-            String notificationData = intent.getStringExtra("test");
-            if(notificationData != null)
-                Log.d("FCM_TEST", notificationData);
-
-        }
 
     } //view 객체 획득
 
