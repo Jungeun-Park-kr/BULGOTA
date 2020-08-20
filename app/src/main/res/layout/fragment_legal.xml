@@ -92,33 +92,32 @@
             android:layout_height="50dp"
             android:src="@drawable/government"
             app:layout_constraintTop_toBottomOf="@id/pbg6"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:tint="@color/colorPrimary" />
         <TextView
             android:id="@+id/pbg8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
             android:text="1. 전동킥보드 사고 발생율을 낮출 수 있음 \n
 2. 기기와 연동하여 손쉽게 음주 관련 기준을 변경 가능"
             android:textSize="17dp"
             android:layout_marginTop="17dp"
+            android:layout_marginLeft="17dp"
             app:layout_constraintTop_toBottomOf="@id/pbg7"
             android:textStyle="bold"
-            android:gravity="center_horizontal"
             android:fontFamily="@font/nanum_square_round_bold"/>
 
         <TextView
             android:id="@+id/pbg7_2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
             android:text="정부"
-            android:textSize="19dp"
-            android:layout_marginTop="17dp"
+            android:textSize="27dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
             app:layout_constraintBottom_toTopOf="@id/pbg8"
             app:layout_constraintLeft_toRightOf="@id/pbg7"
             android:textStyle="bold"
-            android:gravity="center_horizontal"
             android:fontFamily="@font/nanum_square_round_bold"/>
 
         <!--기업 장점
@@ -130,33 +129,33 @@
             android:layout_height="50dp"
             android:src="@drawable/company"
             app:layout_constraintTop_toBottomOf="@id/pbg8"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:tint="@color/colorPrimary"/>
         <TextView
             android:id="@+id/pbg10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:text="1. 전동킥보드 사고 발생율을 낮출 수 있음 \n
-2. 기기와 연동하여 손쉽게 음주 관련 기준을 변경 가능"
+            android:text="1. 낮아진 사고율을 토대로 적어진 기기 유지비 \n
+2. 해당 기업의 좋은 이미지로 다른 기업과의 경쟁에서 유리
+"
             android:textSize="17dp"
             android:layout_marginTop="17dp"
+            android:layout_marginLeft="17dp"
             app:layout_constraintTop_toBottomOf="@id/pbg9"
             android:textStyle="bold"
-            android:gravity="center_horizontal"
             android:fontFamily="@font/nanum_square_round_bold"/>
 
         <TextView
             android:id="@+id/pbg9_2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:text="정부"
-            android:textSize="19dp"
-            android:layout_marginTop="17dp"
+            android:text="기업"
+            android:textSize="27dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
             app:layout_constraintBottom_toTopOf="@id/pbg10"
             app:layout_constraintLeft_toRightOf="@id/pbg9"
             android:textStyle="bold"
-            android:gravity="center_horizontal"
             android:fontFamily="@font/nanum_square_round_bold"/>
 
         <!--사용자 장점
@@ -168,34 +167,35 @@
             android:layout_height="50dp"
             android:src="@drawable/people"
             app:layout_constraintTop_toBottomOf="@id/pbg10"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:tint="@color/colorPrimary"/>
         <TextView
             android:id="@+id/pbg12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:text="1. 전동킥보드 사고 발생율을 낮출 수 있음 \n
-2. 기기와 연동하여 손쉽게 음주 관련 기준을 변경 가능"
+            android:text="1. 음주 시 탑승을 제한하여 사고를 미연에 방지 \n
+2. 해당 플랫폼의 존재로 비사용자 기준에선 안심할 수 있음
+"
             android:textSize="17dp"
             android:layout_marginTop="17dp"
+            android:layout_marginLeft="17dp"
             app:layout_constraintTop_toBottomOf="@id/pbg11"
             android:textStyle="bold"
-            android:gravity="center_horizontal"
             android:fontFamily="@font/nanum_square_round_bold"/>
 
         <TextView
             android:id="@+id/pbg11_2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
             android:text="사용자 및 비사용자"
-            android:textSize="19dp"
-            android:layout_marginTop="17dp"
+            android:textSize="27dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
             app:layout_constraintBottom_toTopOf="@id/pbg12"
             app:layout_constraintLeft_toRightOf="@id/pbg11"
             android:textStyle="bold"
-            android:gravity="center_horizontal"
             android:fontFamily="@font/nanum_square_round_bold"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>
