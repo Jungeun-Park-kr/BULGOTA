@@ -6,8 +6,12 @@ import androidx.annotation.UiThread;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
@@ -20,6 +24,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bulgota.api.BullgoTAService;
 import com.example.bulgota.api.Marker_list;
@@ -47,6 +52,16 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
+    //퍼미션 리스트
+    private static String[] permission_list = {
+            Manifest.permission.BLUETOOTH,
+            Manifest.permission.BLUETOOTH_ADMIN,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.CAMERA
+    };
+    private static final int request_code = 0;
+
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     private static final int PAGE_UP = 8;
     private static final int PAGE_LEFT = 4;
@@ -107,6 +122,36 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         setContentView(R.layout.activity_device_map);
 
+        //필요한 모든 퍼미션 확인
+        if(DeviceMapActivity.checkPermissions(this, Manifest.permission.BLUETOOTH)
+                &&(DeviceMapActivity.checkPermissions(this, Manifest.permission.BLUETOOTH_ADMIN))
+                &&(DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION))
+                &&(DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION))
+                &&(DeviceMapActivity.checkPermissions(this, Manifest.permission.CAMERA))) {
+            //권한 있음 - 원하는 메소드 사용
+            //기존코드
+            if (!locationSource.isActivated()) {
+                map.setLocationTrackingMode(LocationTrackingMode.None);
+            }
+            map.setLocationSource(locationSource);
+            map.setLocationTrackingMode(LocationTrackingMode.Follow);
+            //Toast.makeText(this, "권한 설정이 완료되었습니다.", Toast.LENGTH_LONG).show();
+        }
+        else {
+            //Toast.makeText(this, "권한 하나이상 없음.", Toast.LENGTH_LONG).show();
+            DeviceMapActivity.requestExternalPermissions(this);
+        }
+        /* //권한 하나하나 확인
+        for(String permissions : permission_list) {
+            if(DeviceMapActivity.checkPermissions(this,permissions)) {
+                //Toast.makeText(this, permissions+"<-권한 설정이 완료되었습니다.", Toast.LENGTH_LONG).show();
+            }
+            else {
+                //Toast.makeText(this, "권한 하나이상 없음."+permissions+"얘없음", Toast.LENGTH_LONG).show();
+                DeviceMapActivity.requestExternalPermissions(this);
+            }
+        }*/
+
         //기획 배경 등 텍스트를 클릭하면 해당 항목의 공지사항으로 이동할 예정.
         tvPlanBackground = (TextView)findViewById(R.id.tv_tab_list_1);
         tvPlanBackground.setOnClickListener(this);
@@ -155,19 +200,60 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            if (!locationSource.isActivated()) {
-                map.setLocationTrackingMode(LocationTrackingMode.None);
-            }
-            map.setLocationSource(locationSource);
-            map.setLocationTrackingMode(LocationTrackingMode.Follow);
-            return;
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    public static boolean checkPermissions(Activity activity, String permission) {
+        int permissionResult = ActivityCompat.checkSelfPermission(activity, permission);
+        if (permissionResult == PackageManager.PERMISSION_GRANTED)
+            return true;
+        else
+            return false;
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == 0) { //if(requestCode == BreathTestingActivity.request_code)
+            if(DeviceMapActivity.verifyPermission(grantResults)) {
+                //요청한 권한 얻음, 원하는 메소드 사용
+                Toast.makeText(this, "권한 설정이 모두 완료되었습니다.", Toast.LENGTH_LONG).show();
+
+//                //기존코드
+//                if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+//                    if (!locationSource.isActivated()) {
+//                        map.setLocationTrackingMode(LocationTrackingMode.None);
+//                    }
+//                    map.setLocationSource(locationSource);
+//                    map.setLocationTrackingMode(LocationTrackingMode.Follow);
+//                    return;
+//                }
+//                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
+            else {
+                Toast.makeText(this, "불고타 서비스 이용을 위해 권한이 필요합니다.", Toast.LENGTH_LONG).show();
+            }
+        }
+        else
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
+    }
+
+
+    public static void requestExternalPermissions(Activity activity) {
+        ActivityCompat.requestPermissions(activity, permission_list, request_code);
+    }
+
+    public static boolean verifyPermission(int[] grantresults) { //하나라도 허용 안되어있으면 flase리턴
+        if (grantresults.length < 1) {
+            return false;
+        }
+        for (int result : grantresults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 
     @Override
     protected void onStart() {
