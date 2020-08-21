@@ -260,11 +260,6 @@ public class BluetoothSearchDialog extends Dialog {
 
             Log.e("click4", String.valueOf(bluetoothSocket));
 
-//            if(tvValue != null) {
-//                Log.e("result", "mincho");
-//                lottieBreathTesting.cancelAnimation();
-//
-//            }
 
         } catch (IOException e) {
             Toast.makeText(context, "블루투스 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
