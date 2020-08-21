@@ -30,7 +30,7 @@ public class FirebasePushMessage extends FirebaseMessagingService {
         String message = remoteMessage.getData().get("message");//firebase에서 보낸 메세지의 내용
         String test = remoteMessage.getData().get("test");
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, DeviceMapActivity.class);
         intent.putExtra("test", test);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
