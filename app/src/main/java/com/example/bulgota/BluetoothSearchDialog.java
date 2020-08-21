@@ -1,7 +1,5 @@
 package com.example.bulgota;
 
-import android.animation.Animator;
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -12,7 +10,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -22,18 +19,14 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -338,7 +331,7 @@ public class BluetoothSearchDialog extends Dialog {
 
     private void setUpAnimation(LottieAnimationView animview) { //로띠 애니메이션 설정
         //재생할 애니메이션
-        animview.setAnimation("lottie_breathe_testing.json");
+        animview.setAnimation("lottie_breath_testing.json");
         //반복횟수 지정 : 무한
         animview.setRepeatCount(LottieDrawable.INFINITE); //아니면 횟수 지정
         //시작

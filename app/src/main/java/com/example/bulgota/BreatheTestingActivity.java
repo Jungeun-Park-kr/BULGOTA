@@ -1,46 +1,69 @@
 package com.example.bulgota;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
+import android.animation.Animator;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.airbnb.lottie.LottieAnimationView;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 
+import static android.view.View.VISIBLE;
+
 public class BreatheTestingActivity extends AppCompatActivity implements View.OnClickListener{
     private BluetoothSPP btSpp; //블루투스 통신
-    Button btnMeasureActivity;//측정하기 화면 이동 버튼
-    Button btnTesting; //진짜 측정화면
+    MyTimer myTimer;    //타이머객체
+    public static LottieAnimationView lottieBreathTesting; //(로딩모양)측정중 로띠
+    public static LottieAnimationView lottieAnalyzing; //(점모양)분석중 로띠
+    Button btnTesting; //측정시작 버튼
+    Button btnConnect; //연결하기 버튼
+    TextView tvBigInfo; //큰 안내문(아이콘 아래)
+    TextView tvSmallInfo; //작은 안내문 (버튼 위)
+    ImageView ivConnect; //연결 아이콘
+    ImageView ivTesting; //측정 아이콘
 
 
-    public static Context context_main;
-    public boolean result = true; //Testing Activity에 보낼 측정 결과값을 저장
-    public boolean isTesting; //측정중인지 확인(Testing Activity에서 가져옴)
-
+    private boolean isTesting = false; //현재 사용자가 측정중인지 확인하는 변수
+    private boolean result = true; //음주 측정 결과값 저장
     double dValue; ////측정값 가져오기 (mg/L) , 혈중알코올 농도:mg/100mL
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_breathe_testing);
 
-        context_main = this;
 
-        btnTesting = findViewById(R.id.btn_testing);
+        lottieBreathTesting = findViewById(R.id.lottie_breathing); //측정중 로띠
+        lottieAnalyzing = findViewById(R.id.lottie_analyzing); //분석중 로띠
+        btnTesting = findViewById(R.id.btn_measure_start); //측정시작 버튼
+        btnConnect = findViewById(R.id.btn_connect_start); //연결하기 버튼
+        ivConnect = findViewById(R.id.iv_device_connecting_icon); //연결하기 아이콘
+        ivTesting = findViewById(R.id.iv_breath_testing_icon); //측정하기 아이콘
+        tvBigInfo = findViewById(R.id.tv_testing_info); //아이콘 아래 큰 안내문
+        tvSmallInfo = findViewById(R.id.tv_testing_small_info); //버튼 위 작은 안내문
         btnTesting.setOnClickListener(this);
-        btnMeasureActivity = findViewById(R.id.btn_testing_activity);
-        btnMeasureActivity.setOnClickListener(this);
+
+        btnTesting.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                tvSmallInfo.setText("3초 후에 측정을 시작합니다.");
+                myTimer = new MyTimer(3000, 1000);
+                myTimer.start();
+            }
+        });
 
         btSpp = new BluetoothSPP(this); //초기화
 
@@ -56,16 +79,13 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
              *   따라서 아두이노에서 온 데이터를 넣어 바이트를 모두 합친 후 msg를 통해 return됨
              *   즉 우리가 사용할 것 : msg!! // 아래는 msg를 토스트로 띄운 예시
              */
-            TextView tvValue = findViewById(R.id.tv_value);
-
 
             @Override
             public void onDataReceived(byte[] data, String msg) { //데이터 수신 받을 때
-                //int iValue = Integer.parseInt(msg);
 
-                dValue = Double.parseDouble(msg);
-                tvValue.setText("측정값:" + dValue);
-                if (dValue > 300) { //현재 측정중이고 300 넘은 경우 - 운전 불가
+                dValue = Double.parseDouble(msg); //수신받은 음주측정 값 저장
+                //tvValue.setText("측정값:" + dValue);
+                if (isTesting && (dValue > 300)) { //현재 측정중이고 200 넘은 경우 - 운전 불가
                     result = false;
                 }
             }
@@ -77,6 +97,13 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
                 Toast.makeText(getApplicationContext()
                         , "Connected to " + name + "\n" + address
                         , Toast.LENGTH_SHORT).show();
+                btnConnect.setVisibility(View.INVISIBLE); //연결 완료시 '연결시작' 버튼 없애기
+                tvSmallInfo.setText("아래의 측정시작 버튼을 눌러주세요."); //작은 안내문 내용 변경
+                btnTesting.setVisibility(View.VISIBLE); //'측정시작' 버튼 생기기
+                tvBigInfo.setText("전동킥보드 옆의 음주 측정 장치에\n숨을 3초 이상 불어 넣어 주세요."); //큰 안내문 내용 변경
+                ivConnect.setVisibility(View.INVISIBLE); //연결하기 아이콘 없애기
+                ivTesting.setVisibility(View.VISIBLE); //측정하기 아이콘 생기기
+
             }
 
             @Override
@@ -93,7 +120,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         });
 
         ////////////////////////////////////////////////////////////////연결 시도
-        Button btnConnect = findViewById(R.id.btn_measure); //측정하기 버튼
+
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +156,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
 
     public void measure() {
 
-        Button btnMeasure = findViewById(R.id.btn_measure); //
+        Button btnMeasure = findViewById(R.id.btn_measure_start); //
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -151,6 +178,121 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         }
     }
 
+    private void setUpAnimationMeasuring(final LottieAnimationView animview) { //측정중 로띠
+        //재생할 애니메이션
+        animview.setAnimation("lottie_breath_testing.json");
+        //반복횟수 지정
+        animview.setRepeatCount(1); //횟수 지정
+        //시작
+        animview.playAnimation();
+
+
+
+        animview.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) { //끝난 경우
+                animview.setVisibility(View.INVISIBLE);
+                lottieAnalyzing.setVisibility(VISIBLE);
+                tvSmallInfo.setText("측정 결과를 분석중입니다.");
+                setUpAnimationAnalyzing(lottieAnalyzing);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+                animview.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+    }
+
+    private void setUpAnimationAnalyzing(final LottieAnimationView animview) { //분석중 로띠
+        //재생할 애니메이션
+        animview.setAnimation("lottie_dots.json");
+        animview.setSpeed((float)0.8);
+        //반복횟수 지정
+        animview.setRepeatCount(1); //횟수 지정
+        //시작
+        animview.playAnimation();
+
+        animview.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+                //isTesting = true; //측정 시작
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) { //끝난 경우
+                isTesting = false; //측정 종료
+                tvSmallInfo.setVisibility(View.INVISIBLE);
+                animview.setVisibility(View.INVISIBLE);
+
+                analysisResult(); //측정 결과에 따라 화면 이동하는 메소드
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+                animview.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+                animview.removeAllLottieOnCompositionLoadedListener();
+            }
+        });
+    }
+
+    private void analysisResult() { //측정 결과 확인후 처리하는 메소드
+        //큐알코드 화면 이동 or 분석화면 이동
+        if (result) { //측정결과 - 운전 가능
+            Toast.makeText(this, "분석결과 정상입니다.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this,QRCodeScanActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else { //측정결과 - 운전 불가
+            Toast.makeText(this, "분석결과 운전 불가합니다.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this,DetoxAnalysisActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    class MyTimer extends CountDownTimer {
+
+        public MyTimer(long millisInFuture, long countDowninterval) {
+            super(millisInFuture, countDowninterval);
+        }
+        @Override
+        public void onTick(long millisUntilFinished) {
+            tvSmallInfo.setText((millisUntilFinished/1000)+1 + " 초 후에 측정을 시작합니다.");
+        }
+
+        @Override
+        public void onFinish() {
+            tvSmallInfo.setText("3초간 바람을 세게 불어주세요!");
+            isTesting = true; //측정 시작 인지 확인
+            if (btnTesting.getVisibility() == VISIBLE) //측정중 버튼 없애기
+                btnTesting.setVisibility(View.INVISIBLE);
+
+            if (lottieBreathTesting.getVisibility() == View.INVISIBLE) { //측정중 로띠 띄우기
+                lottieBreathTesting.setVisibility(VISIBLE);
+                setUpAnimationMeasuring(lottieBreathTesting);
+            }
+
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -164,4 +306,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
 //        }
 
     }
+
+
+
 }
