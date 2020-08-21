@@ -168,9 +168,9 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private void receiveMessage() {
         Intent intent = getIntent();
         if(intent != null) {//푸시알림을 선택해서 실행한것이 아닌경우 예외처리
-            String notificationData = intent.getStringExtra("BULGOTA MESSAGE");
+            String notificationData = intent.getStringExtra("test");
             if(notificationData != null)
-                Toast.makeText(this, "대여 화면으로 이동합니다.", Toast.LENGTH_SHORT).show();
+                Log.d("FCM_TEST", notificationData);
         }
     }
 

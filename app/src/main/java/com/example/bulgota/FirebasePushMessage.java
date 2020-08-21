@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -19,6 +20,9 @@ public class FirebasePushMessage extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
+        //토큰값 받아오는 로그
+        //디바이스 토큰값이 이유없이 변경되는 경우가 존재
+        //cf)해당 문제 발생 시 재설치 후 log에 나타나는 디바이스 토큰 값 다시 받아야와야 함
         Log.d("FCM_TEST", s);
     }
 
@@ -26,12 +30,14 @@ public class FirebasePushMessage extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+        //해당 위치에서 Toast 띄우기 불가... 이유모름
+
         String title = remoteMessage.getData().get("title");//firebase에서 보낸 메세지의 title
         String message = remoteMessage.getData().get("message");//firebase에서 보낸 메세지의 내용
-        String test = remoteMessage.getData().get("alram message");
+        String test = remoteMessage.getData().get("test");
 
         Intent intent = new Intent(this, DeviceMapActivity.class);
-        intent.putExtra("BULGOTA MESSAGE", test);
+        intent.putExtra("test", test);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
