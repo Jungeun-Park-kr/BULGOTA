@@ -1,20 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    꾸며야함
--->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:scrollbarAlwaysDrawVerticalTrack="true">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:paddingLeft="17dp"
+        android:paddingRight="17dp"
+        android:paddingTop="70dp"
+        android:paddingBottom="100dp">
+
+        <TextView
+            android:id="@+id/pbg1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:text="전동 킥보드, 작고 편리한 교통 수단이죠. \n\n특히 전동 킥보드 공유 서비스는 큰 성장세를 보이며 무서운 속도로 규모가 커지고 있습니다."
+            android:textSize="19dp"
+            android:textAlignment="center"
+            android:layout_marginTop="17dp"
+            android:layout_margin="7dp"
+            app:layout_constraintBottom_toTopOf="@id/pbg2"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/nanum_square_round_bold"/>
+
+        <ImageView
+            android:id="@+id/pbg2"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/evidence_garph"
+            app:layout_constraintTop_toBottomOf="@id/pbg1"
+            tools:layout_editor_absoluteX="18dp" />
+
+        <TextView
+            android:id="@+id/pbg3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:text="이처럼 전동 킥보드의 이용량은 증가하고 있고, 저희 일상에서 적지 않게 찾아볼 수 있습니다.\n\n 하지만, 킥보드이용이 증가함에 따라서 킥보드의 어두운 면도 드러나게 되었습니다."
+            android:textSize="19dp"
+            android:textAlignment="center"
+            android:layout_marginTop="17dp"
+            app:layout_constraintTop_toBottomOf="@id/pbg2"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/nanum_square_round_bold"/>
+
+        <ImageView
+            android:id="@+id/pbg4"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/hard_to_catch"
+            app:layout_constraintTop_toBottomOf="@id/pbg3" />
+
+        <ImageView
+            android:id="@+id/pbg5"
+            android:layout_width="match_parent"
+            android:layout_height="330dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/so_we_think"
+            app:layout_constraintTop_toBottomOf="@id/pbg4" />
+
+        <TextView
+            android:id="@+id/pbg6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:text="저희는 이 아이디어를 현실로 바꾸었고, \n현 전동킥보드 시장에 불고타 플랫폼을 제안하고 싶습니다.\n\n
+
+불고타는 전동킥보드 대여 과정에서 음주 측정을 필수로 하고 있고,\n 이를 통해 정부 기업 사용자 비사용자 모두에게 이점을 줄 수 있습니다."
+            android:textSize="17dp"
+            android:textAlignment="center"
+            android:layout_marginTop="17dp"
+            app:layout_constraintTop_toBottomOf="@id/pbg5"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/nanum_square_round_bold"/>
+
+        <!--정부 장점
+        -->
+        <ImageView
+            android:id="@+id/pbg7"
+            android:layout_marginTop="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/government"
+            app:layout_constraintTop_toBottomOf="@id/pbg6"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:tint="@color/colorPrimary" />
+        <TextView
+            android:id="@+id/pbg8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. 전동킥보드 사고 발생율을 낮출 수 있음 \n
+2. 기기와 연동하여 손쉽게 음주 관련 기준을 변경 가능"
+            android:textSize="17dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginLeft="17dp"
+            app:layout_constraintTop_toBottomOf="@id/pbg7"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanum_square_round_bold"/>
+
+        <TextView
+            android:id="@+id/pbg7_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="정부"
+            android:textSize="27dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintBottom_toTopOf="@id/pbg8"
+            app:layout_constraintLeft_toRightOf="@id/pbg7"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanum_square_round_bold"/>
+
+        <!--기업 장점
+        -->
+        <ImageView
+            android:id="@+id/pbg9"
+            android:layout_marginTop="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/company"
+            app:layout_constraintTop_toBottomOf="@id/pbg8"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:tint="@color/colorPrimary"/>
+        <TextView
+            android:id="@+id/pbg10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. 낮아진 사고율을 토대로 적어진 기기 유지비 \n
+2. 해당 기업의 좋은 이미지로 다른 기업과의 경쟁에서 유리
+"
+            android:textSize="17dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginLeft="17dp"
+            app:layout_constraintTop_toBottomOf="@id/pbg9"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanum_square_round_bold"/>
+
+        <TextView
+            android:id="@+id/pbg9_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기업"
+            android:textSize="27dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintBottom_toTopOf="@id/pbg10"
+            app:layout_constraintLeft_toRightOf="@id/pbg9"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanum_square_round_bold"/>
+
+        <!--사용자 장점
+        -->
+        <ImageView
+            android:id="@+id/pbg11"
+            android:layout_marginTop="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/people"
+            app:layout_constraintTop_toBottomOf="@id/pbg10"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:tint="@color/colorPrimary"/>
+        <TextView
+            android:id="@+id/pbg12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. 음주 시 탑승을 제한하여 사고를 미연에 방지 \n
+2. 해당 플랫폼의 존재로 비사용자 기준에선 안심할 수 있음
+"
+            android:textSize="17dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginLeft="17dp"
+            app:layout_constraintTop_toBottomOf="@id/pbg11"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanum_square_round_bold"/>
+
+        <TextView
+            android:id="@+id/pbg11_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용자 및 비사용자"
+            android:textSize="27dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintBottom_toTopOf="@id/pbg12"
+            app:layout_constraintLeft_toRightOf="@id/pbg11"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanum_square_round_bold"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

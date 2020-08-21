@@ -186,11 +186,20 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if(v == tvPlanBackground){
-            tag = PLAN_BACKGROUND;
+            if(tag != PLAN_BACKGROUND) {
+                tag = PLAN_BACKGROUND;
+                viewLayer.performClick();
+            }
         } else if(v == tvLegal){
-            tag = LEGAL;
+            if(tag != LEGAL) {
+                tag = LEGAL;
+                viewLayer.performClick();
+            }
         } else if(v == tvGuide){
-            tag = GUIDE;
+            if(tag != GUIDE) {
+                tag = GUIDE;
+                viewLayer.performClick();
+            }
         }
         setContent(tag);
     }

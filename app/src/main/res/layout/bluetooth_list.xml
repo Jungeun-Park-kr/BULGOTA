@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="300dp"
-    android:orientation="vertical"
-    >
+    android:background="#FFFFFF"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -15,12 +15,13 @@
         android:layout_marginRight="10dp"
         android:orientation="horizontal">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/img_bluetooth"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center|left"
-            app:srcCompat="@drawable/bluetooth" />
+            android:background="@drawable/bluetooth"
+            app:srcCompat="@null" />
 
         <TextView
             android:id="@+id/tv_bluetooth"
@@ -84,11 +85,13 @@
         android:textSize="10sp" />
 
     <ListView
-        android:id="@+id/list_bluetooth"
+        android:id="@+id/list_devices"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        />
-
+        android:layout_above="@+id/button_scan"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="10dp"
+        android:clipToPadding="false"
+        android:smoothScrollbar="true" />
 </LinearLayout>
-

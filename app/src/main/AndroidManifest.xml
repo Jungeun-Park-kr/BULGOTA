@@ -30,6 +30,7 @@
         <activity android:name=".SplashActivity" />
         <activity android:name=".NoticeActivity"/>
         <activity android:name=".BreatheTestingActivity" />
+        <activity android:name=".DeviceList" android:theme="@style/Theme.MyDialog"/>
         <activity
             android:name=".DeviceMapActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
