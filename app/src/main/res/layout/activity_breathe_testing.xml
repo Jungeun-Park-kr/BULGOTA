@@ -1,91 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     tools:context=".BreatheTestingActivity">
 
-    <TextView
-        android:id="@+id/tv_testing_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:fontFamily="@font/nanum_square_round_bold"
-        android:textColor="@color/colorPrimary"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:text="불고타 음주 측정"
-        android:layout_marginBottom="20dp"/>
-
-    <!-- 아이콘 및 설명 -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="15dp"
-        android:padding="10dp"
-        android:background="@drawable/round_square_shape"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:background="@drawable/iv_breath_testing_icon"/>
-
-        <TextView
-            android:id="@+id/tv_breathe_testing_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:fontFamily="@font/nanum_square_round_regular"
-            android:textColor="@color/colorAccent"
-            android:textAlignment="center"
-            android:layout_gravity="center"
-            android:text="전동킥보드 옆의 음주 측정 장치에\n숨을 3초 이상 불어 넣어 주세요."
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="30dp" />
-    </LinearLayout>
-
     <Button
-        android:id="@+id/btn_search"
+        android:id="@+id/btn_testing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_gravity="center"
-        android:text="다시연결시도"/>
-    <TextView
-        android:id="@+id/tv_bluetooth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/colorPrimary"
-        android:layout_gravity="center"
-        android:hint="블루투스"/>
-
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_breathe_testing"
-        android:layout_gravity="center"
-        android:layout_width="50dp"
-        android:layout_height="50dp"/>
+        android:text="측정 화면2"/>
 
     <Button
-        android:id="@+id/btn_test"
+        android:id="@+id/btn_testing_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_gravity="center"
-        android:text="음주측정하기" />
+        android:text="측정 화면 이동"/>
+
+    <Button
+        android:id="@+id/btn_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center"
+        android:text="측정(연결)하기"/>
 
     <TextView
-        android:id="@+id/tv_test_result"
+        android:id="@+id/tv_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="50sp"
+        android:textColor="@color/colorPrimary"
         android:layout_gravity="center"
-        android:text="음주측정하기" />
-    <!--        app:lottie_autoPlay="true"-->
-    <!--        app:lottie_fileName="liv_loading.json"-->
-    <!--        app:lottie_loop="true"-->
+        android:hint="결과값"/>
 
 </LinearLayout>
