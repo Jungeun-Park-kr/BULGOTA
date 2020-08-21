@@ -156,6 +156,23 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
+
+        //알람 메세지 클릭 시 map으로 이동 변경(firebasemessageservice)
+        //firebasemessage service Intent
+        //임시로 설정해둔 것이니 추후 논의 후 변경
+       receiveMessage();
+
+    }
+
+    //jonghun add code(firebasemessageservice)
+    //firebasemessage service Intent
+    private void receiveMessage() {
+        Intent intent = getIntent();
+        if(intent != null) {//푸시알림을 선택해서 실행한것이 아닌경우 예외처리
+            String notificationData = intent.getStringExtra("test");
+            if(notificationData != null)
+                Log.d("FCM_TEST", notificationData);
+        }
     }
 
     @Override

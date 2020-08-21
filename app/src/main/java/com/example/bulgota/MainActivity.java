@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button deviceMapBtn;
@@ -34,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         QRCodeScanBtn.setOnClickListener(this);
         certCompletionBtn.setOnClickListener(this);
         splashActivityBtn.setOnClickListener(this);
-
 
     } //view 객체 획득
 
