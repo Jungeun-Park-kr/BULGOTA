@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme. -->
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -10,7 +11,7 @@
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>    </style>
+        <item name="android:statusBarColor">@android:color/white</item>    </style>
 
     <style name="Theme.MyDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
         <item name="windowNoTitle">true</item>
