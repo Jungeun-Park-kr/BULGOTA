@@ -85,7 +85,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
 
                 dValue = Double.parseDouble(msg); //수신받은 음주측정 값 저장
                 //tvValue.setText("측정값:" + dValue);
-                if (isTesting && (dValue > 300)) { //현재 측정중이고 200 넘은 경우 - 운전 불가
+                if (isTesting && (dValue >= 0.03)) { //현재 측정중이고 BAC가 0.03이상인 경우
                     result = false;
                 }
             }
