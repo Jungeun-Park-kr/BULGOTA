@@ -141,6 +141,14 @@ void loop() {
 }
 ```
 
+##### Arduino - Bluetooth AT Commands
+
+연결 확인 : **AT**
+
+기기이름 변경 : **AT+NAME**이름
+
+비밀번호 변경 : **AT+PIN**0000
+
 ### Test Example) Breath Testing Using Arduino and Android Studio (unit - SensorValue)
 
 ```c
