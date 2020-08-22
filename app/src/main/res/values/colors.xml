@@ -8,5 +8,6 @@
     <color name="colorLightAccent">#F2EBEB</color>
     <color name="colorInfoLight">#7E7E7E</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorNotice">#060F12</color>
 
 </resources>

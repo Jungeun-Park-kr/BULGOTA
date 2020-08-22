@@ -66,6 +66,8 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
     private TextView tvPlanBackground;
     private TextView tvLegal;
     private TextView tvGuide;
+    private TextView tvToolbarTitle;
+    private TextView tvHambergerTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +82,10 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
         tvLegal.setOnClickListener(this);
         tvGuide = (TextView)findViewById(R.id.tv_tab_list_3);
         tvGuide.setOnClickListener(this);
+        tvToolbarTitle = (TextView)findViewById(R.id.tv_toolbar_title);
+        tvToolbarTitle.setOnClickListener(this);
+        tvHambergerTitle = (TextView)findViewById(R.id.tv_hamberger_title);
+        tvHambergerTitle.setOnClickListener(this);
 
         Intent intent = getIntent();
 
@@ -189,19 +195,27 @@ public class NoticeActivity extends AppCompatActivity implements View.OnClickLis
             if(tag != PLAN_BACKGROUND) {
                 tag = PLAN_BACKGROUND;
                 viewLayer.performClick();
+                setContent(tag);
             }
         } else if(v == tvLegal){
             if(tag != LEGAL) {
                 tag = LEGAL;
                 viewLayer.performClick();
+                setContent(tag);
             }
         } else if(v == tvGuide){
             if(tag != GUIDE) {
                 tag = GUIDE;
                 viewLayer.performClick();
+                setContent(tag);
             }
+        } else if(v == tvToolbarTitle){
+            onBackPressed();
+            onBackPressed();
+        } else if(v == tvHambergerTitle){
+            onBackPressed();
         }
-        setContent(tag);
+
     }
 
     public void setContent(int tag) {
