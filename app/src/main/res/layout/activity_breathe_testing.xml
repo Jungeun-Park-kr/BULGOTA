@@ -67,7 +67,7 @@
             android:fontFamily="@font/nanum_square_round_regular"
             android:textAlignment="center"
             android:layout_gravity="center"
-            android:text="킥보드 대여 전 음주확인을 위해\n음주측정기를 연결해주세요."
+            android:text="킥보드 대여 전 음주측정을 위해\n선택한 킥보드와 동일한 이름의\n음주측정기를 연결해주세요."
             android:layout_marginBottom="30dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
