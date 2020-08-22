@@ -339,6 +339,19 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
 //        Intent intent = new Intent(getApplicationContext(),)
 //    }
 
+    @Override
+    public void onClick(View v) {
+//        if(v == btnMeasureActivity) {
+//            Intent intent = new Intent(this,BreathTestingActivity.class);
+//            startActivity(intent);
+//        }
+//        else if (v== btnTesting) {
+//            Intent intent = new Intent(this,TestingActivity.class);
+//            startActivity(intent);
+//        }
+
+    }
+
 
 
 }
