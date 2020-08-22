@@ -1,142 +1,226 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".BreatheTestingActivity">
 
-    <TextView
-        android:id="@+id/tv_testing_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="불고타 음주 측정"
-        android:textColor="@color/colorPrimary"
-        android:textSize="30sp"
-        android:fontFamily="@font/nanum_square_round_extra_bold"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/iv_background_square"
-        android:layout_width="0dp"
-        android:layout_height="350dp"
-        android:background="@drawable/round_square_shape"
-        android:layout_margin="15dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_testing_title" />
-
-    <!-- 연결 안내 아이콘-->
-    <ImageView
-        android:id="@+id/iv_device_connecting_icon"
-        android:layout_width="0dp"
-        android:layout_height="210dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_background_square"
-        app:layout_constraintBottom_toTopOf="@id/tv_testing_info"
-        android:background="@drawable/bluetooth_connecting_icon_4" />
-<!-- 음주 측정 아이콘 -->
-    <!--아이콘 아래 큰 안내문-->
-    <ImageView
-        android:id="@+id/iv_breath_testing_icon"
-        android:layout_width="0dp"
-        android:layout_height="210dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/breath_testing_icon"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/tv_testing_info"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_background_square" />
-
-    <TextView
-        android:id="@+id/tv_testing_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@color/colorAccent"
-        android:fontFamily="@font/nanum_square_round_regular"
-        android:textAlignment="center"
+<!--  기기 연결 뷰  -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_connect_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:text="킥보드 대여 전 음주확인을 위해\n음주측정기를 연결해주세요."
-        android:layout_marginBottom="30dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/iv_background_square" />
-<!--버튼 위 작은 안내문-->
-    <TextView
-        android:id="@+id/tv_testing_small_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text = "아래의 연결하기 버튼을 눌러주세요."
-        android:textSize="15sp"
-        android:fontFamily="@font/nanum_square_round_regular"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_measure_start"
-        app:layout_constraintTop_toBottomOf="@id/iv_background_square"/>
-<!--연결 시작 버튼-->
-    <Button
-        android:id="@+id/btn_connect_start"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="연 결 하 기"
-        android:background="@drawable/rec_btn_info"
-        android:fontFamily="@font/nanum_square_round_bold"
-        android:textColor="@color/colorPrimaryDark"
         android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/iv_background_square"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        />
-<!--측정 시작 버튼-->
-    <Button
-        android:id="@+id/btn_measure_start"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="측 정 시 작"
-        android:background="@drawable/rec_btn_info"
-        android:fontFamily="@font/nanum_square_round_bold"
-        android:textColor="@color/colorPrimaryDark"
-        android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@id/iv_background_square"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        />
-<!--  측정중 로띠 (로딩모양)  -->
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_breathing"
-        android:layout_width="150dp"
-        android:layout_height="0dp"
-        android:visibility="invisible"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/iv_background_square"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-<!-- 분석중 로띠 (점 모양) -->
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_analyzing"
-        android:layout_width="100dp"
-        android:layout_height="0dp"
-        android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@id/iv_background_square"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_testing_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="불고타 음주 측정"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"
+            android:fontFamily="@font/nanum_square_round_extra_bold"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/iv_background_square"
+            android:layout_width="0dp"
+            android:layout_height="350dp"
+            android:background="@drawable/round_square_shape"
+            android:layout_margin="15dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_testing_title" />
+
+        <!-- 연결 안내 아이콘-->
+        <ImageView
+            android:id="@+id/iv_device_connecting_icon"
+            android:layout_width="0dp"
+            android:layout_height="210dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_background_square"
+            app:layout_constraintBottom_toTopOf="@id/tv_testing_info"
+            android:background="@drawable/bluetooth_connecting_icon_4" />
+
+
+        <!--아이콘 아래 큰 안내문-->
+        <TextView
+            android:id="@+id/tv_testing_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/colorAccent"
+            android:fontFamily="@font/nanum_square_round_regular"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:text="킥보드 대여 전 음주확인을 위해\n음주측정기를 연결해주세요."
+            android:layout_marginBottom="30dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/iv_background_square" />
+        <!--버튼 위 작은 안내문-->
+        <TextView
+            android:id="@+id/tv_testing_small_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "아래의 연결하기 버튼을 눌러주세요."
+            android:textSize="15sp"
+            android:fontFamily="@font/nanum_square_round_regular"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_connect_start"
+            app:layout_constraintTop_toBottomOf="@id/iv_background_square"/>
+        <!--연결 시작 버튼-->
+        <Button
+            android:id="@+id/btn_connect_start"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="연 결 하 기"
+            android:background="@drawable/rec_btn_info"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintTop_toBottomOf="@id/iv_background_square"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+<!--음주 측정 뷰-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_test_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:background="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_testing_title2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="불고타 음주 측정"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"
+            android:fontFamily="@font/nanum_square_round_extra_bold"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_background_square2"
+            android:layout_width="0dp"
+            android:layout_height="350dp"
+            android:background="@drawable/round_square_shape"
+            android:layout_margin="15dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_testing_title2" />
+
+
+        <!-- 음주 측정 아이콘 -->
+        <ImageView
+            android:id="@+id/iv_breath_testing_icon"
+            android:layout_width="330dp"
+            android:layout_height="210dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/breath_testing_icon"
+            app:layout_constraintBottom_toTopOf="@id/tv_testing_info2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_background_square2" />
+        <!--아이콘 아래 큰 안내문-->
+        <TextView
+            android:id="@+id/tv_testing_info2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/colorAccent"
+            android:fontFamily="@font/nanum_square_round_regular"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:text="전동킥보드 옆의 음주 측정 장치에\n숨을 3초 이상 불어 넣어 주세요."
+            android:layout_marginBottom="30dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/iv_background_square2" />
+        <!--버튼 위 작은 안내문-->
+        <TextView
+            android:id="@+id/tv_testing_small_info2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "아래의 측정시작 버튼을 눌러주세요."
+            android:textSize="15sp"
+            android:fontFamily="@font/nanum_square_round_regular"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_measure_start"
+            app:layout_constraintTop_toBottomOf="@id/iv_background_square2"/>
+
+        <!--측정 시작 버튼-->
+        <Button
+            android:id="@+id/btn_measure_start"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="측 정 시 작"
+            android:background="@drawable/rec_btn_info"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintTop_toBottomOf="@id/iv_background_square2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+        <!--  측정중 로띠 (로딩모양)  -->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_breathing"
+            android:layout_width="150dp"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/iv_background_square2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+        <!-- 분석중 로띠 (점 모양) -->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_analyzing"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@id/iv_background_square2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>

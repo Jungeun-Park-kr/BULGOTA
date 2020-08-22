@@ -1,6 +1,7 @@
 package com.example.bulgota;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.animation.Animator;
 import android.app.Activity;
@@ -9,6 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +25,13 @@ import app.akexorcist.bluetotohspp.library.BluetoothState;
 import static android.view.View.VISIBLE;
 
 public class BreatheTestingActivity extends AppCompatActivity implements View.OnClickListener{
+    boolean isPageSlide = false; //페이지가 넘어갔는지 확인하는 변수
+    Animation translateUpAnim; //화면 슬라이드 애니메이션
+    ConstraintLayout testPage; //측정 레이아웃
+    ConstraintLayout connectPage; //연결 레이아웃
+    //페이지 슬라이딩 이벤트 발생시, 애니메이션이 시작 됐는지 종료됐는지 감지하는 리스너
+    private BreatheTestingActivity.SlidingPageAnimationListener animationListener;
+
     private BluetoothSPP btSpp; //블루투스 통신
     MyTimer myTimer;    //타이머객체
     public static LottieAnimationView lottieBreathTesting; //(로딩모양)측정중 로띠
@@ -30,8 +40,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
     Button btnConnect; //연결하기 버튼
     TextView tvBigInfo; //큰 안내문(아이콘 아래)
     TextView tvSmallInfo; //작은 안내문 (버튼 위)
-    ImageView ivConnect; //연결 아이콘
-    ImageView ivTesting; //측정 아이콘
+
 
 
     private boolean isTesting = false; //현재 사용자가 측정중인지 확인하는 변수
@@ -50,16 +59,22 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         lottieAnalyzing = findViewById(R.id.lottie_analyzing); //분석중 로띠
         btnTesting = findViewById(R.id.btn_measure_start); //측정시작 버튼
         btnConnect = findViewById(R.id.btn_connect_start); //연결하기 버튼
-        ivConnect = findViewById(R.id.iv_device_connecting_icon); //연결하기 아이콘
-        ivTesting = findViewById(R.id.iv_breath_testing_icon); //측정하기 아이콘
         tvBigInfo = findViewById(R.id.tv_testing_info); //아이콘 아래 큰 안내문
-        tvSmallInfo = findViewById(R.id.tv_testing_small_info); //버튼 위 작은 안내문
+        tvSmallInfo = findViewById(R.id.tv_testing_small_info2); //버튼 위 작은 안내문
         btnTesting.setOnClickListener(this);
+
+        //슬라이드할 뷰
+        testPage = findViewById(R.id.cl_test_view);  //측정 뷰
+        connectPage = findViewById(R.id.cl_connect_view); //연결 뷰
+
+        //페이지 슬라이딩 이벤트 발생시, 애니메이션이 시작 됐는지 종료됐는지 감지하는 리스너
+        translateUpAnim = AnimationUtils.loadAnimation(this, R.anim.move_down);
+
 
         btnTesting.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                tvSmallInfo.setText("3초 후에 측정을 시작합니다.");
+                tvSmallInfo.setText("3초 후에 측정을 시작합니다.");
                 myTimer = new MyTimer(3000, 1000);
                 myTimer.start();
             }
@@ -97,12 +112,17 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
                 Toast.makeText(getApplicationContext()
                         , "Connected to " + name + "\n" + address
                         , Toast.LENGTH_SHORT).show();
-                btnConnect.setVisibility(View.INVISIBLE); //연결 완료시 '연결시작' 버튼 없애기
-                tvSmallInfo.setText("아래의 측정시작 버튼을 눌러주세요."); //작은 안내문 내용 변경
-                btnTesting.setVisibility(View.VISIBLE); //'측정시작' 버튼 생기기
-                tvBigInfo.setText("전동킥보드 옆의 음주 측정 장치에\n숨을 3초 이상 불어 넣어 주세요."); //큰 안내문 내용 변경
-                ivConnect.setVisibility(View.INVISIBLE); //연결하기 아이콘 없애기
-                ivTesting.setVisibility(View.VISIBLE); //측정하기 아이콘 생기기
+                //연결완료시 화면 전환
+                if (!isPageSlide) { //화면 전환이 안된 경우
+                    //애니메이션 사용할 준비
+                    translateUpAnim.setAnimationListener(animationListener);
+                    testPage.setVisibility(View.VISIBLE); //테스트 페이지 보이게 하기
+                    testPage.startAnimation(translateUpAnim); //페이지 슬라이딩 애니메이션 시작
+                } else {
+
+
+                }
+
 
             }
 
@@ -235,7 +255,6 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
             @Override
             public void onAnimationEnd(Animator animator) { //끝난 경우
                 isTesting = false; //측정 종료
-                tvSmallInfo.setVisibility(View.INVISIBLE);
                 animview.setVisibility(View.INVISIBLE);
 
                 analysisResult(); //측정 결과에 따라 화면 이동하는 메소드
@@ -294,18 +313,31 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         }
     }
 
-    @Override
-    public void onClick(View v) {
-//        if(v == btnMeasureActivity) {
-//            Intent intent = new Intent(this,BreathTestingActivity.class);
-//            startActivity(intent);
-//        }
-//        else if (v== btnTesting) {
-//            Intent intent = new Intent(this,TestingActivity.class);
-//            startActivity(intent);
-//        }
+    private class SlidingPageAnimationListener implements Animation.AnimationListener {
 
+        @Override
+        public void onAnimationStart(Animation animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) { //화면 전환 된 경우
+            isPageSlide = true;
+            connectPage.setVisibility(View.GONE); //연결 완료시 연결 레이아웃 없애기
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(getApplicationContext(),)
+//    }
 
 
 
