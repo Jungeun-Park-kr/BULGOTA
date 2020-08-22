@@ -35,7 +35,7 @@
     <ImageView
         android:id="@+id/iv_device_connecting_icon"
         android:layout_width="0dp"
-        android:layout_height="230dp"
+        android:layout_height="210dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:visibility="visible"
@@ -43,21 +43,23 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/iv_background_square"
         app:layout_constraintBottom_toTopOf="@id/tv_testing_info"
-        android:background="@drawable/breath_testing_icon" />
+        android:background="@drawable/bluetooth_connecting_icon_4" />
 <!-- 음주 측정 아이콘 -->
+    <!--아이콘 아래 큰 안내문-->
     <ImageView
         android:id="@+id/iv_breath_testing_icon"
         android:layout_width="0dp"
-        android:layout_height="230dp"
+        android:layout_height="210dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:background="@drawable/breath_testing_icon"
         android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/tv_testing_info"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_background_square"
-        app:layout_constraintBottom_toTopOf="@id/tv_testing_info"
-        android:background="@drawable/breath_testing_icon" />
-<!--아이콘 아래 큰 안내문-->
+        app:layout_constraintTop_toTopOf="@id/iv_background_square" />
+
     <TextView
         android:id="@+id/tv_testing_info"
         android:layout_width="wrap_content"
