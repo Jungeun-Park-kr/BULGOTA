@@ -109,20 +109,28 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         btSpp.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() { //연결됐을 때
             @Override
             public void onDeviceConnected(String name, String address) {
-                Toast.makeText(getApplicationContext()
-                        , "Connected to " + name + "\n" + address
-                        , Toast.LENGTH_SHORT).show();
-                //연결완료시 화면 전환
-                if (!isPageSlide) { //화면 전환이 안된 경우
-                    //애니메이션 사용할 준비
-                    translateUpAnim.setAnimationListener(animationListener);
-                    testPage.setVisibility(View.VISIBLE); //테스트 페이지 보이게 하기
-                    testPage.startAnimation(translateUpAnim); //페이지 슬라이딩 애니메이션 시작
-                } else {
-
-
+                //연결한 블루투스 이름이 사용자가 대여하기 누른 기기이름과 동일한지 확인
+                //DeviceMapActivity에 있는 모델 변수 이름) markerDataList.get(finalI).getModel()
+                if(!name.equals("BGT_001")) { //이름 다르면 연결 해제
+                    Toast.makeText(getApplicationContext()
+                            , "(연결실패) 선택한 킥보드와 같은 기기를 다시 선택해주세요.\n(선택한기기:" + name + ")"
+                            , Toast.LENGTH_SHORT).show();
+                    btSpp.disconnect();
                 }
+                else
+                    { //이름 같으면 마저 연결 진행
+                    Toast.makeText(getApplicationContext()
+                            , "Connected to " + name + "\n" + address
+                            , Toast.LENGTH_SHORT).show();
 
+                    //연결완료시 화면 전환
+                    if (!isPageSlide) { //화면 전환이 안된 경우
+                        //애니메이션 사용할 준비
+                        translateUpAnim.setAnimationListener(animationListener);
+                        testPage.setVisibility(View.VISIBLE); //테스트 페이지 보이게 하기
+                        testPage.startAnimation(translateUpAnim); //페이지 슬라이딩 애니메이션 시작
+                    }
+                }
 
             }
 
@@ -144,7 +152,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (btSpp.getServiceState() == BluetoothState.STATE_CONNECTED) {
+                if (btSpp.getServiceState() == BluetoothState.STATE_CONNECTED) { //이미 연결되어있으면 해제
                     btSpp.disconnect();
                 } else {
                     Intent intent = new Intent(getApplicationContext(), DeviceList.class);
