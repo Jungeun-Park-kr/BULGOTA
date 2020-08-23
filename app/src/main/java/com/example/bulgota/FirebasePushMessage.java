@@ -30,8 +30,6 @@ public class FirebasePushMessage extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        //해당 위치에서 Toast 띄우기 불가... 이유모름
-
         String title = remoteMessage.getData().get("title");//firebase에서 보낸 메세지의 title
         String message = remoteMessage.getData().get("message");//firebase에서 보낸 메세지의 내용
         String test = remoteMessage.getData().get("test");
