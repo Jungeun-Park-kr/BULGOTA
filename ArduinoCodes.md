@@ -6,6 +6,110 @@
 
 ## Arduino Codes
 
+### Breathe Testing Using Ultra sonic waves
+
+```c++
+/* MQ-3 Alcohol Sensor Circuit with Arduino */
+#include <DigitShield.h>
+#include <Wire.h>
+#include <SoftwareSerial.h>
+
+/*블루투스 관련 변수*/
+int Tx = 6; //전송
+int Rx = 7; //수신
+SoftwareSerial btSerial(Tx, Rx);
+
+/*음주측정 관련 변수*/
+const int AOUTpin = 0;
+float sensor_volt;
+float RS_gas;
+float R0;
+int R2 = 2000;
+float ratio;
+float BAC;
+
+/*초음파 관련 변수*/
+int trigPin = 13; // trigPin을 13으로 설정합니다.
+int echoPin = 12; // echoPin을 12로 설정합니다.
+
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  btSerial.begin(9600);
+  DigitShield.begin();
+  pinMode(trigPin, OUTPUT); // trigPin 핀을 출력핀으로 설정(초음파 보내기)
+  pinMode(echoPin, INPUT); // echoPin 핀을 입력핀으로 설정(초음파 받기)
+
+}
+
+void loop()
+{
+  int sensorValue = analogRead(AOUTpin); //알코올 센서 값 받기
+  long duration, distance; // 초음파 변수를 선언
+
+  /* 초음파 측정 시작 */
+  digitalWrite(trigPin, LOW); // trigPin에 LOW를 출력하고
+  delayMicroseconds(2); // 2 마이크로초가 지나면
+  digitalWrite(trigPin, HIGH); // trigPin에 HIGH를 출력
+  delayMicroseconds(10); // trigPin을 10마이크로초 동안 기다렸다가
+  digitalWrite(trigPin, LOW); // trigPin에 LOW를 출력
+  duration = pulseIn(echoPin, HIGH); // echoPin핀에서 펄스값을 받아옴
+  // trigPin핀에서 초음파를 발사하였고 그 초음파가 다시 돌아 올 때까지 기다림.
+  //만약 벽이나 장애물에 닿아서 다시 echoPin으로 돌아왔다면 그동안의 시간을 duration에 저장.
+
+ distance = duration * 17 / 1000;          //  duration을 연산하여 센싱한 거리값을 distance에 저장
+  /*
+     거리는 시간 * 속도입니다.
+     속도는 음속으로 초당 340mm이므로 시간 * 340m이고 cm단위로 바꾸기 위해 34000cm로 변환합니다.
+     시간 값이 저장된 duration은 마이크로초 단위로 저장되어 있어, 변환하기 위해 1000000을 나눠줍니다.
+     그럼 시간 * 34000 / 1000000이라는 값이 나오고, 정리하여 거리 * 34 / 1000이 됩니다.
+     하지만 시간은 장애물에 닿기까지와 돌아오기까지 총 두 번의 시간이 걸렸으므로 2를 나누어줍니다.
+     그럼 시간 * 17 / 1000이라는 공식이 나옵니다.
+  */
+ if (distance >= 200 || distance <= 0)       // 거리가 200cm가 넘거나 0보다 작으면
+
+  {
+
+    Serial.println("거리를 측정할 수 없음");   // 에러를 출력합니다.
+
+  }
+  else if (distance <= 10) { //10cm이내에 있을 때만 측정 하기
+    Serial.print("------ distance : ");
+    Serial.print(distance);
+    Serial.println(" cm ------");
+      /* 알코올 센서 측정 시작 */
+    sensor_volt = (float)sensorValue/1024*5.0;
+    RS_gas = ((5.0 * R2)/sensor_volt) + R2;
+    R0 = 1800;
+    ratio = RS_gas/R0; //ratio = RS/R0
+    double x = 0.4*ratio;
+    BAC = pow(x,-1.431); //BAC in mg/L
+  
+    if(btSerial.available()) { //블루투스와 연결 되어있으면 시리얼 모니터에 BAC, AOut값 출력
+     Serial.write(btSerial.read());
+    }
+    if (Serial.available()) { //시리얼 연결이 되어있으면 블루투스로 BAC 값 전송
+      btSerial.write(Serial.read());
+    }
+    
+    DigitShield.setValue(sensorValue); //BAC값 디지털 실드에 출력
+    btSerial.println(BAC*0.1); //블루투스로 BAC 값 전송
+    Serial.print("BAC = ");
+    Serial.print(BAC*0.1);
+    Serial.print("mg/100mL   -------  SensorValue = ");
+    Serial.println(sensorValue);
+    
+    //Serial.print(BAC*0.0001); //convert to g/dL
+    //Serial.print(" g/DL\n\n");
+  }
+  
+  delay(1000); //측정 딜레이 (테스트 용으로 넣어둔 것)
+}
+```
+
+
+
 ### Get R0 for Breath Testing
 
 ```c
