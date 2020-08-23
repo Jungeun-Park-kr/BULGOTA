@@ -21,7 +21,7 @@ public class ChooseMarkerDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_choose_marker);
 
-        tvOK = (TextView) findViewById(R.id.btn_retry);
+        tvOK = (TextView) findViewById(R.id.tv_ok);
 
         //버튼 클릭 리스너 등록
         tvOK.setOnClickListener(l -> {

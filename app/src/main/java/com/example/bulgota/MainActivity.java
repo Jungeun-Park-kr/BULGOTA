@@ -44,9 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(v == deviceMapBtn) {
             Intent intent = new Intent(this,DeviceMapActivity.class);
             startActivity(intent);
-        }  else if (v == breathTestingBtn) {
-            Intent intent = new Intent(this, BreatheTestingActivity.class);
-            startActivity(intent);
         } else if (v == detoxAnalysisBtn) {
             Intent intent = new Intent(this,DetoxAnalysisActivity.class);
             startActivity(intent);
