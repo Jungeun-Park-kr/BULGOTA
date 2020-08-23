@@ -67,15 +67,18 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
             conn.setDoInput(true);
             conn.setRequestMethod("POST");
 
+            conn.setRequestProperty("content-type","application/json");
+
             StringBuffer buffer = new StringBuffer();
-            buffer = buffer.append(jsonObject);
+            buffer = buffer.append(jsonObject.toString());
 
             OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
             writer.write(buffer.toString());
+            Log.e("josn 값 : ",jsonObject.toString());
             writer.flush();
             writer.close();
 
-            Log.e("서버전송 완료","성공");
+            Log.e("서버전송 확인여부 : ","성공");
 
             //TODO 서버에서 값을 받아오지 않더라도 작성??    추후 삭제 시 구동되는지 확인
             BufferedReader reader = new BufferedReader(new InputStreamReader((conn.getInputStream())));
@@ -83,6 +86,8 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 buffer1.append(line);
+
+                Log.e("응답바디 : ",line);
             }
             conn.disconnect();
 
