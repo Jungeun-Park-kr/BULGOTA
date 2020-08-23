@@ -100,9 +100,11 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
                                 String token = task.getResult().getToken();
                                 Log.e("token number",token);
 
-                                //토큰 값 서버전달
-                                sendRegistrationToServer(token);
+                                //서버에서 json값 수신
+                                //getRegistrationToServer(token);
 
+                                //서버에서 json값 전송
+                                sendRegistrationToServer(token);
                             }
                         });
             }
@@ -126,7 +128,12 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
     }
 
-    void sendRegistrationToServer(String token){
+     void sendRegistrationToServer(String token) {
+        String serverUrl = "https://bullgota.ml/notification/push";
+         new RestApiTask2(serverUrl,token).execute();
+    }
+
+    void getRegistrationToServer(String token){
         String serverUrl = "https://bullgota.ml/list/marker";
         new RestApiTask(serverUrl).execute();
 
