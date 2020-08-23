@@ -46,8 +46,8 @@
         <!-- 연결 안내 아이콘-->
         <ImageView
             android:id="@+id/iv_device_connecting_icon"
-            android:layout_width="0dp"
-            android:layout_height="210dp"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -147,8 +147,8 @@
         <!-- 음주 측정 아이콘 -->
         <ImageView
             android:id="@+id/iv_breath_testing_icon"
-            android:layout_width="330dp"
-            android:layout_height="210dp"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/breath_testing_icon"
@@ -166,7 +166,7 @@
             android:fontFamily="@font/nanum_square_round_regular"
             android:textAlignment="center"
             android:layout_gravity="center"
-            android:text="전동킥보드 옆의 음주 측정 장치에\n숨을 3초 이상 불어 넣어 주세요."
+            android:text="전동킥보드 옆의 음주 측정 장치에\n10cm 이하의 거리를 유지하고\n숨을 3초 이상 불어 넣어 주세요."
             android:layout_marginBottom="30dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -176,10 +176,11 @@
             android:id="@+id/tv_testing_small_info2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text = "아래의 측정시작 버튼을 눌러주세요."
+            android:text = "측정기에 입을 가까이 댄 후\n아래의 측정시작 버튼을 눌러주세요."
             android:textSize="15sp"
             android:fontFamily="@font/nanum_square_round_regular"
             android:textColor="@color/colorAccent"
+            android:gravity="center_horizontal"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toTopOf="@id/btn_measure_start"
