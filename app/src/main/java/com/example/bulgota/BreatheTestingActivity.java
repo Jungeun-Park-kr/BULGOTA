@@ -114,7 +114,8 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
             public void onDeviceConnected(String name, String address) {
                 //연결한 블루투스 이름이 사용자가 대여하기 누른 기기이름과 동일한지 확인
                 //DeviceMapActivity에 있는 모델 변수 이름) markerDataList.get(finalI).getModel()
-                if(!name.equals("BGT_001")) { //이름 다르면 연결 해제
+                String modelName = getIntent().getStringExtra("modelName");
+                if(!name.equals(modelName)) { //이름 다르면 연결 해제
                     Toast.makeText(getApplicationContext()
                             , "(연결실패) 선택한 킥보드와 같은 기기를 다시 선택해주세요.\n(선택한기기:" + name + ")"
                             , Toast.LENGTH_SHORT).show();
