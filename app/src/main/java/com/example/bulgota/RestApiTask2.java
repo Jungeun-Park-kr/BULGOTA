@@ -56,6 +56,7 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
 
         jsonObject = new JSONObject();
 
+        //json 파일 생성
         makeJson(token, timer, jsonObject);
 
         try {
@@ -74,13 +75,12 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
 
             OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
             writer.write(buffer.toString());
-            Log.e("josn 값 : ",jsonObject.toString());
-            writer.flush();
-            writer.close();
+            writer.flush();     //서버전송
+            writer.close();     //객체 닫기
 
-            Log.e("서버전송 확인여부 : ","성공");
+            Log.e("서버 전송 여부 : ","성공");
 
-            //TODO 서버에서 값을 받아오지 않더라도 작성??    추후 삭제 시 구동되는지 확인
+            //응답 바디 받기
             BufferedReader reader = new BufferedReader(new InputStreamReader((conn.getInputStream())));
             StringBuffer buffer1 = new StringBuffer();
             String line = null;
@@ -93,8 +93,8 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
 
         }
         catch (Exception e) {
-            // Error calling the rest api
-            Log.e("REST_API", "GET method failed: " + e.getMessage());
+
+            Log.e("서버 전송 여부 : ","실패");
             e.printStackTrace();
         }
         return null;

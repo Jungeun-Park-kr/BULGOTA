@@ -44,8 +44,7 @@ public class RestApiTask extends AsyncTask<Integer, Void, Void> {
             Log.e("데이터수신 값 : ", result);
         }
         catch (Exception e) {
-            // Error calling the rest api
-            Log.e("REST_API", "GET method failed: " + e.getMessage());
+            Log.e("서버 전송 여부 : ","실패");
             e.printStackTrace();
         }
         return null;
