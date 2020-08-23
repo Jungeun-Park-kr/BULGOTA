@@ -67,14 +67,8 @@ void loop()
      하지만 시간은 장애물에 닿기까지와 돌아오기까지 총 두 번의 시간이 걸렸으므로 2를 나누어줍니다.
      그럼 시간 * 17 / 1000이라는 공식이 나옵니다.
   */
- if (distance >= 200 || distance <= 0)       // 거리가 200cm가 넘거나 0보다 작으면
 
-  {
-
-    Serial.println("거리를 측정할 수 없음");   // 에러를 출력합니다.
-
-  }
-  else if (distance <= 10) { //10cm이내에 있을 때만 측정 하기
+  if (0 <=distance &&distance <= 10) { //10cm이내에 있을 때만 측정 하기
     Serial.print("------ distance : ");
     Serial.print(distance);
     Serial.println(" cm ------");
@@ -103,6 +97,15 @@ void loop()
     //Serial.print(BAC*0.0001); //convert to g/dL
     //Serial.print(" g/DL\n\n");
   }
+  else {
+    Serial.println("@@@10cm보다 멀리 있습니다.@@@");
+    //Serial.println(-999);
+    btSerial.println(-999);
+  }
+//   else if (distance >= 200 || distance <= 0)       // 거리가 200cm가 넘거나 0보다 작으면
+//  {
+//    Serial.println("거리를 측정할 수 없음");   // 에러를 출력합니다.
+//  }
   
   delay(1000); //측정 딜레이 (테스트 용으로 넣어둔 것)
 }
