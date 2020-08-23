@@ -23,11 +23,14 @@ import com.airbnb.lottie.LottieAnimationView;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 public class BreatheTestingActivity extends AppCompatActivity implements View.OnClickListener{
     boolean isPageSlide = false; //페이지가 넘어갔는지 확인하는 변수
-    Animation translateUpAnim; //화면 슬라이드 애니메이션
+    boolean isTooFar = false; //측정기와의 거리를 확인하는 변수 (10cm 이상일시 true)
+    Animation translateDownAnim; //화면 슬라이드 애니메이션
+    Animation translateUpAnim;
     ConstraintLayout testPage; //측정 레이아웃
     ConstraintLayout connectPage; //연결 레이아웃
     //페이지 슬라이딩 이벤트 발생시, 애니메이션이 시작 됐는지 종료됐는지 감지하는 리스너
@@ -69,7 +72,9 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         connectPage = findViewById(R.id.cl_connect_view); //연결 뷰
 
         //페이지 슬라이딩 이벤트 발생시, 애니메이션이 시작 됐는지 종료됐는지 감지하는 리스너
-        translateUpAnim = AnimationUtils.loadAnimation(this, R.anim.move_down);
+        translateDownAnim = AnimationUtils.loadAnimation(this, R.anim.move_down);
+        //translateUpAnim = AnimationUtils.loadAnimation(this, R.anim.move_up);
+  
 
         Log.d("modelName", getIntent().getStringExtra("modelName"));//대여하기 눌렀을 때 넘어오는 모델명
 
@@ -80,6 +85,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
                 tvSmallInfo.setText("3초 후에 측정을 시작합니다.");
                 myTimer = new MyTimer(3000, 1000);
                 myTimer.start();
+
             }
         });
 
@@ -100,12 +106,23 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
 
             @Override
             public void onDataReceived(byte[] data, String msg) { //데이터 수신 받을 때
-
                 dValue = Double.parseDouble(msg); //수신받은 음주측정 값 저장
                 //tvValue.setText("측정값:" + dValue);
-                if (isTesting && (dValue >= 0.03)) { //현재 측정중이고 BAC가 0.03이상인 경우
-                    result = false;
+
+                if (isTesting) {
+//                    Toast.makeText(getApplicationContext()
+//                            , "넘어오는값 :"+dValue
+//                            , Toast.LENGTH_SHORT).show();
+                    if (dValue < -100.00) { //현재 측정 중이고, 10cm 보다 멀리 있는 경우
+                        isTooFar = true;
+                    }
+                    else
+                        isTooFar = false;
+                    if(dValue >= 0.03) { //현재 측정중이고 BAC가 0.03이상인 경우
+                        result = false;
+                    }
                 }
+
             }
         });
 
@@ -130,9 +147,11 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
                     //연결완료시 화면 전환
                     if (!isPageSlide) { //화면 전환이 안된 경우
                         //애니메이션 사용할 준비
-                        translateUpAnim.setAnimationListener(animationListener);
+                        translateDownAnim.setAnimationListener(animationListener);
+                        //translateUpAnim.setAnimationListener(animationListener);
                         testPage.setVisibility(View.VISIBLE); //테스트 페이지 보이게 하기
-                        testPage.startAnimation(translateUpAnim); //페이지 슬라이딩 애니메이션 시작
+                        testPage.startAnimation(translateDownAnim); //페이지 슬라이딩 애니메이션 시작
+                        //connectPage.startAnimation(translateUpAnim); //연결 페이지 사라지기 애니메이션 시작
                     }
                 }
 
@@ -165,6 +184,28 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
             }
         });
     }
+
+    private class SlidingPageAnimationListener implements Animation.AnimationListener {
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) { //화면 전환 된 경우
+            isPageSlide = true;
+            connectPage.setVisibility(View.GONE); //연결 완료시 연결 레이아웃 없애기
+
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
+    }
+
 
     public void onDestroy() {
         super.onDestroy();
@@ -218,21 +259,40 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         //시작
         animview.playAnimation();
 
-
-
         animview.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
-
+                isTesting = true; //측정 시작
 
             }
 
             @Override
             public void onAnimationEnd(Animator animator) { //끝난 경우
-                animview.setVisibility(View.INVISIBLE);
-                lottieAnalyzing.setVisibility(VISIBLE);
-                tvSmallInfo.setText("측정 결과를 분석중입니다.");
-                setUpAnimationAnalyzing(lottieAnalyzing);
+                isTesting = false; //측정 종료
+//                Toast.makeText(getApplicationContext()
+//                        , "isTooFar : "+isTooFar+"\ndValue : "+dValue
+//                        , Toast.LENGTH_SHORT).show();
+                if(isTooFar) { //측정 거리가 너무 멀 경우
+//                    Toast.makeText(getApplicationContext()
+//                            , "(측정 실패) 측정기와의 거리를 10cm 이내로 해주세요."
+//                            , Toast.LENGTH_SHORT).show();
+
+                    tvSmallInfo.setText("측정기와의 거리를 10cm 이내로 해주세요.");
+                    btnTesting.setText("측 정 재 시 작");
+                    if (btnTesting.getVisibility() == INVISIBLE) //측정중 버튼 다시 보이게 하기
+                        btnTesting.setVisibility(View.VISIBLE);
+
+                    if (lottieBreathTesting.getVisibility() == VISIBLE) { //측정중 로띠 다시 없애기
+                        lottieBreathTesting.setVisibility(INVISIBLE);
+                    }
+
+                }
+                else {
+                    animview.setVisibility(INVISIBLE);
+                    lottieAnalyzing.setVisibility(VISIBLE);
+                    tvSmallInfo.setText("측정 결과를 분석중입니다.");
+                    setUpAnimationAnalyzing(lottieAnalyzing);
+                }
             }
 
             @Override
@@ -260,16 +320,15 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
             @Override
             public void onAnimationStart(Animator animator) {
 
-                //isTesting = true; //측정 시작
-
             }
 
             @Override
             public void onAnimationEnd(Animator animator) { //끝난 경우
-                isTesting = false; //측정 종료
-                animview.setVisibility(View.INVISIBLE);
 
-                analysisResult(); //측정 결과에 따라 화면 이동하는 메소드
+                animview.setVisibility(INVISIBLE);
+
+                if(!isTooFar)
+                    analysisResult(); //측정 결과에 따라 화면 이동하는 메소드
             }
 
             @Override
@@ -313,37 +372,20 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         @Override
         public void onFinish() {
             tvSmallInfo.setText("3초간 바람을 세게 불어주세요!");
-            isTesting = true; //측정 시작 인지 확인
-            if (btnTesting.getVisibility() == VISIBLE) //측정중 버튼 없애기
-                btnTesting.setVisibility(View.INVISIBLE);
+            //isTesting = true; //측정 시작 인지 확인
 
-            if (lottieBreathTesting.getVisibility() == View.INVISIBLE) { //측정중 로띠 띄우기
-                lottieBreathTesting.setVisibility(VISIBLE);
-                setUpAnimationMeasuring(lottieBreathTesting);
-            }
+                if (btnTesting.getVisibility() == VISIBLE) //측정중 버튼 없애기
+                    btnTesting.setVisibility(INVISIBLE);
 
-        }
-    }
-
-    private class SlidingPageAnimationListener implements Animation.AnimationListener {
-
-        @Override
-        public void onAnimationStart(Animation animation) {
-
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) { //화면 전환 된 경우
-            isPageSlide = true;
-            connectPage.setVisibility(View.GONE); //연결 완료시 연결 레이아웃 없애기
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
+                if (lottieBreathTesting.getVisibility() == INVISIBLE) { //측정중 로띠 띄우기
+                    lottieBreathTesting.setVisibility(VISIBLE);
+                    setUpAnimationMeasuring(lottieBreathTesting);
+                }
 
         }
     }
+
+
 
 //    @Override
 //    public void onBackPressed() {
