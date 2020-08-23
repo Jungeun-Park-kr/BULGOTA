@@ -106,6 +106,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private LocationButtonView btnInfoLocation;
 
     private int pageValue;
+    private String modelName;
 
     private SlidingPageAnimationListener animationListener;
 
@@ -329,9 +330,9 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         });
 
         btnInfoLend.setOnClickListener(l -> {
-            BluetoothSearchDialog bluetoothSearchDialog = new BluetoothSearchDialog(this);
-            bluetoothSearchDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-            bluetoothSearchDialog.show();
+            Intent intent = new Intent(this,BreatheTestingActivity.class);
+            intent.putExtra("modelName", modelName);//측정중 액티비티로 선택한 모델명 전달
+            startActivity(intent);
         });
 
         btnHomeZoomIn.setOnClickListener(l -> {
@@ -410,6 +411,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                                     markerItems[finalI].setWidth(90);
                                     markerItems[finalI].setHeight(90);
                                     lastMarker = markerItems[finalI];
+                                    modelName = markerDataList.get(finalI).getModel();
                                 } else {
                                     markerItems[finalI].setIcon(OverlayImage.fromResource(R.drawable.normal_marker));
                                 }

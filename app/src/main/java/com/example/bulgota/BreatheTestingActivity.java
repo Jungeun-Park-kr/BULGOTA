@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -69,6 +70,8 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
 
         //페이지 슬라이딩 이벤트 발생시, 애니메이션이 시작 됐는지 종료됐는지 감지하는 리스너
         translateUpAnim = AnimationUtils.loadAnimation(this, R.anim.move_down);
+
+        Log.d("modelName", getIntent().getStringExtra("modelName"));//대여하기 눌렀을 때 넘어오는 모델명
 
 
         btnTesting.setOnClickListener(new Button.OnClickListener() {
