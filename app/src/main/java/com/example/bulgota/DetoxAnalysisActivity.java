@@ -11,16 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.URL;
 import java.util.ArrayList;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -34,13 +25,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
-import com.naver.maps.map.internal.LocalGlyphRasterizer;
-
-import javax.net.ssl.HttpsURLConnection;
-
-import retrofit2.http.Url;
 
 
 public class DetoxAnalysisActivity extends AppCompatActivity{
@@ -85,7 +69,6 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
             public void onClick(View view) {
 
                 //서버로부터 예상 해독시간 및 사용자 토큰id 전달
-                //TODO 이거 토큰 기기토큰아니고 firebase토큰이니까 나중에 삭제하고 기기토큰으로 수정예정
 
                 FirebaseInstanceId.getInstance().getInstanceId()
                         .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -96,9 +79,8 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
                                     Log.e("토큰 id전달 실패","send token error",task.getException());
                                     return;
                                 }
-                                //"" 성공시
+
                                 String token = task.getResult().getToken();
-                                Log.e("token number",token);
 
                                 //서버에서 json값 수신
                                 //getRegistrationToServer(token);
@@ -130,12 +112,12 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
      void sendRegistrationToServer(String token) {
         String serverUrl = "https://bullgota.ml/notification/push";
-         new RestApiTask2(serverUrl,token).execute();
+         new DataSendServer(serverUrl,token).execute();
     }
 
     void getRegistrationToServer(String token){
         String serverUrl = "https://bullgota.ml/list/marker";
-        new RestApiTask(serverUrl).execute();
+        new DataGetServer(serverUrl).execute();
 
     }
 

@@ -19,17 +19,17 @@ import java.util.function.LongBinaryOperator;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
+public class DataSendServer extends AsyncTask<Integer, Void, Void> {
 
     String url;
     String token;
-    String timer;
+    int timer;
     JSONObject jsonObject;
 
-    public RestApiTask2(String url, String token) {
+    public DataSendServer(String url, String token) {
         this.url = url;
         this.token = token;
-        this.timer = "05:00:00";    //TODO 임시설정
+        this.timer = 5;    //TODO 임시설정
         this.jsonObject = null;
     }
 
@@ -41,7 +41,7 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
         return token;
     }
 
-    public String getTimer() {
+    public int getTimer() {
         return timer;
     }
 
@@ -65,9 +65,8 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
 
         jsonObject = new JSONObject();
 
-        makeJson(token, timer, jsonObject);
         //  서버에 전달할 json 객체 생성
-        //setJsonObject(jsonObject);
+        setJsonObject(jsonObject);
 
         try {
             // Open the connection
@@ -78,6 +77,9 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
             conn.setDoInput(true);
             conn.setRequestMethod("POST");
 
+            //respose데이터 json으로 설정
+            conn.setRequestProperty("Content-type","application/json");
+
             StringBuffer buffer = new StringBuffer();
             buffer = buffer.append(jsonObject);
 
@@ -86,9 +88,9 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
             writer.flush();
             writer.close();
 
+            Log.e("json 값 : ",jsonObject.toString());
             Log.e("서버전송 완료","성공");
 
-            //TODO 서버에서 값을 받아오지 않더라도 작성??    추후 삭제 시 구동되는지 확인
             //응답바디 받기
             BufferedReader reader = new BufferedReader(new InputStreamReader((conn.getInputStream())));
             StringBuffer buffer1 = new StringBuffer();
@@ -109,16 +111,6 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
             e.printStackTrace();
         }
         return null;
-    }
-
-    //서버에 전달할 json 객체 생성
-    void makeJson(String token, String timer, JSONObject jsonObject){
-            try{
-                jsonObject.put("deviceToken",token);
-                jsonObject.put("timer",timer);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
     }
 
 }
