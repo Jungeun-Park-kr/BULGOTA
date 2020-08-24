@@ -11,10 +11,10 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class RestApiTask extends AsyncTask<Integer, Void, Void> {
+public class DataGetServer extends AsyncTask<Integer, Void, Void> {
 
     String url;
-    public RestApiTask(String url) {
+    public DataGetServer(String url) {
         this.url = url;
     }
 
