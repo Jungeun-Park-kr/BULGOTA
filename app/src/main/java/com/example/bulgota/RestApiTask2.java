@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.function.LongBinaryOperator;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -49,6 +51,13 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
 
     public void setJsonObject(JSONObject jsonObject) {
         this.jsonObject = jsonObject;
+
+        try {
+            jsonObject.put("deviceToken", token);
+            jsonObject.put("timer", timer);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -56,8 +65,9 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
 
         jsonObject = new JSONObject();
 
-        //json 파일 생성
         makeJson(token, timer, jsonObject);
+        //  서버에 전달할 json 객체 생성
+        //setJsonObject(jsonObject);
 
         try {
             // Open the connection
@@ -68,31 +78,32 @@ public class RestApiTask2 extends AsyncTask<Integer, Void, Void> {
             conn.setDoInput(true);
             conn.setRequestMethod("POST");
 
-            conn.setRequestProperty("content-type","application/json");
-
             StringBuffer buffer = new StringBuffer();
-            buffer = buffer.append(jsonObject.toString());
+            buffer = buffer.append(jsonObject);
 
             OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
             writer.write(buffer.toString());
-            writer.flush();     //서버전송
-            writer.close();     //객체 닫기
+            writer.flush();
+            writer.close();
 
-            Log.e("서버 전송 여부 : ","성공");
+            Log.e("서버전송 완료","성공");
 
-            //응답 바디 받기
+            //TODO 서버에서 값을 받아오지 않더라도 작성??    추후 삭제 시 구동되는지 확인
+            //응답바디 받기
             BufferedReader reader = new BufferedReader(new InputStreamReader((conn.getInputStream())));
             StringBuffer buffer1 = new StringBuffer();
             String line = null;
             while ((line = reader.readLine()) != null) {
                 buffer1.append(line);
 
-                Log.e("응답바디 : ",line);
+                Log.e("응답바디 : ", line);
             }
             conn.disconnect();
 
         }
         catch (Exception e) {
+            // Error calling the rest api
+            Log.e("REST_API", "GET method failed: " + e.getMessage());
 
             Log.e("서버 전송 여부 : ","실패");
             e.printStackTrace();
