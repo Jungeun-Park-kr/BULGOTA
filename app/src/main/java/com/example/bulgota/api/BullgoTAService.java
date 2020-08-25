@@ -7,7 +7,7 @@ import retrofit2.http.Path;
 public interface BullgoTAService {
     String BASE_URL = "https://bullgota.ml";
 
-    @GET("/product/model/{model}")
+    @GET("/model/info/{model}")
     Call<ResponseSelectModel> checkModel(@Path("model") String model);
 
     @GET("/list/marker")
