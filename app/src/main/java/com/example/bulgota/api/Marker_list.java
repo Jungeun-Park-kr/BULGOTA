@@ -2,15 +2,15 @@ package com.example.bulgota.api;
 
 public class Marker_list {
     private final int id;
-    private final String model;
+    private final String modelNum;
     private final int battery;
     private final String time;
     private final Double latitude;
     private final Double longitude;
 
-    public Marker_list(int id, String model, int battery, String time, Double latitude, Double longitude) {
+    public Marker_list(int id, String modelNum, int battery, String time, Double latitude, Double longitude) {
         this.id = id;
-        this.model = model;
+        this.modelNum = modelNum;
         this.battery = battery;
         this.time = time;
         this.latitude = latitude;
@@ -19,8 +19,8 @@ public class Marker_list {
 
     public int getId() { return id; }
 
-    public String getModel() {
-        return model;
+    public String getModelNum() {
+        return modelNum;
     }
 
     public int getBattery() {

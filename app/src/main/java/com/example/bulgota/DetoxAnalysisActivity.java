@@ -71,24 +71,24 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
                 //서버로부터 예상 해독시간 및 사용자 토큰id 전달
 
                 FirebaseInstanceId.getInstance().getInstanceId()
-                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                //토큰 값 전달 실패 시
-                                if(task.isSuccessful()==false){
-                                    Log.e("토큰 id전달 실패","send token error",task.getException());
-                                    return;
-                                }
-
-                                String token = task.getResult().getToken();
-
-                                //서버에서 json값 수신
-                                //getRegistrationToServer(token);
-
-                                //서버에서 json값 전송
-                                sendRegistrationToServer(token);
+                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            //토큰 값 전달 실패 시
+                            if(task.isSuccessful()==false){
+                                Log.e("토큰 id전달 실패","send token error",task.getException());
+                                return;
                             }
-                        });
+
+                            String token = task.getResult().getToken();
+
+                            //서버에서 json값 수신
+                            //getRegistrationToServer(token);
+
+                            //서버에서 json값 전송
+                            sendRegistrationToServer(token);
+                        }
+                    });
             }
         });
 

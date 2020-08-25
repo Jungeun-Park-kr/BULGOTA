@@ -411,12 +411,12 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                                     markerItems[finalI].setWidth(90);
                                     markerItems[finalI].setHeight(90);
                                     lastMarker = markerItems[finalI];
-                                    modelName = markerDataList.get(finalI).getModel();
+                                    modelName = markerDataList.get(finalI).getModelNum();
                                 } else {
                                     markerItems[finalI].setIcon(OverlayImage.fromResource(R.drawable.normal_marker));
                                 }
 
-                                tvModelNum.setText(markerDataList.get(finalI).getModel());
+                                tvModelNum.setText(markerDataList.get(finalI).getModelNum());
                                 tvBatteryValue.setText(String.valueOf(markerDataList.get(finalI).getBattery()) + "%");
                                 tvTimeValue.setText(markerDataList.get(finalI).getTime());
 
