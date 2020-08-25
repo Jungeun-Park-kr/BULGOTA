@@ -14,18 +14,18 @@ import java.net.URL;
 
 public class DataSendServer extends AsyncTask<Integer, Void, Void> {
 
+    int timer;
     String url;
     String token;
-    int timer;
     JSONObject jsonObject;
 
     //내부 DB를 위한 string 변수
     String DBtimer;
 
-    public DataSendServer(String url, String token) {
+    public DataSendServer(String url, String token, int timer) {
         this.url = url;
         this.token = token;
-        this.timer = 5;    //TODO 임시설정
+        this.timer = timer;
         this.jsonObject = null;
         this.DBtimer = null;
     }
