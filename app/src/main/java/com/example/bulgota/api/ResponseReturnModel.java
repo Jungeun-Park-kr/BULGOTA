@@ -1,12 +1,14 @@
 package com.example.bulgota.api;
 
-public class ResponseSelectModel {
+import java.util.ArrayList;
+
+public class ResponseReturnModel {
     private final int status;
     private final boolean success;
     private final String message;
-    private final boolean data;
+    private final int data;
 
-    public ResponseSelectModel(int status, boolean success, String message, boolean data) {
+    public ResponseReturnModel(int status, boolean success, String message, int data) {
         this.status = status;
         this.success = success;
         this.message = message;
@@ -19,6 +21,6 @@ public class ResponseSelectModel {
 
     public String getMessage() { return message; }
 
-    public boolean getData() { return data; }
+    public int getData() { return data; }
 
 }

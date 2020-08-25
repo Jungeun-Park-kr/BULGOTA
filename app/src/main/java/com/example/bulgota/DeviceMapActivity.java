@@ -29,6 +29,8 @@ import android.widget.Toast;
 import com.example.bulgota.api.BullgoTAService;
 import com.example.bulgota.api.Marker_list;
 import com.example.bulgota.api.ResponseWithMarkerData;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraUpdate;
@@ -84,6 +86,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private Button btnHomeZoomOut;
     private Button btnInfoZoomIn;
     private Button btnInfoZoomOut;
+    private Button btnReturn;
 
     private ImageView btnHamberger;
 
@@ -114,6 +117,8 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private TextView tvPlanBackground;
     private TextView tvLegal;
     private TextView tvGuide;
+
+    private IntentIntegrator qrScan;
 
 
     @Override
@@ -314,6 +319,9 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         btnHomeZoomOut = findViewById(R.id.btn_home_zoom_out);
         btnInfoZoomIn = findViewById(R.id.btn_info_zoom_in);
         btnInfoZoomOut = findViewById(R.id.btn_info_zoom_out);
+        btnReturn = findViewById(R.id.btn_return);
+
+        qrScan = new IntentIntegrator(this);
 
         UiSettings uiSettings = map.getUiSettings();
 
@@ -349,6 +357,13 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         btnInfoZoomOut.setOnClickListener(l -> {
             btnZoomClickEvent(btnInfoZoomOut, false);
+        });
+
+        btnReturn.setOnClickListener(l -> {
+            qrScan.setBeepEnabled(false);
+            qrScan.setCaptureActivity(QReaderReturnActivity.class);
+            qrScan.setOrientationLocked(false);
+            qrScan.initiateScan();
         });
     }
 
@@ -595,5 +610,21 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+
+            if (result.getContents() == null) {
+
+            } else {
+                String returnModel = result.getContents();
+
+
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data); }    }
+
 
 }

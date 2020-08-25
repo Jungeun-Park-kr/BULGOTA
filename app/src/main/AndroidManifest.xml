@@ -47,6 +47,12 @@
             tools:replace="screenOrientation"/>
         <activity android:name=".QReaderActivity" />
 
+        <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation"
+            tools:ignore="DuplicateActivity" />
+        <activity android:name=".QReaderReturnActivity" />
+
         <service
             android:name=".FirebasePushMessage"
             android:stopWithTask="false">
