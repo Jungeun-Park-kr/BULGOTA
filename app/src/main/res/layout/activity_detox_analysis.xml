@@ -85,8 +85,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/nanum_square_round_bold"
-            android:textSize="30sp"
-            android:text="1시간 50분"/>
+            android:textSize="16sp"
+            android:hint="받아오는 int timer 값 string 변환 후 들어가는 부분"/>
 
 
         <ImageView

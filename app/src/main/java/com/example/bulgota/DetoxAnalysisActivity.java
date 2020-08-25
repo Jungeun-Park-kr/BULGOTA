@@ -30,11 +30,20 @@ import com.google.firebase.iid.InstanceIdResult;
 
 public class DetoxAnalysisActivity extends AppCompatActivity{
 
+    //TODO  상민이 읽어보고 이해안되는 부분 있음 알려줘 ! 가장먼저 읽어볼 것 !
+    //TODO  STEP1. 카운트다운은 내부 SQLITE(DB)에서 적용불가 하기 때문에 삭제함 TEXTVIEW로 대체
+    //TODO  STEP2. DataSendSever에 int timer 클래스 변수가 유지해야함 -> 영현이 서버에 timer 받을 때 INT로 설정되있어서 분석 후 필요한 시간을 STRING 값이랑 INT값 둘 모두 필요함
+    //TODO  STEP3.  해당 액티비에서 내부DB에 저장할 String 시간 값 받아와야함    ->  DB저장하는 .java 클래스 생성   ->   해당 시간 string 변수를 저장할 static scope의 변수에 저장 -> 일반 변수에서는 생명주기가 끝나면 소멸
+    //TODO 이외 부분은 건드릴 필요 없들것 같음 STEP 3부터는 내가 해야되는 부분이니까 신경쓰지 않아도 됨
+
     private LineChart lineChart;
     ArrayList<Entry> entry_chart;
     //차트 객체
     private TextView countTime;
-    MyTimer myTimer;    //타이머객체
+
+    //TODO 타이머 객체 사용 X
+    //TODO 해당 CUSTOM 객체 삭제해야함 TEXTVIEW로 시간 찍어줄 것임       우선 혹시몰라 주석처리함
+    //MyTimer myTimer;    //타이머객체
 
     LinearLayout llNoticeView;  //상단 전체 layout
     LinearLayout llState;   //주행가능 여부
@@ -48,6 +57,19 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     //혈중 알코올 농도
     double bac;
     //혈중 알코올 농도
+    int timer;
+    //TODO
+    //TODO 아두이노에서 받아온 알콜농도에서 해독시간까지 걸리는 시간 값 저장 변수
+    //TODO DataSendServer.java 파일에 timer 변수에 전달해야함
+    //TODO 해당 java 파일에 전달하기 위해 int timer 매개변수 추가하여 값 저장
+    //TODO DataSendServer.java의 timer 변수는 sendRegisterToserver 메서드안에 DataSendServer 객체 생성자에서 전달됨
+    //TODO 이부분은 미리 수정해둠. flow 확인해주세요.
+
+    String sTimer;
+    //TODO
+    //TODO 아두이노에서 받아온 알콜농도에서 해독시간까지 걸리는 시간을 string 값으로 저장하는 변수
+    //TODO 소스코드 하단에 makeStringTimer 메서드 사용해서 리턴값만 받아오면 됨
+    //TODO 해당 메서드 매개변수는 해독시간까지 걸리는 timer변수값 넣으면 됨
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,15 +115,19 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
                             //getRegistrationToServer(token);
 
                             //서버에서 json값 전송
+                            //TODO 해당 메서드 호출 전에 timer 변수 값 변경필요...
+                            // 여기서 서버에 전달할 변수들이 저장되기 때문에 Onclick 메서드 호출 전에 해독시간 int값 저장 알고리즘 사용 후 저장 필요
                             sendRegistrationToServer(token);
                         }
                     });
             }
         });
 
-        myTimer = new MyTimer(600000, 1000);
-        myTimer.start();
-        //카운트다운 선언
+
+        //TODO 타이머 객체 사용 X
+        //TODO 해당 CUSTOM 객체 삭제해야함 TEXTVIEW로 시간 찍어줄 것임       우선 혹시몰라 주석처리함
+      /*  myTimer = new MyTimer(600000, 1000);
+        myTimer.start();*/
 
         LineData chartData = new LineData();
         // 그래프선언
@@ -115,11 +141,14 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         chartSetting(lineChart,lineDataSet,chartData);
         //차트 설정값 세팅 메서드
 
+        //TODO  알콜농도에서 구한 timer값 string 변수로 변경하는 메서드
+        sTimer =  makeStringTimer(timer);
+
     }
 
-     void sendRegistrationToServer(String token) {
+    void sendRegistrationToServer(String token) {
         String serverUrl = "https://bullgota.ml/notification/push";
-         new DataSendServer(serverUrl,token).execute();
+         new DataSendServer(serverUrl,token,timer).execute();
     }
 
     void getRegistrationToServer(String token){
@@ -190,7 +219,26 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);    //라벨 위치
     }
 
-    class MyTimer extends CountDownTimer
+
+    //TODO 아두이노에서 받아온 알콜농도에서 해독시간까지 걸리는 시간을 string 값으로 변경하는 메서드
+    private String makeStringTimer(int timer) {
+        int sec;
+        int min;
+        int  hour;
+        String sTimer;
+
+        sec = timer%60;
+        min = timer/60;
+        hour = min/60;
+
+        sTimer = hour+"시"+min+"분"+sec+"초";
+
+        return sTimer;
+    }
+
+    //TODO 타이머 객체 사용 X
+    //TODO 해당 CUSTOM 객체 삭제해야함 TEXTVIEW로 시간 찍어줄 것임       우선 혹시몰라 주석처리함
+/*    class MyTimer extends CountDownTimer
     {
         public MyTimer(long millisInFuture, long countDownInterval)
         {
@@ -206,5 +254,5 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         public void onFinish() {
             countTime.setText("0 초");
         }
-    }
+    }*/
 }
