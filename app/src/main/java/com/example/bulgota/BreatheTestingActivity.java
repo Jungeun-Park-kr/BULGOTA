@@ -43,7 +43,8 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
     Button btnTesting; //측정시작 버튼
     Button btnConnect; //연결하기 버튼
     TextView tvBigInfo; //큰 안내문(아이콘 아래)
-    TextView tvSmallInfo; //작은 안내문 (버튼 위)
+    TextView tvSmallInfoM; //작은 안내문 (버튼 위 - 연결화면)
+    TextView tvSmallInfoC; //작은 안내문 (버튼 위 - 측정화면)
 
 
 
@@ -64,7 +65,8 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         btnTesting = findViewById(R.id.btn_measure_start); //측정시작 버튼
         btnConnect = findViewById(R.id.btn_connect_start); //연결하기 버튼
         tvBigInfo = findViewById(R.id.tv_testing_info); //아이콘 아래 큰 안내문
-        tvSmallInfo = findViewById(R.id.tv_testing_small_info2); //버튼 위 작은 안내문
+        tvSmallInfoC = findViewById(R.id.tv_testing_small_info); //버튼 위 작은 안내문 (연결화면)
+        tvSmallInfoM = findViewById(R.id.tv_testing_small_info2); //버튼 위 작은 안내문 (측정화면)
         btnTesting.setOnClickListener(this);
 
         //슬라이드할 뷰
@@ -78,11 +80,14 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
 
         Log.d("modelName", getIntent().getStringExtra("modelName"));//대여하기 눌렀을 때 넘어오는 모델명
 
+        //기기명과 함께 연결하기 안내 메시지
+        tvSmallInfoC.setText("아래의 연결하기 버튼을 눌러\n"+getIntent().getStringExtra("modelName")+"와 연결해주세요.");
+
 
         btnTesting.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tvSmallInfo.setText("3초 후에 측정을 시작합니다.");
+                tvSmallInfoM.setText("3초 후에 측정을 시작합니다.");
                 myTimer = new MyTimer(3000, 1000);
                 myTimer.start();
 
@@ -277,7 +282,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
 //                            , "(측정 실패) 측정기와의 거리를 10cm 이내로 해주세요."
 //                            , Toast.LENGTH_SHORT).show();
 
-                    tvSmallInfo.setText("측정기와의 거리를 10cm 이내로 해주세요.");
+                    tvSmallInfoM.setText("측정기와의 거리를 10cm 이내로 해주세요.");
                     btnTesting.setText("측 정 재 시 작");
                     if (btnTesting.getVisibility() == INVISIBLE) //측정중 버튼 다시 보이게 하기
                         btnTesting.setVisibility(View.VISIBLE);
@@ -290,7 +295,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
                 else {
                     animview.setVisibility(INVISIBLE);
                     lottieAnalyzing.setVisibility(VISIBLE);
-                    tvSmallInfo.setText("측정 결과를 분석중입니다.");
+                    tvSmallInfoM.setText("측정 결과를 분석중입니다.");
                     setUpAnimationAnalyzing(lottieAnalyzing);
                 }
             }
@@ -366,16 +371,17 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         }
         @Override
         public void onTick(long millisUntilFinished) {
-            tvSmallInfo.setText((millisUntilFinished/1000)+1 + " 초 후에 측정을 시작합니다.");
+            tvSmallInfoM.setText((millisUntilFinished/1000)+1 + " 초 후에 측정을 시작합니다.");
         }
 
         @Override
         public void onFinish() {
-            tvSmallInfo.setText("3초간 바람을 세게 불어주세요!");
+            tvSmallInfoM.setText("3초간 바람을 세게 불어주세요!");
             //isTesting = true; //측정 시작 인지 확인
 
-                if (btnTesting.getVisibility() == VISIBLE) //측정중 버튼 없애기
+                if (btnTesting.getVisibility() == VISIBLE) { //측정중 버튼 없애기
                     btnTesting.setVisibility(INVISIBLE);
+                }
 
                 if (lottieBreathTesting.getVisibility() == INVISIBLE) { //측정중 로띠 띄우기
                     lottieBreathTesting.setVisibility(VISIBLE);
