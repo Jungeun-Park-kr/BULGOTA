@@ -30,6 +30,12 @@ import com.google.firebase.iid.InstanceIdResult;
 
 public class DetoxAnalysisActivity extends AppCompatActivity{
 
+    //TODO  상민이 읽어보고 이해안되는 부분 있음 알려줘 ! 가장먼저 읽어볼 것 !
+    //TODO  STEP1. 카운트다운은 내부 SQLITE(DB)에서 적용불가 하기 때문에 삭제함 TEXTVIEW로 대체
+    //TODO  STEP2. DataSendSever에 int timer 클래스 변수가 유지해야함 -> 영현이 서버에 timer 받을 때 INT로 설정되있어서 분석 후 필요한 시간을 STRING 값이랑 INT값 둘 모두 필요함
+    //TODO  STEP3.  해당 액티비에서 내부DB에 저장할 String 시간 값 받아와야함    ->  DB저장하는 .java 클래스 생성   ->   해당 시간 string 변수를 저장할 static scope의 변수에 저장 -> 일반 변수에서는 생명주기가 끝나면 소멸
+    //TODO 이외 부분은 건드릴 필요 없들것 같음 STEP 3부터는 내가 해야되는 부분이니까 신경쓰지 않아도 됨
+
     private LineChart lineChart;
     ArrayList<Entry> entry_chart;
     //차트 객체
@@ -117,7 +123,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
     }
 
-     void sendRegistrationToServer(String token) {
+    void sendRegistrationToServer(String token) {
         String serverUrl = "https://bullgota.ml/notification/push";
          new DataSendServer(serverUrl,token).execute();
     }
