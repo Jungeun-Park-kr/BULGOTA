@@ -27,6 +27,8 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 public class BreatheTestingActivity extends AppCompatActivity implements View.OnClickListener{
+    private String modelName;
+
     boolean isPageSlide = false; //페이지가 넘어갔는지 확인하는 변수
     boolean isTooFar = false; //측정기와의 거리를 확인하는 변수 (10cm 이상일시 true)
     Animation translateDownAnim; //화면 슬라이드 애니메이션
@@ -79,9 +81,10 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
   
 
         Log.d("modelName", getIntent().getStringExtra("modelName"));//대여하기 눌렀을 때 넘어오는 모델명
+        modelName = getIntent().getStringExtra("modelName"); //모델네임 저장
 
         //기기명과 함께 연결하기 안내 메시지
-        tvSmallInfoC.setText("아래의 연결하기 버튼을 눌러\n"+getIntent().getStringExtra("modelName")+"와 연결해주세요.");
+        tvSmallInfoC.setText("아래의 연결하기 버튼을 눌러\n"+modelName+"와 연결해주세요.");
 
 
         btnTesting.setOnClickListener(new Button.OnClickListener() {
@@ -136,10 +139,10 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
             public void onDeviceConnected(String name, String address) {
                 //연결한 블루투스 이름이 사용자가 대여하기 누른 기기이름과 동일한지 확인
                 //DeviceMapActivity에 있는 모델 변수 이름) markerDataList.get(finalI).getModel()
-                String modelName = getIntent().getStringExtra("modelName");
-                if(!name.equals(modelName)) { //이름 다르면 연결 해제
+                //String modelName = getIntent().getStringExtra("modelName");
+                if(!name.equals(modelName)) { //맵에서 선택한 모델명과 선택한 블루투스 이름이 다르면 연결 해제
                     Toast.makeText(getApplicationContext()
-                            , "(연결실패) 선택한 킥보드와 같은 기기를 다시 선택해주세요.\n(선택한기기:" + name + ")"
+                            , "(연결실패) 선택한 킥보드 ("+modelName+")와 같은 기기를 다시 선택해주세요."
                             , Toast.LENGTH_SHORT).show();
                     btSpp.disconnect();
                 }
@@ -352,7 +355,9 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         //큐알코드 화면 이동 or 분석화면 이동
         if (result) { //측정결과 - 운전 가능
             Toast.makeText(this, "분석결과 정상입니다.", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this,QRCodeScanActivity.class);
+            //Intent intent = new Intent(this,QRCodeScanActivity.class);
+            Intent intent = new Intent(this, QReaderActivity.class);
+            intent.putExtra("modelName", modelName); //QRcode Activity로 모델이름 전달
             startActivity(intent);
             finish();
         }

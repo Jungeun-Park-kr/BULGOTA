@@ -27,12 +27,17 @@ public class QReaderActivity extends AppCompatActivity implements DecoratedBarco
 
     private boolean correct = false;
 
+    private String modelName; //BreathetestingActivity에서 넘어온 모델명(기기이름)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_qrcode);
 
         barcodeView = findViewById(R.id.qr_layout);
+
+        Log.d("modelName", getIntent().getStringExtra("modelName")); //모델이름 확인용
+        modelName = getIntent().getStringExtra("modelName"); //모델네임 저장
 
         manager = new CaptureManager(this, barcodeView);
         manager.initializeFromIntent(getIntent(), savedInstanceState);
@@ -62,6 +67,7 @@ public class QReaderActivity extends AppCompatActivity implements DecoratedBarco
                 @Override
                 public void onPositiveClicked(String model) {
                     Intent intent = new Intent(QReaderActivity.this, CertCompletionActivity.class);
+                    intent.putExtra("modelName", modelName);
                     startActivity(intent);
                 }
                 @Override
