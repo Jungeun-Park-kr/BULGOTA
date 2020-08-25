@@ -359,6 +359,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         else { //측정결과 - 운전 불가
             Toast.makeText(this, "분석결과 운전 불가합니다.", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this,DetoxAnalysisActivity.class);
+            intent.putExtra("bac", dValue);
             startActivity(intent);
             finish();
         }
