@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -44,7 +45,9 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     TextView tvMystate; //주행 가능 or 불가 텍스트
     TextView tvtimer;   //주행가능까지 남은시간
 
-
+    //혈중 알코올 농도
+    double bac;
+    //혈중 알코올 농도
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,10 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         tvMystate = findViewById(R.id.tv_my_state);
         tvtimer = findViewById(R.id.tv_timer);
 
+        //intent 추가
+        Intent intent = getIntent();
+        bac = intent.getDoubleExtra("bac",0.3);
+        //intent 추가
 
         rlAlarm.setOnClickListener(new RelativeLayout.OnClickListener(){
             @Override
@@ -123,17 +130,17 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
     void graphDataAdd(ArrayList<Entry> entry_chart)
     {
-        Entry data1 = new Entry(15, 100);
-        Entry data2 = new Entry(16, 90);
-        Entry data3 = new Entry(17, 65);
-        Entry data4 = new Entry(18, 30);
-        Entry data5 = new Entry(19, 1);
+        int xTime=0;
+        double yBac=bac;
+        while((yBac)>0){
+            Entry data = new Entry(xTime++, (float)(yBac-=0.015));
+            entry_chart.add(data);   //x y 좌표
+        }
+        if(yBac != 0){
+            Entry data = new Entry(xTime+(float)(yBac/0.015), (float)(yBac-=0.015));
+            entry_chart.add(data);
+        }
 
-        entry_chart.add(data1);   //x y 좌표
-        entry_chart.add(data2);   //x y 좌표
-        entry_chart.add(data3);   //x y 좌표
-        entry_chart.add(data4);   //x y 좌표
-        entry_chart.add(data5);   //x y 좌표
     }
 
     void chartSetting(LineChart lineChart,LineDataSet lineDataSet, LineData chartData)
