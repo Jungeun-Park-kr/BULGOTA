@@ -222,6 +222,15 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         legend.setYOffset(20);  //라벨과 그래프 offset
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);   //라벨 위치
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);    //라벨 위치
+
+        //추가코드
+        lineDataSet.setColor(R.color.colorLightAccent);
+
+        lineDataSet.setDrawFilled(true);
+        //색채우기
+
+        lineDataSet.setDrawValues(false);
+
     }
 
 
