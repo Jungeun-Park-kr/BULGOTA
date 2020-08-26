@@ -79,7 +79,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         countTime = findViewById(R.id.tv_timer);    //타이머
         lineChart = findViewById(R.id.chart);   //그래프
 
-        clNoticeView = findViewById(R.id.ll_notice_view);
+        clNoticeView = findViewById(R.id.cl_notice_view);
         llState = findViewById(R.id.ll_state);
 
         rlAlarm = findViewById(R.id.rl_alarm);
@@ -96,6 +96,9 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         timer = (int)(bac * 60 * 60 / 0.015); // 초단위로 바꿈
         //intent 추가
+
+        sTimer = makeStringTimer(timer);
+        tvtimer.setText(sTimer);
 
         rlAlarm.setOnClickListener(new RelativeLayout.OnClickListener(){
             @Override
@@ -140,7 +143,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         graphDataAdd(entry_chart);
         //그래프에 들어갈 ArrayList 자료구조 데이터 추가 메서드
 
-        LineDataSet lineDataSet = new LineDataSet(entry_chart, "나");
+        LineDataSet lineDataSet = new LineDataSet(entry_chart, "주행불가능");
 
         chartSetting(lineChart,lineDataSet,chartData);
         //차트 설정값 세팅 메서드
@@ -224,7 +227,6 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);    //라벨 위치
 
         //추가코드
-        lineDataSet.setColor(R.color.colorLightAccent);
 
         lineDataSet.setDrawFilled(true);
         //색채우기
