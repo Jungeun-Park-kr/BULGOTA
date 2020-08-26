@@ -3,34 +3,31 @@ package com.example.bulgota;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.gson.JsonObject;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.function.LongBinaryOperator;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class DataSendServer extends AsyncTask<Integer, Void, Void> {
 
+    int timer;
     String url;
     String token;
-    int timer;
     JSONObject jsonObject;
 
-    public DataSendServer(String url, String token) {
+    //내부 DB를 위한 string 변수
+    String DBtimer;
+
+    public DataSendServer(String url, String token, int timer) {
         this.url = url;
         this.token = token;
-        this.timer = 5;    //TODO 임시설정
+        this.timer = timer;
         this.jsonObject = null;
+        this.DBtimer = null;
     }
 
     public String getUrl() {
@@ -47,6 +44,14 @@ public class DataSendServer extends AsyncTask<Integer, Void, Void> {
 
     public JSONObject getJsonObject() {
       return jsonObject;
+    }
+
+    public String getDBtimer() {
+        return DBtimer;
+    }
+
+    public void setDBtimer(String DBtimer) {
+        this.DBtimer = DBtimer;
     }
 
     public void setJsonObject(JSONObject jsonObject) {
@@ -110,7 +115,31 @@ public class DataSendServer extends AsyncTask<Integer, Void, Void> {
             Log.e("서버 전송 여부 : ","실패");
             e.printStackTrace();
         }
+
+        //String timer 변수 저장
+        makeStringTimer(timer);
+
         return null;
+    }
+
+    private void makeStringTimer(int timer) {
+        int sec;
+        int min;
+        int  hour;
+        String Timer;
+
+        sec = timer%60;
+        min = timer/60;
+        hour = min/60;
+
+        Timer = hour+"시"+min+"분"+sec+"초";
+
+        setDBtimer(Timer);
+
+        DatabaseManager.sTimer = Timer;
+        //static 변수로 해독 시간 저장
+        DatabaseManager databaseManager = new DatabaseManager();
+        //객체 생성 -> 생성자로 데이터베이스 생성 및 수정 자동 완성 코드 구현
     }
 
 }
