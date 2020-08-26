@@ -97,6 +97,9 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         timer = (int)(bac * 60 * 60 / 0.015); // 초단위로 바꿈
         //intent 추가
 
+        sTimer = makeStringTimer(timer);
+        tvtimer.setText(sTimer);
+
         rlAlarm.setOnClickListener(new RelativeLayout.OnClickListener(){
             @Override
             public void onClick(View view) {
