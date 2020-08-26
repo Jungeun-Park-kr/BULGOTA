@@ -68,12 +68,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:fontFamily="@font/nanum_square_round_regular"
-        android:textColor="@android:color/holo_red_dark"
-        android:text="블루투스를 활성화한 후 다시 검색해주세요."
-        android:visibility="gone"
         android:layout_marginBottom="5dp"
-        android:textSize="8sp" />
+        android:fontFamily="@font/nanum_square_round_regular"
+        android:text="블루투스를 활성화한 후 다시 검색해주세요."
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="8sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_bluetooth_list"

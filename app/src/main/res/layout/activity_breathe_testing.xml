@@ -81,6 +81,7 @@
             android:textSize="15sp"
             android:fontFamily="@font/nanum_square_round_regular"
             android:textColor="@color/colorAccent"
+            android:gravity="center_horizontal"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toTopOf="@id/btn_connect_start"
