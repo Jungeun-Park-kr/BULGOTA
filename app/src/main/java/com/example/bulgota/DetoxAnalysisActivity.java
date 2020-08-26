@@ -79,7 +79,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         countTime = findViewById(R.id.tv_timer);    //타이머
         lineChart = findViewById(R.id.chart);   //그래프
 
-        clNoticeView = findViewById(R.id.ll_notice_view);
+        clNoticeView = findViewById(R.id.cl_notice_view);
         llState = findViewById(R.id.ll_state);
 
         rlAlarm = findViewById(R.id.rl_alarm);
@@ -224,11 +224,8 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);    //라벨 위치
 
         //추가코드
-        lineDataSet.setColor(R.color.colorLightAccent);
-
         lineDataSet.setDrawFilled(true);
         //색채우기
-
         lineDataSet.setDrawValues(false);
 
     }
