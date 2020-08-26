@@ -12,7 +12,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ll_notice_view"
+        android:id="@+id/cl_notice_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
