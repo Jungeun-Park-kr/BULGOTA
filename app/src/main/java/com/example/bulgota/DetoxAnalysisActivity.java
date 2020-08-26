@@ -2,11 +2,11 @@ package com.example.bulgota;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -45,7 +45,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     //TODO 해당 CUSTOM 객체 삭제해야함 TEXTVIEW로 시간 찍어줄 것임       우선 혹시몰라 주석처리함
     //MyTimer myTimer;    //타이머객체
 
-    LinearLayout llNoticeView;  //상단 전체 layout
+    ConstraintLayout clNoticeView;  //상단 전체 layout
     LinearLayout llState;   //주행가능 여부
 
     RelativeLayout rlAlarm; //주행가능시 알람받기 layout
@@ -79,7 +79,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         countTime = findViewById(R.id.tv_timer);    //타이머
         lineChart = findViewById(R.id.chart);   //그래프
 
-        llNoticeView = findViewById(R.id.ll_notice_view);
+        clNoticeView = findViewById(R.id.ll_notice_view);
         llState = findViewById(R.id.ll_state);
 
         rlAlarm = findViewById(R.id.rl_alarm);
@@ -129,7 +129,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
 
         //TODO 타이머 객체 사용 X
-        //TODO 해당 CUSTOM 객체 삭제해야함 TEXTVIEW로 시간 찍어줄 것임       우선 혹시몰라 주석처리함
+        //TODO 해당 CUSTOM 객체 삭제해야함 TEXTVIEW로 시간 찍어줄 것임 우선 혹시몰라 주석처리함
       /*  myTimer = new MyTimer(600000, 1000);
         myTimer.start();*/
 
