@@ -223,15 +223,6 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);   //라벨 위치
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);    //라벨 위치
 
-        for(int Xnum = 0; Xnum<lineDataSet.getEntryCount(); Xnum++){
-            if(lineDataSet.getEntryForIndex(Xnum).getY()>=0.15){
-                lineDataSet.setColors(R.color.design_default_color_error);
-            }
-            else{
-                lineDataSet.setColors(R.color.colorLightAccent);
-            }
-        }
-
         //추가코드
         lineDataSet.setColor(R.color.colorLightAccent);
 
