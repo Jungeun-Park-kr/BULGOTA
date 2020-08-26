@@ -143,7 +143,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         graphDataAdd(entry_chart);
         //그래프에 들어갈 ArrayList 자료구조 데이터 추가 메서드
 
-        LineDataSet lineDataSet = new LineDataSet(entry_chart, "주행불가능");
+        LineDataSet lineDataSet = new LineDataSet(entry_chart, "나");
 
         chartSetting(lineChart,lineDataSet,chartData);
         //차트 설정값 세팅 메서드
