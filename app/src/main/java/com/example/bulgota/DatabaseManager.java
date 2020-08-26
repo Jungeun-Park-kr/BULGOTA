@@ -1,6 +1,7 @@
 package com.example.bulgota;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class DatabaseManager {
     static final String fileDB = "timer.db";    //DB이름
@@ -40,6 +41,7 @@ public class DatabaseManager {
     //TODO 코드 줄이기 위해 REPLACE 기능도 있다하여 사용  -> 에러 시 UPDATE로 변경
     private void addTimer() {
         String sqlInsert = "INSERT OR REPLACE INTO TIMER (LEFT_TIME) VALUES ('"+ sTimer+"')";
+        Log.e("뀨?",sqlInsert);
         sqliteDB.execSQL(sqlInsert);
     }
 
