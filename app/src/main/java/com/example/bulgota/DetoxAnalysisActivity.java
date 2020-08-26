@@ -90,7 +90,9 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         //intent 추가
         Intent intent = getIntent();
-        bac = intent.getDoubleExtra("bac",0.3);
+        bac = intent.getDoubleExtra("bac",0.03);
+
+        tvAlcholLevel.setText(String.format("%.2f", bac));
         //intent 추가
 
         rlAlarm.setOnClickListener(new RelativeLayout.OnClickListener(){
@@ -123,11 +125,19 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
             }
         });
 
+<<<<<<< HEAD
+        int detoxTime = (int)(bac*60*60/0.015);
+
+        myTimer = new MyTimer(detoxTime*1000, 1000);
+        myTimer.start();
+        //카운트다운 선언
+=======
 
         //TODO 타이머 객체 사용 X
         //TODO 해당 CUSTOM 객체 삭제해야함 TEXTVIEW로 시간 찍어줄 것임       우선 혹시몰라 주석처리함
       /*  myTimer = new MyTimer(600000, 1000);
         myTimer.start();*/
+>>>>>>> 779fc22541e5b9365d7b0b435d0e9e50eb2a93ce
 
         LineData chartData = new LineData();
         // 그래프선언
@@ -161,15 +171,15 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     {
         int xTime=0;
         double yBac=bac;
-        while((yBac)>0){
-            Entry data = new Entry(xTime++, (float)(yBac-=0.015));
+        while(yBac>=0.0){
+            Entry data = new Entry(xTime++, (float)(yBac));
             entry_chart.add(data);   //x y 좌표
+            yBac-=0.015;
         }
-        if(yBac != 0){
-            Entry data = new Entry(xTime+(float)(yBac/0.015), (float)(yBac-=0.015));
+        if(yBac > 0){
+            Entry data = new Entry(xTime+(float)(yBac/0.015), 0.0f);
             entry_chart.add(data);
         }
-
     }
 
     void chartSetting(LineChart lineChart,LineDataSet lineDataSet, LineData chartData)
@@ -247,7 +257,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         @Override
         public void onTick(long millisUntilFinished) {
-            countTime.setText(millisUntilFinished/1000 + " 초");
+            countTime.setText(millisUntilFinished /3600000 + " 시간 "+millisUntilFinished % 3600000 / 60000 +" 분 " + millisUntilFinished % 60 / 1000 + " 초");
         }
 
         @Override
