@@ -227,10 +227,8 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);    //라벨 위치
 
         //추가코드
-
         lineDataSet.setDrawFilled(true);
         //색채우기
-
         lineDataSet.setDrawValues(false);
 
     }
