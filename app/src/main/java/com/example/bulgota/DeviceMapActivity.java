@@ -46,6 +46,7 @@ import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.LocationButtonView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -120,6 +121,12 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     private IntentIntegrator qrScan;
 
+    //현재시간 변수 추가
+    final int CURSECOND=0, CURMINUTE=1, CURHOUR=2, CURDATE=3, CURMONTH=4, CURYEAR=5;
+    int curTime[] = new int[6];
+    //해독시간 텍스트뷰
+    TextView tvDetoxTime;
+    //
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -148,7 +155,29 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         tvGuide = (TextView)findViewById(R.id.tv_tab_list_3);
         tvGuide.setOnClickListener(this);
 
+        //해독시간 텍스트뷰
+        tvDetoxTime = (TextView)findViewById(R.id.tv_detox_time);
 
+        //임시 데이터
+        int tmpHour = 26;
+        int tmpMinute = 44;
+        int tmpSecond = 25;
+
+        //정보 가져오기
+        //여기 코딩 하실?
+
+        //
+        //
+        String strDetoxTime = "해독 예상 시간은 ";
+
+        if(tmpHour > 24){
+            strDetoxTime += "다음날 ";
+        }
+
+        strDetoxTime += tmpHour + "시 ";
+        strDetoxTime += tmpMinute + "분 입니다.";
+        tvDetoxTime.setText(strDetoxTime);
+        //
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -164,6 +193,16 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
         
 
+
+        //현재시간 변수 값 설정
+        Calendar cal = Calendar.getInstance();
+        curTime[CURSECOND] = cal.get(Calendar.SECOND);
+        curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
+        curTime[CURHOUR] = cal.get(Calendar.HOUR); // 24시간 넘어가도 ㄱㅊ
+        curTime[CURDATE] = cal.get(Calendar.DATE);
+        curTime[CURMONTH] = cal.get(Calendar.MONDAY)+1;
+        curTime[CURYEAR] = cal.get(Calendar.YEAR);
+        //
 
         //알람 메세지 클릭 시 map으로 이동 변경(firebasemessageservice)
         //firebasemessage service Intent
