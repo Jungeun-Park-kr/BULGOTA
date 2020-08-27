@@ -192,8 +192,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         } else {
             super.onBackPressed();
         }
-
-
     }
 
     @Override

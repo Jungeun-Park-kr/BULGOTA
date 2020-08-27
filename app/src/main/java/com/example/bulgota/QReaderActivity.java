@@ -60,7 +60,7 @@ public class QReaderActivity extends AppCompatActivity implements DecoratedBarco
             dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
             dialog.setDialogListener(new QRCodeDialog.CustomDialogListener() {
                 @Override
-                public void onPositiveClicked(String model, boolean lendStatus) {
+                public void onPositiveClicked(String model) {
                     //대여하기
                     Intent intent = new Intent(QReaderActivity.this, CertCompletionActivity.class);
                     intent.putExtra("modelName", model);

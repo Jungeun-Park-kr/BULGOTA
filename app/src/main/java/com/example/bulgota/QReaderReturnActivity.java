@@ -64,13 +64,13 @@ public class QReaderReturnActivity extends AppCompatActivity implements Decorate
             dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
             dialog.setDialogListener(new QRCodeDialog.CustomDialogListener() {
                 @Override
-                public void onPositiveClicked(String model, boolean lendStatus) {
-                    //반납하기
-                    Intent intent = new Intent(QReaderReturnActivity.this, DeviceMapActivity.class);
-                    intent.putExtra("modelNum", model);
-                    intent.putExtra("lendStatus", lendStatus);
-                    startActivity(intent);
-                    finish();
+                public void onPositiveClicked(String model) {
+//                    //반납하기
+//                    Intent intent = new Intent(QReaderReturnActivity.this, DeviceMapActivity.class);
+//                    intent.putExtra("modelNum", model);
+//                    intent.putExtra("lendStatus", lendStatus);
+//                    startActivity(intent);
+//                    finish();
                 }
                 @Override
                 public void onNegativeClicked() {
