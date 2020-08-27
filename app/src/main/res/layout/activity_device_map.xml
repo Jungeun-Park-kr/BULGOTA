@@ -424,10 +424,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="해독완료시간을 받아옵니다."
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:background="@color/colorLightAccent"
             android:textAlignment="center"
             android:fontFamily="@font/nanum_square_round_bold"
-            android:textSize="15dp"
+            android:textSize="17dp"
             android:gravity="center_horizontal"
             android:textColor="@color/colorWarning"
             app:layout_constraintTop_toBottomOf="@id/cl_toolbar" />

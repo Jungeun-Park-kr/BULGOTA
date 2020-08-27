@@ -135,7 +135,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         Calendar cal = Calendar.getInstance();
         dTime[DTSECOND] = cal.get(Calendar.SECOND) + timer % 60;
         dTime[DTMINUTE] = cal.get(Calendar.MINUTE) + timer / 60 % 60;
-        dTime[DTHOUR] = cal.get(Calendar.HOUR) + timer / 60 / 60 % 24;
+        dTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY) + timer / 60 / 60 % 24;
         dTime[DTDATE] = cal.get(Calendar.DATE) + timer / 60 / 60 / 24 ;
         dTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
         dTime[DTYEAR] = cal.get(Calendar.YEAR);
