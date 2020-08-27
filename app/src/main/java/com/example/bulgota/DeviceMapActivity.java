@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -158,7 +159,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         tvGuide.setOnClickListener(this);
 
         //해독시간 텍스트뷰
-        tvDetoxTime = (TextView)findViewById(R.id.tv_detox_time);
+        tvDetoxTime = findViewById(R.id.tv_detox_time);
 
         //임시 데이터
         int tmpHour = 26;
