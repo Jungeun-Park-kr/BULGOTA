@@ -162,6 +162,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         mapView.getMapAsync(this::onMapReady);
 
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+        
 
 
         //알람 메세지 클릭 시 map으로 이동 변경(firebasemessageservice)
