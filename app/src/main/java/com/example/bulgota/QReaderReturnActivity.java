@@ -15,13 +15,17 @@ import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 
-public class QReaderActivity extends AppCompatActivity implements DecoratedBarcodeView.TorchListener {
+public class QReaderReturnActivity extends AppCompatActivity implements DecoratedBarcodeView.TorchListener {
     private CaptureManager manager;
     private boolean isFlashOn = false;
 
     private Button btFlash;
     private Button btCode;
     private DecoratedBarcodeView barcodeView;
+
+    private static final int SUCCESS = 0;
+    private static final int ALREADY = 1;
+    private static final int FAIL = 2;
 
     private String value = "";
 
@@ -61,10 +65,12 @@ public class QReaderActivity extends AppCompatActivity implements DecoratedBarco
             dialog.setDialogListener(new QRCodeDialog.CustomDialogListener() {
                 @Override
                 public void onPositiveClicked(String model) {
-                    //대여하기
-                    Intent intent = new Intent(QReaderActivity.this, CertCompletionActivity.class);
-                    intent.putExtra("modelName", model);
-                    startActivity(intent);
+//                    //반납하기
+//                    Intent intent = new Intent(QReaderReturnActivity.this, DeviceMapActivity.class);
+//                    intent.putExtra("modelNum", model);
+//                    intent.putExtra("lendStatus", lendStatus);
+//                    startActivity(intent);
+//                    finish();
                 }
                 @Override
                 public void onNegativeClicked() {

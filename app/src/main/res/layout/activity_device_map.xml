@@ -372,6 +372,22 @@
         android:background="@android:color/white"
         android:clickable="true">
 
+        <Button
+            android:id="@+id/btn_return"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/rec_btn_info"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:text="반납"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tv_toolbar_title"
             android:layout_width="wrap_content"

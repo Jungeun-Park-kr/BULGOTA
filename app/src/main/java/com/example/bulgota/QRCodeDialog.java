@@ -91,5 +91,3 @@ public class QRCodeDialog extends Dialog implements View.OnClickListener{
         }
     }
 }
-
-
