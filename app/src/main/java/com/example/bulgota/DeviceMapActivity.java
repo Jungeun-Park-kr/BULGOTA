@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -119,6 +120,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private int pageValue;
     private String modelName;
 
+    private ReturnModelDialog returnModelDialog;
     private SlidingPageAnimationListener animationListener;
 
     //기획 배경 등 텍스트를 클릭하면 해당 항목의 공지사항으로 이동할 예정.
@@ -129,7 +131,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private IntentIntegrator qrScan;
 
     //현재시간 변수 추가
-    final int CURSECOND=0, CURMINUTE=1, CURHOUR=2, CURDATE=3, CURMONTH=4, CURYEAR=5;
+    final int CURSECOND = 0, CURMINUTE = 1, CURHOUR = 2, CURDATE = 3, CURMONTH = 4, CURYEAR = 5;
     int curTime[] = new int[6];
     //해독시간 텍스트뷰
     TextView tvDetoxTime;
@@ -148,23 +150,22 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
 
         //퍼미션 확인
-        if(DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                &&(DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION))
-                &&(DeviceMapActivity.checkPermissions(this, Manifest.permission.CAMERA))) {
+        if (DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                && (DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION))
+                && (DeviceMapActivity.checkPermissions(this, Manifest.permission.CAMERA))) {
             //권한 있음 - 원하는 메소드 사용
             Toast.makeText(this, "권한 설정이 완료되었습니다.", Toast.LENGTH_LONG).show();
-        }
-        else {
+        } else {
             Toast.makeText(this, "권한 하나이상 없음.", Toast.LENGTH_LONG).show();
             DeviceMapActivity.requestExternalPermissions(this);
         }
 
         //기획 배경 등 텍스트를 클릭하면 해당 항목의 공지사항으로 이동할 예정.
-        tvPlanBackground = (TextView)findViewById(R.id.tv_tab_list_1);
+        tvPlanBackground = (TextView) findViewById(R.id.tv_tab_list_1);
         tvPlanBackground.setOnClickListener(this);
-        tvLegal = (TextView)findViewById(R.id.tv_tab_list_2);
+        tvLegal = (TextView) findViewById(R.id.tv_tab_list_2);
         tvLegal.setOnClickListener(this);
-        tvGuide = (TextView)findViewById(R.id.tv_tab_list_3);
+        tvGuide = (TextView) findViewById(R.id.tv_tab_list_3);
         tvGuide.setOnClickListener(this);
 
         //해독시간 텍스트뷰
@@ -178,18 +179,18 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
         curTime[CURHOUR] = cal.get(Calendar.HOUR); // 24시간 넘어가도 ㄱㅊ
         curTime[CURDATE] = cal.get(Calendar.DATE);
-        curTime[CURMONTH] = cal.get(Calendar.MONDAY)+1;
+        curTime[CURMONTH] = cal.get(Calendar.MONDAY) + 1;
         curTime[CURYEAR] = cal.get(Calendar.YEAR);
         //현재시간 문자열로 바꿔 저장
-        cTime=Integer.toString(curTime[5])+"-"+Integer.toString(curTime[4])+"-"+Integer.toString(curTime[3])+" "+
-                Integer.toString(curTime[2])+":"+ Integer.toString(curTime[1])+":"+Integer.toString(curTime[0]); //해독시간을 문자열로 변경
+        cTime = Integer.toString(curTime[5]) + "-" + Integer.toString(curTime[4]) + "-" + Integer.toString(curTime[3]) + " " +
+                Integer.toString(curTime[2]) + ":" + Integer.toString(curTime[1]) + ":" + Integer.toString(curTime[0]); //해독시간을 문자열로 변경
 
 
         //Realm 객체 선언
         Realm.init(this);
-        Realm mRealm=Realm.getDefaultInstance();
+        Realm mRealm = Realm.getDefaultInstance();
         TimeVO vo = mRealm.where(TimeVO.class).isNotNull("detoxTime").findFirst(); //detoxDate 있는경우 객체 얻기
-        if(vo != null) {
+        if (vo != null) {
             detoxTime = vo.detoxTime; //해독 시간 detoxTime String에 저장
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //날짜 포맷
@@ -218,8 +219,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                 //남은 해독시간 띄우는 코드 in here
                 Toast.makeText(this, "해독예정시간 :" + detoxTime, Toast.LENGTH_LONG).show();
             }
-        }
-        else { //해독시간 데이터 존재하지 않음
+        } else { //해독시간 데이터 존재하지 않음
             //해독시간 텍스트뷰 보이지 않게 해주세요
             //in here
 
@@ -238,7 +238,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         //
         String strDetoxTime = "해독 예상 시간은 ";
 
-        if(tmpHour > 24){
+        if (tmpHour > 24) {
             strDetoxTime += "다음날 ";
         }
 
@@ -259,7 +259,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         mapView.getMapAsync(this::onMapReady);
 
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
-        
 
 
         //현재시간 변수 값 설정
@@ -268,14 +267,14 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
         curTime[CURHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
         curTime[CURDATE] = cal.get(Calendar.DATE);
-        curTime[CURMONTH] = cal.get(Calendar.MONDAY)+1;
+        curTime[CURMONTH] = cal.get(Calendar.MONDAY) + 1;
         curTime[CURYEAR] = cal.get(Calendar.YEAR);
         //
 
         //알람 메세지 클릭 시 map으로 이동 변경(firebasemessageservice)
         //firebasemessage service Intent
         //임시로 설정해둔 것이니 추후 논의 후 변경
-       receiveMessage();
+        receiveMessage();
 
     }
 
@@ -283,20 +282,20 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     //firebasemessage service Intent
     private void receiveMessage() {
         Intent intent = getIntent();
-        if(intent != null) {//푸시알림을 선택해서 실행한것이 아닌경우 예외처리
+        if (intent != null) {//푸시알림을 선택해서 실행한것이 아닌경우 예외처리
             String notificationData = intent.getStringExtra("test");
-            if(notificationData != null)
+            if (notificationData != null)
                 Log.d("FCM_TEST", notificationData);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if(isHambergerOpen) {
+        if (isHambergerOpen) {
             viewLayer.performClick();
             return;
-        } else if(isInfoPageOpen) {
-            map.getOnMapClickListener().onMapClick(new PointF(10,10), lastMarker.getPosition());
+        } else if (isInfoPageOpen) {
+            map.getOnMapClickListener().onMapClick(new PointF(10, 10), lastMarker.getPosition());
         } else {
             super.onBackPressed();
         }
@@ -310,6 +309,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         }
         return super.onOptionsItemSelected(item);
     }
+
     public static boolean checkPermissions(Activity activity, String permission) {
         int permissionResult = ActivityCompat.checkSelfPermission(activity, permission);
         if (permissionResult == PackageManager.PERMISSION_GRANTED)
@@ -320,8 +320,8 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == 0) { //if(requestCode == BreathTestingActivity.request_code)
-            if(DeviceMapActivity.verifyPermission(grantResults)) {
+        if (requestCode == 0) { //if(requestCode == BreathTestingActivity.request_code)
+            if (DeviceMapActivity.verifyPermission(grantResults)) {
                 //요청한 권한 얻음, 원하는 메소드 사용
                 Toast.makeText(this, "권한 설정이 모두 완료되었습니다.", Toast.LENGTH_LONG).show();
                 if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
@@ -332,13 +332,11 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                     map.setLocationTrackingMode(LocationTrackingMode.Follow);
                     return;
                 }
-            }
-            else {
+            } else {
                 //showRequestAgainDialog();
                 Toast.makeText(this, "불고타 서비스 이용을 위해 권한이 필요합니다.", Toast.LENGTH_LONG).show();
             }
-        }
-        else
+        } else
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
@@ -445,7 +443,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         });
 
         btnInfoLend.setOnClickListener(l -> {
-            Intent intent = new Intent(this,BreatheTestingActivity.class);
+            Intent intent = new Intent(this, BreatheTestingActivity.class);
             intent.putExtra("modelName", modelName);//측정중 액티비티로 선택한 모델명 전달
             startActivity(intent);
         });
@@ -475,7 +473,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void btnZoomClickEvent(Button button, boolean zoom) {
-        if(zoom) {
+        if (zoom) {
             map.moveCamera(CameraUpdate.zoomIn().animate(CameraAnimation.Easing, 1500));
         } else {
             map.moveCamera(CameraUpdate.zoomOut().animate(CameraAnimation.Fly, 1500));
@@ -520,7 +518,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                         int finalI = i;
 
                         markerItems[i].setOnClickListener(overlay -> {
-                            if(lastMarker == null || lastMarker.getTag() != markerItems[finalI].getTag()) {
+                            if (lastMarker == null || lastMarker.getTag() != markerItems[finalI].getTag()) {
                                 LatLng coord = new LatLng(markerDataList.get(finalI).getLatitude(), markerDataList.get(finalI).getLongitude());
                                 map.moveCamera(CameraUpdate.scrollAndZoomTo(coord, 16)
                                         .animate(CameraAnimation.Easing, 1500));
@@ -574,7 +572,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         map.setLocationSource(locationSource);
 
         map.addOnLocationChangeListener(location -> {
-            if(initMapLoad) {
+            if (initMapLoad) {
                 map.moveCamera(CameraUpdate.scrollAndZoomTo(new LatLng(location.getLatitude(), location.getLongitude()), 14)
                         .animate(CameraAnimation.Linear, 3000));
                 map.setLocationTrackingMode(LocationTrackingMode.Follow);
@@ -589,7 +587,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         map.setOnMapClickListener((point, coord) -> {
             //애니메이션
-            if(isInfoPageOpen) {
+            if (isInfoPageOpen) {
                 //애니메이션 준비
                 translateDownAim = AnimationUtils.loadAnimation(this, R.anim.translate_down);
                 translateDownAim.setAnimationListener(animationListener);
@@ -634,22 +632,22 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onClick(View v) {
-        if(v == tvPlanBackground){
-            Intent intent = new Intent(this,NoticeActivity.class);
-            Log.d("asdf1","1");
+        if (v == tvPlanBackground) {
+            Intent intent = new Intent(this, NoticeActivity.class);
+            Log.d("asdf1", "1");
             intent.putExtra("tag", PLAN_BACKGROUND);
-            Log.d("asdf2","2");
+            Log.d("asdf2", "2");
             viewLayer.performClick();
-            Log.d("asdf3","4");
+            Log.d("asdf3", "4");
             startActivity(intent);
-            Log.d("asdf4","4");
-        } else if(v == tvLegal){
-            Intent intent = new Intent(this,NoticeActivity.class);
+            Log.d("asdf4", "4");
+        } else if (v == tvLegal) {
+            Intent intent = new Intent(this, NoticeActivity.class);
             intent.putExtra("tag", LEGAL);
             viewLayer.performClick();
             startActivity(intent);
-        } else if(v == tvGuide){
-            Intent intent = new Intent(this,NoticeActivity.class);
+        } else if (v == tvGuide) {
+            Intent intent = new Intent(this, NoticeActivity.class);
             intent.putExtra("tag", GUIDE);
             viewLayer.performClick();
             startActivity(intent);
@@ -660,25 +658,25 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         @Override
         public void onAnimationStart(Animation animation) {
             switch (pageValue) {
-                case PAGE_DOWN : {
+                case PAGE_DOWN: {
                     isInfoPageOpen = false;
                     btnInfoLocation.setVisibility(View.GONE);
                     btnInfoZoomIn.setVisibility(View.GONE);
                     btnInfoZoomOut.setVisibility(View.GONE);
                     break;
                 }
-                case PAGE_UP : {
+                case PAGE_UP: {
                     isInfoPageOpen = true;
                     break;
                 }
-                case PAGE_LEFT : {
+                case PAGE_LEFT: {
                     clHamberger.setVisibility(View.GONE);
                     viewLayer.setVisibility(View.GONE);
                     clToolbar.setVisibility(View.VISIBLE);
                     isHambergerOpen = false;
                     break;
                 }
-                case PAGE_RIGHT : {
+                case PAGE_RIGHT: {
                     clToolbar.setVisibility(View.GONE);
                     viewLayer.setVisibility(View.VISIBLE);
                     isHambergerOpen = true;
@@ -689,11 +687,11 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         @Override
         public void onAnimationEnd(Animation animation) {
             switch (pageValue) {
-                case PAGE_DOWN : {
+                case PAGE_DOWN: {
                     clModelInfo.setVisibility(View.GONE);
                     break;
                 }
-                case PAGE_UP : {
+                case PAGE_UP: {
                     clModelInfo.setVisibility(View.VISIBLE);
                     btnInfoLocation.setVisibility(View.VISIBLE);
                     btnInfoZoomIn.setVisibility(View.VISIBLE);
@@ -701,11 +699,11 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                     btnInfoLocation.setMap(map);
                     break;
                 }
-                case PAGE_LEFT : {
+                case PAGE_LEFT: {
                     clHamberger.setVisibility(View.GONE);
                     break;
                 }
-                case PAGE_RIGHT : {
+                case PAGE_RIGHT: {
                     clHamberger.setVisibility(View.VISIBLE);
                 }
             }
@@ -720,7 +718,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
+        if (result != null) {
             String modelNum = result.getContents();
             //return 모델 명 string
             if (result.getContents() == null) {
@@ -736,31 +734,31 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                 double latitude = locationSource.getLastLocation().getLatitude();   //위도
                 double longitude = locationSource.getLastLocation().getLongitude(); //경도
 
-                bullgoTAService.returnModel(modelNum, new RequestReturnModel(latitude,longitude)).enqueue(new Callback<ResponseReturnModel>() {
+                bullgoTAService.returnModel(modelNum, new RequestReturnModel(latitude, longitude)).enqueue(new Callback<ResponseReturnModel>() {
 
 
                     @Override
                     public void onResponse(Call<ResponseReturnModel> call, Response<ResponseReturnModel> response) {
-                        Log.e("getSuccess", String.valueOf(response.body().getSuccess()));
-
                         String message = response.body().getMessage();
+                        returnModelDialog = new ReturnModelDialog(DeviceMapActivity.this);
 
-                        ReturnModelDialog returnModelDialog = new ReturnModelDialog(DeviceMapActivity.this);
+                        if (response.body().getSuccess()) {
+                            Log.e("getSuccess", String.valueOf(response.body().getSuccess()));
 
+                            if (message.equals("킥보드 반납 성공")) {
+                                double data = (double) response.body().getData();
+                                int object = (int) data;
+                                returnModelDialog.setReturnModelDialog(0, modelNum, object);
 
-                        if (message.equals("킥보드 반납 성공")) {
-                            double data = (double) response.body().getData();
-                            int object = (int) data;
-                            returnModelDialog.setReturnModelDialog(0,modelNum, object);
-
-                        } else if(message.equals("이미 반납된 킥보드입니다.")){
-                            returnModelDialog.setReturnModelDialog(1,modelNum,0);
-                        }
-                        else if(message.equals("킥보드 반납 실패")){
-                            returnModelDialog.setReturnModelDialog(2,modelNum,0);
-                        }
-                        else{
-                            Log.e("retrofit2 message :", message +"이건 서버담당자가 잘못한거임 ! 반성하세요. ");
+                            } else if (message.equals("이미 반납된 킥보드입니다.")) {
+                                returnModelDialog.setReturnModelDialog(1, modelNum, 0);
+                            }
+                        } else {
+                            if (message.equals("킥보드 반납 실패")) {
+                                returnModelDialog.setReturnModelDialog(2, modelNum, 0);
+                            } else {
+                                Log.e("retrofit2 message :", message + "이건 서버담당자가 잘못한거임 ! 반성하세요. ");
+                            }
                         }
                     }
 
@@ -770,9 +768,17 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                         Log.e("fail", "fail");
                     }
                 });
-
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        returnModelDialog.dismiss();
+                    }
+                }, 3000);
             }
         } else {
-            super.onActivityResult(requestCode, resultCode, data); }    }
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
 }
