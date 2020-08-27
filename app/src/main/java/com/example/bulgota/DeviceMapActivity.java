@@ -142,6 +142,8 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private String cTime; //현재 시간 문자열
     private Date curDate; //현재 시간 Date
 
+    boolean isDTNeed; // tv_detox_time 을 킬지 말지 결정
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,15 +175,16 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
 
         /* -----------------------------------정은 DB부분 ---------------------------------------*/
-//현재시간 변수 값 설정
+        //현재시간 변수 값 설정
         Calendar cal = Calendar.getInstance();
         curTime[CURSECOND] = cal.get(Calendar.SECOND);
         curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
-        curTime[CURHOUR] = cal.get(Calendar.HOUR); // 24시간 넘어가도 ㄱㅊ
+        curTime[CURHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
         curTime[CURDATE] = cal.get(Calendar.DATE);
         curTime[CURMONTH] = cal.get(Calendar.MONDAY) + 1;
         curTime[CURYEAR] = cal.get(Calendar.YEAR);
 
+        isDTNeed = false;
         //현재시간 문자열로 바꿔 저장
         cTime = Integer.toString(curTime[5]) + "-" + Integer.toString(curTime[4]) + "-" + Integer.toString(curTime[3]) + " " +
                 Integer.toString(curTime[2]) + ":" + Integer.toString(curTime[1]) + ":" + Integer.toString(curTime[0]); //해독시간을 문자열로 변경
@@ -201,8 +204,8 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Toast.makeText(this, "curDate :" + curDate, Toast.LENGTH_LONG).show();
-            Toast.makeText(this, "detoxDate :" + detoxDate, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "curDate :" + curDate, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "detoxDate :" + detoxDate, Toast.LENGTH_LONG).show();
             int compare = curDate.compareTo(detoxDate);
             if (compare > 0) { //curDate > detoxDate 인 경우
                 //해독시간이 현재 시간보다 이른 경우 해독시간 데이터 삭제
@@ -213,39 +216,39 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
                     }
                 });
-                Toast.makeText(this, "데이터 삭제 완료", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "데이터 삭제 완료", Toast.LENGTH_SHORT).show();
                 //남은 해독시간 보이지 않게 해주세요
+                isDTNeed = false;
                 // in here
             } else { //curDate < detoxDate 인 경우 => 화면에 보이게 하기
                 //남은 해독시간 띄우는 코드 in here
-                Toast.makeText(this, "해독예정시간 :" + detoxTime, Toast.LENGTH_LONG).show();
+                isDTNeed = true;
+                //Toast.makeText(this, "해독예정시간 :" + detoxTime, Toast.LENGTH_LONG).show();
             }
         } else { //해독시간 데이터 존재하지 않음
             //해독시간 텍스트뷰 보이지 않게 해주세요
+            isDTNeed = false;
             //in here
 
         }
         /* -----------------------------------정은 DB부분 ---------------------------------------*/
 
-        //임시 데이터
-        int tmpHour = 26; //임시 시 분 초 입니다.
-        int tmpMinute = 44;
-        int tmpSecond = 25;
 
-        //정보 가져오기
-        //여기 코딩 하실?
+        if(isDTNeed){
+            String strDetoxTime = "해독 예상 시간은 ";
 
-        //
-        //
-        String strDetoxTime = "해독 예상 시간은 ";
+            if (detoxDate.getTime()-curDate.getTime() / 24 / 60 / 60 / 1000 >0) {
+                strDetoxTime += "다음날 ";
+            }
 
-        if (tmpHour > 24) {
-            strDetoxTime += "다음날 ";
+            strDetoxTime += detoxDate.getHours() + "시 ";
+            strDetoxTime += detoxDate.getMinutes() + "분 입니다.";
+            tvDetoxTime.setText(strDetoxTime);
+            tvDetoxTime.setVisibility(View.VISIBLE);
+        } else {
+            tvDetoxTime.setVisibility(View.GONE);
         }
 
-        strDetoxTime += (tmpHour % 24) + "시 ";
-        strDetoxTime += tmpMinute + "분 입니다.";
-        tvDetoxTime.setText(strDetoxTime);
         //
 
         ActionBar actionBar = getSupportActionBar();

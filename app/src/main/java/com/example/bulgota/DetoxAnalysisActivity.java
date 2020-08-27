@@ -135,16 +135,14 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         Calendar cal = Calendar.getInstance();
         dTime[DTSECOND] = cal.get(Calendar.SECOND) + timer % 60;
         dTime[DTMINUTE] = cal.get(Calendar.MINUTE) + timer / 60 % 60;
-
-        dTime[DTHOUR] = cal.get(Calendar.HOUR) + timer / 60 / 60; // 24시간 넘어가도 ㄱㅊ
-        dTime[DTDATE] = cal.get(Calendar.DATE);
+        dTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY) + timer / 60 / 60 % 24;
+        dTime[DTDATE] = cal.get(Calendar.DATE) + timer / 60 / 60 / 24 ;
         dTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
         dTime[DTYEAR] = cal.get(Calendar.YEAR);
 
         /* -----------------------------------정은 DB 부분 ---------------------------------------*/
-        // detoxTime=Integer.toString(dTime[5])+"-"+Integer.toString(dTime[4])+"-"+Integer.toString(dTime[3])+" "+
-        //          Integer.toString(dTime[2])+":"+ Integer.toString(dTime[1])+":"+Integer.toString(dTime[0]); //해독시간을 문자열로 변경
-        detoxTime="2020-08-27 10:20:00"; //테스트용 값
+        detoxTime=Integer.toString(dTime[5])+"-"+Integer.toString(dTime[4])+"-"+Integer.toString(dTime[3])+" "+
+                Integer.toString(dTime[2])+":"+ Integer.toString(dTime[1])+":"+Integer.toString(dTime[0]); //해독시간을 문자열로 변경
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //날짜 포맷
         try {
             detoxDate = format.parse(detoxTime);
@@ -164,7 +162,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
                 vo.detoxTime = detoxTime; //String 해독시간 DB에 저장
             }
         });
-        Toast.makeText(this, "남은시간 : "+detoxTime, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "남은시간 : "+detoxTime, Toast.LENGTH_LONG).show();
         /* -----------------------------------정은 DB 부분 ---------------------------------------*/
 
 
