@@ -13,9 +13,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -31,6 +35,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+
+import io.realm.Realm;
 
 
 public class DetoxAnalysisActivity extends AppCompatActivity{
@@ -91,6 +97,10 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     int curTime[] = new int[6];
     //
 
+
+    String detoxTime; //해독 시간 문자열
+    Date detoxDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,10 +135,39 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         Calendar cal = Calendar.getInstance();
         dTime[DTSECOND] = cal.get(Calendar.SECOND) + timer % 60;
         dTime[DTMINUTE] = cal.get(Calendar.MINUTE) + timer / 60 % 60;
-        dTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY) + timer / 60 / 60; // 24시간 넘어가도 ㄱㅊ
+
+        dTime[DTHOUR] = cal.get(Calendar.HOUR) + timer / 60 / 60; // 24시간 넘어가도 ㄱㅊ
         dTime[DTDATE] = cal.get(Calendar.DATE);
         dTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
         dTime[DTYEAR] = cal.get(Calendar.YEAR);
+
+        /* -----------------------------------정은 DB 부분 ---------------------------------------*/
+        // detoxTime=Integer.toString(dTime[5])+"-"+Integer.toString(dTime[4])+"-"+Integer.toString(dTime[3])+" "+
+        //          Integer.toString(dTime[2])+":"+ Integer.toString(dTime[1])+":"+Integer.toString(dTime[0]); //해독시간을 문자열로 변경
+        detoxTime="2020-08-27 10:20:00"; //테스트용 값
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //날짜 포맷
+        try {
+            detoxDate = format.parse(detoxTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //Realm 객체 획득
+        Realm.init(this);
+        Realm mRealm = Realm.getDefaultInstance();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                mRealm.delete(TimeVO.class); //TimeVO의 모든 데이터 삭제 (가장 최근 해독시간으로 업데이트)
+                //새로운 데이터 추가
+                TimeVO vo = realm.createObject(TimeVO.class);
+                vo.detoxTime = detoxTime; //String 해독시간 DB에 저장
+            }
+        });
+        Toast.makeText(this, "남은시간 : "+detoxTime, Toast.LENGTH_LONG).show();
+        /* -----------------------------------정은 DB 부분 ---------------------------------------*/
+
+
         //현재시간 변수 값 설정
         curTime[DTSECOND] = cal.get(Calendar.SECOND);
         curTime[DTMINUTE] = cal.get(Calendar.MINUTE);

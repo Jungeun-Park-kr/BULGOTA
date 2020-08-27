@@ -48,9 +48,13 @@ import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.LocationButtonView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -131,6 +135,11 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     TextView tvDetoxTime;
     //
 
+    private String detoxTime; //해독 시간 문자열
+    private Date detoxDate; //해독 시간 Date
+    private String cTime; //현재 시간 문자열
+    private Date curDate; //현재 시간 Date
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,6 +169,62 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         //해독시간 텍스트뷰
         tvDetoxTime = findViewById(R.id.tv_detox_time);
+
+
+        /* -----------------------------------정은 DB부분 ---------------------------------------*/
+//현재시간 변수 값 설정
+        Calendar cal = Calendar.getInstance();
+        curTime[CURSECOND] = cal.get(Calendar.SECOND);
+        curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
+        curTime[CURHOUR] = cal.get(Calendar.HOUR); // 24시간 넘어가도 ㄱㅊ
+        curTime[CURDATE] = cal.get(Calendar.DATE);
+        curTime[CURMONTH] = cal.get(Calendar.MONDAY)+1;
+        curTime[CURYEAR] = cal.get(Calendar.YEAR);
+        //현재시간 문자열로 바꿔 저장
+        cTime=Integer.toString(curTime[5])+"-"+Integer.toString(curTime[4])+"-"+Integer.toString(curTime[3])+" "+
+                Integer.toString(curTime[2])+":"+ Integer.toString(curTime[1])+":"+Integer.toString(curTime[0]); //해독시간을 문자열로 변경
+
+
+        //Realm 객체 선언
+        Realm.init(this);
+        Realm mRealm=Realm.getDefaultInstance();
+        TimeVO vo = mRealm.where(TimeVO.class).isNotNull("detoxTime").findFirst(); //detoxDate 있는경우 객체 얻기
+        if(vo != null) {
+            detoxTime = vo.detoxTime; //해독 시간 detoxTime String에 저장
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //날짜 포맷
+            try {
+                curDate = format.parse(cTime); //현재 시간(String)을 Date type으로 변경
+                detoxDate = format.parse(detoxTime); //해독 시간(String)을 Date 형으로 변경
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(this, "curDate :" + curDate, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "detoxDate :" + detoxDate, Toast.LENGTH_LONG).show();
+            int compare = curDate.compareTo(detoxDate);
+            if (compare > 0) { //curDate > detoxDate 인 경우
+                //해독시간이 현재 시간보다 이른 경우 해독시간 데이터 삭제
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        mRealm.delete(TimeVO.class); //모든 데이터 삭제
+
+                    }
+                });
+                Toast.makeText(this, "데이터 삭제 완료", Toast.LENGTH_SHORT).show();
+                //남은 해독시간 보이지 않게 해주세요
+                // in here
+            } else { //curDate < detoxDate 인 경우 => 화면에 보이게 하기
+                //남은 해독시간 띄우는 코드 in here
+                Toast.makeText(this, "해독예정시간 :" + detoxTime, Toast.LENGTH_LONG).show();
+            }
+        }
+        else { //해독시간 데이터 존재하지 않음
+            //해독시간 텍스트뷰 보이지 않게 해주세요
+            //in here
+
+        }
+        /* -----------------------------------정은 DB부분 ---------------------------------------*/
 
         //임시 데이터
         int tmpHour = 26; //임시 시 분 초 입니다.
@@ -673,6 +738,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
                 bullgoTAService.returnModel(modelNum, new RequestReturnModel(latitude,longitude)).enqueue(new Callback<ResponseReturnModel>() {
 
+
                     @Override
                     public void onResponse(Call<ResponseReturnModel> call, Response<ResponseReturnModel> response) {
                         Log.e("getSuccess", String.valueOf(response.body().getSuccess()));
@@ -699,6 +765,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                     }
 
                     @Override
+
                     public void onFailure(Call<ResponseReturnModel> call, Throwable t) {
                         Log.e("fail", "fail");
                     }
