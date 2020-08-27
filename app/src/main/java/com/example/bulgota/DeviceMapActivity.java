@@ -237,7 +237,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         if(isDTNeed){
             String strDetoxTime = "해독 예상 시간은 ";
 
-            if (detoxDate.getTime()-curDate.getTime() / 24 / 60 / 60 / 1000 >0) {
+            if (detoxDate.getDate() != curDate.getDate()) {
                 strDetoxTime += "다음날 ";
             }
 
