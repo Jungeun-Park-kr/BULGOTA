@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,8 @@ import android.widget.Toast;
 
 import com.example.bulgota.api.BullgoTAService;
 import com.example.bulgota.api.Marker_list;
+import com.example.bulgota.api.RequestReturnModel;
+import com.example.bulgota.api.ResponseReturnModel;
 import com.example.bulgota.api.ResponseWithMarkerData;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -45,8 +48,13 @@ import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.LocationButtonView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -120,7 +128,17 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     private IntentIntegrator qrScan;
 
+    //현재시간 변수 추가
+    final int CURSECOND=0, CURMINUTE=1, CURHOUR=2, CURDATE=3, CURMONTH=4, CURYEAR=5;
+    int curTime[] = new int[6];
+    //해독시간 텍스트뷰
+    TextView tvDetoxTime;
+    //
 
+    private String detoxTime; //해독 시간 문자열
+    private Date detoxDate; //해독 시간 Date
+    private String cTime; //현재 시간 문자열
+    private Date curDate; //현재 시간 Date
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,7 +166,84 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         tvGuide = (TextView)findViewById(R.id.tv_tab_list_3);
         tvGuide.setOnClickListener(this);
 
+        //해독시간 텍스트뷰
+        tvDetoxTime = findViewById(R.id.tv_detox_time);
 
+        /* -----------------------------------정은 DB부분 ---------------------------------------*/
+//현재시간 변수 값 설정
+        Calendar cal = Calendar.getInstance();
+        curTime[CURSECOND] = cal.get(Calendar.SECOND);
+        curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
+        curTime[CURHOUR] = cal.get(Calendar.HOUR); // 24시간 넘어가도 ㄱㅊ
+        curTime[CURDATE] = cal.get(Calendar.DATE);
+        curTime[CURMONTH] = cal.get(Calendar.MONDAY)+1;
+        curTime[CURYEAR] = cal.get(Calendar.YEAR);
+        //현재시간 문자열로 바꿔 저장
+        cTime=Integer.toString(curTime[5])+"-"+Integer.toString(curTime[4])+"-"+Integer.toString(curTime[3])+" "+
+                Integer.toString(curTime[2])+":"+ Integer.toString(curTime[1])+":"+Integer.toString(curTime[0]); //해독시간을 문자열로 변경
+
+
+        //Realm 객체 선언
+        Realm.init(this);
+        Realm mRealm=Realm.getDefaultInstance();
+        TimeVO vo = mRealm.where(TimeVO.class).isNotNull("detoxTime").findFirst(); //detoxDate 있는경우 객체 얻기
+        if(vo != null) {
+            detoxTime = vo.detoxTime; //해독 시간 detoxTime String에 저장
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //날짜 포맷
+            try {
+                curDate = format.parse(cTime); //현재 시간(String)을 Date type으로 변경
+                detoxDate = format.parse(detoxTime); //해독 시간(String)을 Date 형으로 변경
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(this, "curDate :" + curDate, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "detoxDate :" + detoxDate, Toast.LENGTH_LONG).show();
+            int compare = curDate.compareTo(detoxDate);
+            if (compare > 0) { //curDate > detoxDate 인 경우
+                //해독시간이 현재 시간보다 이른 경우 해독시간 데이터 삭제
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        mRealm.delete(TimeVO.class); //모든 데이터 삭제
+
+                    }
+                });
+                Toast.makeText(this, "데이터 삭제 완료", Toast.LENGTH_SHORT).show();
+                //남은 해독시간 보이지 않게 해주세요
+                // in here
+            } else { //curDate < detoxDate 인 경우 => 화면에 보이게 하기
+                //남은 해독시간 띄우는 코드 in here
+                Toast.makeText(this, "해독예정시간 :" + detoxTime, Toast.LENGTH_LONG).show();
+            }
+        }
+        else { //해독시간 데이터 존재하지 않음
+            //해독시간 텍스트뷰 보이지 않게 해주세요
+            //in here
+
+        }
+        /* -----------------------------------정은 DB부분 ---------------------------------------*/
+
+        //임시 데이터
+        int tmpHour = 26; //임시 시 분 초 입니다.
+        int tmpMinute = 44;
+        int tmpSecond = 25;
+
+        //정보 가져오기
+        //여기 코딩 하실?
+
+        //
+        //
+        String strDetoxTime = "해독 예상 시간은 ";
+
+        if(tmpHour > 24){
+            strDetoxTime += "다음날 ";
+        }
+
+        strDetoxTime += (tmpHour % 24) + "시 ";
+        strDetoxTime += tmpMinute + "분 입니다.";
+        tvDetoxTime.setText(strDetoxTime);
+        //
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -465,7 +560,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private void mapLoad() {
         map.setLocationSource(locationSource);
 
-
         map.addOnLocationChangeListener(location -> {
             if(initMapLoad) {
                 map.moveCamera(CameraUpdate.scrollAndZoomTo(new LatLng(location.getLatitude(), location.getLongitude()), 14)
@@ -614,16 +708,56 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
-
+            String modelNum = result.getContents();
+            //return 모델 명 string
             if (result.getContents() == null) {
 
             } else {
-                String returnModel = result.getContents();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(BullgoTAService.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                BullgoTAService bullgoTAService = retrofit.create(BullgoTAService.class);
+                Log.e("result.getContent2", result.getContents());
 
+                double latitude = locationSource.getLastLocation().getLatitude();   //위도
+                double longitude = locationSource.getLastLocation().getLongitude(); //경도
+
+                bullgoTAService.returnModel(modelNum, new RequestReturnModel(latitude,longitude)).enqueue(new Callback<ResponseReturnModel>() {
+
+                    @Override
+                    public void onResponse(Call<ResponseReturnModel> call, Response<ResponseReturnModel> response) {
+                        Log.e("getSuccess", String.valueOf(response.body().getSuccess()));
+
+                        String message = response.body().getMessage();
+                        Object object = response.body().getData();
+
+
+                        if (message.equals("킥보드 반납 성공")) {
+                            ReturnModelDialog returnModelDialog = new ReturnModelDialog(getApplicationContext());
+                            returnModelDialog.setReturnModelDialog(0,modelNum, (int)object);
+
+                        } else if(message.equals("이미 반납된 킥보드입니다.")){
+                            ReturnModelDialog returnModelDialog = new ReturnModelDialog(getApplicationContext());
+                            returnModelDialog.setReturnModelDialog(0,modelNum,0);
+                        }
+                        else if(message.equals("킥보드 반납 실패")){
+                            ReturnModelDialog returnModelDialog = new ReturnModelDialog(getApplicationContext());
+                            returnModelDialog.setReturnModelDialog(0,modelNum,0);
+                        }
+                        else{
+                            Log.e("retrofit2 message :", message +"이건 서버담당자가 잘못한거임 ! 반성하세요. ");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseReturnModel> call, Throwable t) {
+                        Log.e("fail", "fail");
+                    }
+                });
 
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data); }    }
-
 
 }

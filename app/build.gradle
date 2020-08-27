@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'  // Google Services plugin
-
+apply plugin: 'realm-android'
 android {
     compileSdkVersion 30
     buildToolsVersion '28.0.3'

@@ -13,13 +13,21 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.CandleData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -27,6 +35,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+
+import io.realm.Realm;
 
 
 public class DetoxAnalysisActivity extends AppCompatActivity{
@@ -37,15 +47,21 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     //TODO  STEP3.  해당 액티비에서 내부DB에 저장할 String 시간 값 받아와야함    ->  DB저장하는 .java 클래스 생성   ->   해당 시간 string 변수를 저장할 static scope의 변수에 저장 -> 일반 변수에서는 생명주기가 끝나면 소멸
     //TODO 이외 부분은 건드릴 필요 없들것 같음 STEP 3부터는 내가 해야되는 부분이니까 신경쓰지 않아도 됨
 
+    //시간 저장 플로우 (상민, 정은)
+    //상민 : 해독화면에서 해독완료시간정보 값을 주겠습니다. (그 아래에서 내부DB에 저장하는 과정을 실행해주세요.)
+    //정은 : 해독완료 시간정보 dTime[DTSECOND], dTime[DTMINUTE] ... dTime[DTYEAR]를 내부DB에 저장해주세요. 아마도 모두 int,
+    //      값으로만 넘겨도 됨 배열 넘길 필요없음, 자리넘김 편하게 할려고 배열형태 만든 것
+    //      이 정보를 나중에 맵화면에서 받아와서 상단에 띄울겁니다.
+    //      (DB에는 정보를 하나만 저장하자. 현재시간이 시간보다 나중이면 상단 텍스트뷰를 gone으로, 시간보다 전이면 Enable로 하는 식)
+    //
+    //      이해안되는거 바로 전화 ㄱ
+
+
     private LineChart lineChart;
     ArrayList<Entry> entry_chart;
     ArrayList<Entry> entry_chart_enable; // 푸른색(주행 거눙)의 그래프 데이터셋
     //차트 객체
     private TextView countTime;
-
-    //TODO 타이머 객체 사용 X
-    //TODO 해당 CUSTOM 객체 삭제해야함 TEXTVIEW로 시간 찍어줄 것임       우선 혹시몰라 주석처리함
-    //MyTimer myTimer;    //타이머객체
 
     ConstraintLayout clNoticeView;  //상단 전체 layout
     LinearLayout llState;   //주행가능 여부
@@ -73,6 +89,16 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     //TODO 소스코드 하단에 makeStringTimer 메서드 사용해서 리턴값만 받아오면 됨
     //TODO 해당 메서드 매개변수는 해독시간까지 걸리는 timer변수값 넣으면 됨
 
+    //해독완료시간 변수들
+    final int DTSECOND=0, DTMINUTE=1, DTHOUR=2, DTDATE=3, DTMONTH=4, DTYEAR=5;
+    int dTime[] = new int[6];
+    //현재 시간 변수들
+    final int CURSECOND=0, CURMINUTE=1, CURHOUR=2, CURDATE=3, CURMONTH=4, CURYEAR=5;
+    int curTime[] = new int[6];
+    //
+
+    String detoxTime; //해독 시간 문자열
+    Date detoxDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,10 +122,59 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         tvAlcholLevel.setText(String.format("%.2f", bac));
 
-        timer = (int)(bac * 60 * 60 / 0.015); // 초단위로 바꿈
+        timer = (int)(bac * 60 * 4000); // 초단위로 바꿈
+        if(timer % 60>0){
+            timer += 600 - timer%600;
+        }
+        Log.d("timer:",timer+"");
         //intent 추가
 
-        sTimer = makeStringTimer(timer);
+        //해독시간 변수 값 설정
+        Calendar cal = Calendar.getInstance();
+        dTime[DTSECOND] = cal.get(Calendar.SECOND) + timer % 60;
+        dTime[DTMINUTE] = cal.get(Calendar.MINUTE) + timer / 60 % 60;
+        dTime[DTHOUR] = cal.get(Calendar.HOUR) + timer / 60 / 60; // 24시간 넘어가도 ㄱㅊ
+        dTime[DTDATE] = cal.get(Calendar.DATE);
+        dTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
+        dTime[DTYEAR] = cal.get(Calendar.YEAR);
+
+        /* -----------------------------------정은 DB 부분 ---------------------------------------*/
+        // detoxTime=Integer.toString(dTime[5])+"-"+Integer.toString(dTime[4])+"-"+Integer.toString(dTime[3])+" "+
+        //          Integer.toString(dTime[2])+":"+ Integer.toString(dTime[1])+":"+Integer.toString(dTime[0]); //해독시간을 문자열로 변경
+        detoxTime="2020-08-27 10:20:00"; //테스트용 값
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //날짜 포맷
+        try {
+            detoxDate = format.parse(detoxTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //Realm 객체 획득
+        Realm.init(this);
+        Realm mRealm = Realm.getDefaultInstance();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                mRealm.delete(TimeVO.class); //TimeVO의 모든 데이터 삭제 (가장 최근 해독시간으로 업데이트)
+                //새로운 데이터 추가
+                TimeVO vo = realm.createObject(TimeVO.class);
+                vo.detoxTime = detoxTime; //String 해독시간 DB에 저장
+            }
+        });
+        Toast.makeText(this, "남은시간 : "+detoxTime, Toast.LENGTH_LONG).show();
+        /* -----------------------------------정은 DB 부분 ---------------------------------------*/
+
+        //현재시간 변수 값 설정
+        curTime[DTSECOND] = cal.get(Calendar.SECOND);
+        curTime[DTMINUTE] = cal.get(Calendar.MINUTE);
+        curTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
+        curTime[DTDATE] = cal.get(Calendar.DATE);
+        curTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
+        curTime[DTYEAR] = cal.get(Calendar.YEAR);
+        //시간
+
+        //dTime[DTHOUR] = 27; // 다음날 디버깅 용
+        sTimer = makeStringTimer(dTime);
         tvtimer.setText(sTimer);
 
         rlAlarm.setOnClickListener(new RelativeLayout.OnClickListener(){
@@ -147,7 +222,6 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         //그래프에 들어갈 ArrayList 자료구조 데이터 추가 메서드
 
         LineDataSet lineDataSet = new LineDataSet(entry_chart, "주행 불가능");
-        //////// 테스트용
         LineDataSet lineDataSetEnable = new LineDataSet(entry_chart_enable, "주행 가능");
 
         chartSetting(lineChart,lineDataSet,chartData, false); // 주행 불가능 시 그래프
@@ -156,8 +230,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         //차트 설정값 세팅 메서드
 
         //TODO  알콜농도에서 구한 timer값 string 변수로 변경하는 메서드
-        sTimer =  makeStringTimer(timer);
-
+        sTimer =  makeStringTimer(dTime);
     }
 
     void sendRegistrationToServer(String token) {
@@ -260,18 +333,14 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
 
     //TODO 아두이노에서 받아온 알콜농도에서 해독시간까지 걸리는 시간을 string 값으로 변경하는 메서드
-    private String makeStringTimer(int timer) {
-        int sec;
-        int min;
-        int  hour;
-        String sTimer;
+    private String makeStringTimer(int[] dTime) {
+        sTimer = "";
+        if(dTime[DTHOUR] > 24){
+            sTimer += "다음날 ";
+        }
 
-        sec = timer%60;
-        min = timer/60;
-        hour = min/60;
-        min = timer%60; // 240분 나와서 바꿈
-
-        sTimer = hour+"시"+min+"분"+sec+"초";
+        sTimer += (dTime[DTHOUR] % 24) + "시 ";
+        sTimer += dTime[DTMINUTE] + "분 입니다.";
 
         return sTimer;
     }
