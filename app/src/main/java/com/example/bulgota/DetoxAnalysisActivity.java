@@ -122,7 +122,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         Intent intent = getIntent();
         bac = intent.getDoubleExtra("bac",0.06);
 
-        tvAlcholLevel.setText(String.format("%.2f", bac));
+        tvAlcholLevel.setText(String.format("%.2f %%", bac));
 
         timer = (int)(bac * 60 * 4000); // 초단위로 바꿈
         if(timer % 60>0){
