@@ -133,11 +133,18 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         //해독시간 변수 값 설정
         Calendar cal = Calendar.getInstance();
-        dTime[DTSECOND] = cal.get(Calendar.SECOND) + timer % 60;
-        dTime[DTMINUTE] = cal.get(Calendar.MINUTE) + timer / 60 % 60;
-        dTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY) + timer / 60 / 60 % 24;
-        dTime[DTDATE] = cal.get(Calendar.DATE) + timer / 60 / 60 / 24 ;
-        dTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
+
+        cal.add(Calendar.YEAR, 0);
+        cal.add(Calendar.MONTH, 1);
+        cal.add(Calendar.DATE, timer / 60 / 60 / 24);
+        cal.add(Calendar.HOUR_OF_DAY, timer / 60 / 60 % 24);
+        cal.add(Calendar.MINUTE, timer / 60 % 60);
+        cal.add(Calendar.SECOND, timer % 60);
+        dTime[DTSECOND] = cal.get(Calendar.SECOND);
+        dTime[DTMINUTE] = cal.get(Calendar.MINUTE);
+        dTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY);
+        dTime[DTDATE] = cal.get(Calendar.DATE);
+        dTime[DTMONTH] = cal.get(Calendar.MONTH);
         dTime[DTYEAR] = cal.get(Calendar.YEAR);
 
         /* -----------------------------------정은 DB 부분 ---------------------------------------*/
@@ -169,13 +176,13 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         //현재시간 변수 값 설정
         curTime[DTSECOND] = cal.get(Calendar.SECOND);
         curTime[DTMINUTE] = cal.get(Calendar.MINUTE);
-        curTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
+        curTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY);
         curTime[DTDATE] = cal.get(Calendar.DATE);
         curTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
         curTime[DTYEAR] = cal.get(Calendar.YEAR);
+        //curTime[DTDATE] -=1;//디버그용
         //시간
 
-        //dTime[DTHOUR] = 27; // 다음날 디버깅 용
         sTimer = makeStringTimer(dTime);
         tvtimer.setText(sTimer);
 
@@ -337,7 +344,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     //TODO 아두이노에서 받아온 알콜농도에서 해독시간까지 걸리는 시간을 string 값으로 변경하는 메서드
     private String makeStringTimer(int[] dTime) {
         sTimer = "";
-        if(dTime[DTHOUR] > 24){
+        if(curTime[DTDATE] != dTime[DTDATE]){
             sTimer += "다음날 ";
         }
 
