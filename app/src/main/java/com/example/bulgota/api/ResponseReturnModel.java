@@ -6,9 +6,9 @@ public class ResponseReturnModel {
     private final int status;
     private final boolean success;
     private final String message;
-    private final int data;
+    private final Object data;
 
-    public ResponseReturnModel(int status, boolean success, String message, int data) {
+    public ResponseReturnModel(int status, boolean success, String message, Object data) {
         this.status = status;
         this.success = success;
         this.message = message;
@@ -21,6 +21,6 @@ public class ResponseReturnModel {
 
     public String getMessage() { return message; }
 
-    public int getData() { return data; }
+    public Object getData() { return data; }
 
 }
