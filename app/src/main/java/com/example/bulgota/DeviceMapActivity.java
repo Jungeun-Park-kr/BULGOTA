@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 import com.example.bulgota.api.BullgoTAService;
 import com.example.bulgota.api.Marker_list;
+import com.example.bulgota.api.RequestReturnModel;
+import com.example.bulgota.api.ResponseReturnModel;
 import com.example.bulgota.api.ResponseWithMarkerData;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -505,7 +507,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private void mapLoad() {
         map.setLocationSource(locationSource);
 
-
         map.addOnLocationChangeListener(location -> {
             if(initMapLoad) {
                 map.moveCamera(CameraUpdate.scrollAndZoomTo(new LatLng(location.getLatitude(), location.getLongitude()), 14)
@@ -655,15 +656,56 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
 
+            String modelNum = result.getContents();
+            //return 모델 명 string
             if (result.getContents() == null) {
 
             } else {
-                String returnModel = result.getContents();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(BullgoTAService.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                BullgoTAService bullgoTAService = retrofit.create(BullgoTAService.class);
+                Log.e("result.getContent2", result.getContents());
 
+                double latitude = locationSource.getLastLocation().getLatitude();   //위도
+                double longitude = locationSource.getLastLocation().getLongitude(); //경도
+
+                bullgoTAService.returnModel(modelNum, new RequestReturnModel(latitude,longitude)).enqueue(new Callback<ResponseReturnModel>() {
+
+                    @Override
+                    public void onResponse(Call<ResponseReturnModel> call, Response<ResponseReturnModel> response) {
+                        Log.e("getSuccess", String.valueOf(response.body().getSuccess()));
+
+                        String message = response.body().getMessage();
+                        Object object = response.body().getData();
+
+
+                        if (message.equals("킥보드 반납 성공")) {
+                            ReturnModelDialog returnModelDialog = new ReturnModelDialog(getApplicationContext());
+                            returnModelDialog.setReturnModelDialog(0,modelNum, (int)object);
+
+                        } else if(message.equals("이미 반납된 킥보드입니다.")){
+                            ReturnModelDialog returnModelDialog = new ReturnModelDialog(getApplicationContext());
+                            returnModelDialog.setReturnModelDialog(0,modelNum,0);
+                        }
+                        else if(message.equals("킥보드 반납 실패")){
+                            ReturnModelDialog returnModelDialog = new ReturnModelDialog(getApplicationContext());
+                            returnModelDialog.setReturnModelDialog(0,modelNum,0);
+                        }
+                        else{
+                            Log.e("retrofit2 message :", message +"이건 서버담당자가 잘못한거임 ! 반성하세요. ");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseReturnModel> call, Throwable t) {
+                        Log.e("fail", "fail");
+                    }
+                });
 
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data); }    }
-
 
 }
