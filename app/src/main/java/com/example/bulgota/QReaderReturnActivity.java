@@ -65,23 +65,22 @@ public class QReaderReturnActivity extends AppCompatActivity implements Decorate
             qrCodeReturnDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
             qrCodeReturnDialog.setDialogListener(new QRCodeReturnDialog.CustomDialogListener() {
                 @Override
-                public void onPositiveClicked(String model, int data, int status) {
+                public void onPositiveClicked(String modelNum, int data, int status) {
                     ReturnModelDialog returnModelDialog = new ReturnModelDialog(QReaderReturnActivity.this);
+                    int usageTime = 0;
 //                    //반납하기
                     switch(status) {
                         case 0://반납 성공
-                            int usageTime = data;
-                            returnModelDialog.setReturnModelDialog(status, model, usageTime);
+                            usageTime = data;
+                            Log.e("usageTime", String.valueOf(usageTime));
                             break;
                         case 1://이미 반납된 모델
                             Log.e("status", String.valueOf(status));
-                            returnModelDialog.setReturnModelDialog(status, model, 0);
                             break;
                         case 2://반납 오류
-                            Log.e("status", String.valueOf(status));
-                            returnModelDialog.setReturnModelDialog(status, model, -1);
                             break;
                     }
+                    returnModelDialog.setReturnModelDialog(status, modelNum, usageTime);
                 }
                 @Override
                 public void onNegativeClicked() {
