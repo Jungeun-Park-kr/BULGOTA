@@ -179,7 +179,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         Calendar cal = Calendar.getInstance();
         curTime[CURSECOND] = cal.get(Calendar.SECOND);
         curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
-        curTime[CURHOUR] = cal.get(Calendar.HOUR); // 24시간 넘어가도 ㄱㅊ
+        curTime[CURHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
         curTime[CURDATE] = cal.get(Calendar.DATE);
         curTime[CURMONTH] = cal.get(Calendar.MONDAY) + 1;
         curTime[CURYEAR] = cal.get(Calendar.YEAR);
@@ -236,13 +236,16 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         if(isDTNeed){
             String strDetoxTime = "해독 예상 시간은 ";
 
-            if (26 > 24) {
+            if (detoxDate.getTime()-curDate.getTime() / 24 / 60 / 60 / 1000 >0) {
                 strDetoxTime += "다음날 ";
             }
 
-            strDetoxTime += 26 + "시 ";
-            strDetoxTime += 26 + "분 입니다.";
+            strDetoxTime += detoxDate.getHours() + "시 ";
+            strDetoxTime += detoxDate.getMinutes() + "분 입니다.";
             tvDetoxTime.setText(strDetoxTime);
+            tvDetoxTime.setVisibility(View.VISIBLE);
+        } else {
+            tvDetoxTime.setVisibility(View.GONE);
         }
 
         //
