@@ -27,7 +27,13 @@
         <activity android:name=".CertCompletionActivity"></activity>
         <activity android:name=".QRCodeScanActivity" />
         <activity android:name=".DetoxAnalysisActivity" />
-        <activity android:name=".SplashActivity" />
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".NoticeActivity"/>
         <activity android:name=".BreatheTestingActivity" />
         <activity android:name=".DeviceList" android:theme="@style/Theme.MyDialog"/>
@@ -36,11 +42,7 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
 
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"

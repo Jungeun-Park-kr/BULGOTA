@@ -156,9 +156,9 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                 && (DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION))
                 && (DeviceMapActivity.checkPermissions(this, Manifest.permission.CAMERA))) {
             //권한 있음 - 원하는 메소드 사용
-            Toast.makeText(this, "권한 설정이 완료되었습니다.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "권한 설정이 완료되었습니다.", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "권한 하나이상 없음.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "앱 권한 설정을 해주세요.", Toast.LENGTH_LONG).show();
             DeviceMapActivity.requestExternalPermissions(this);
         }
 
