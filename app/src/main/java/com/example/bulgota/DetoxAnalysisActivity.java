@@ -86,6 +86,9 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     //해독완료시간 변수들
     final int DTSECOND=0, DTMINUTE=1, DTHOUR=2, DTDATE=3, DTMONTH=4, DTYEAR=5;
     int dTime[] = new int[6];
+    //현재 시간 변수들
+    final int CURSECOND=0, CURMINUTE=1, CURHOUR=2, CURDATE=3, CURMONTH=4, CURYEAR=5;
+    int curTime[] = new int[6];
     //
 
     @Override
@@ -182,7 +185,13 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         dTime[DTDATE] = cal.get(Calendar.DATE);
         dTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
         dTime[DTYEAR] = cal.get(Calendar.YEAR);
-        //
+        //현재시간 변수 값 설정
+        curTime[DTSECOND] = cal.get(Calendar.SECOND);
+        curTime[DTMINUTE] = cal.get(Calendar.MINUTE);
+        curTime[DTHOUR] = cal.get(Calendar.HOUR); // 24시간 넘어가도 ㄱㅊ
+        curTime[DTDATE] = cal.get(Calendar.DATE);
+        curTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
+        curTime[DTYEAR] = cal.get(Calendar.YEAR);
     }
 
     void sendRegistrationToServer(String token) {
@@ -285,18 +294,8 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
 
     //TODO 아두이노에서 받아온 알콜농도에서 해독시간까지 걸리는 시간을 string 값으로 변경하는 메서드
-    private String makeStringTimer(int timer) {
-        int sec;
-        int min;
-        int  hour;
-        String sTimer;
-
-        sec = timer%60;
-        min = timer/60;
-        hour = min/60;
-        min = timer%60; // 240분 나와서 바꿈
-
-        sTimer = hour+"시"+min+"분"+sec+"초";
+    private String makeStringTimer(int[] dTime) {
+        int a = dTime[DTSECOND];
 
         return sTimer;
     }
