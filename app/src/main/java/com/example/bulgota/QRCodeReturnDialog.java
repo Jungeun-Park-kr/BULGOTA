@@ -44,7 +44,7 @@ public class QRCodeReturnDialog extends Dialog implements View.OnClickListener{
 
     //인터페이스 설정
     interface CustomDialogListener{
-        void onPositiveClicked(String model, int data, int status);
+        void onPositiveClicked(String modelNum, int data, int status);
         void onNegativeClicked();
     }
 
@@ -109,7 +109,9 @@ public class QRCodeReturnDialog extends Dialog implements View.OnClickListener{
                                     //유효한 모델이면
                                     switch(response.body().getMessage()) {
                                         case "킥보드 반납 성공":
-                                            data = (Integer) response.body().getData();
+                                            double result = (double) response.body().getData();
+                                            data = (int) result;
+                                            Log.e("Data", String.valueOf(data));
                                             status = 0;
                                             break;
                                         case "이미 반납된 킥보드입니다.":
