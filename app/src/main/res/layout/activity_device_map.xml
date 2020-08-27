@@ -34,6 +34,20 @@
 
         </com.naver.maps.map.MapView>
 
+      
+        <TextView
+            android:id="@+id/tv_detox_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:background="@color/colorLightAccent"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:gravity="center_horizontal"
+            android:text="해독완료시간을 받아옵니다."
+            android:textAlignment="center"
+            android:textColor="@color/colorWarning"
+            android:textSize="17dp"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <com.naver.maps.map.widget.LocationButtonView
@@ -119,6 +133,18 @@
             app:layout_constraintStart_toStartOf="parent">
 
         </com.naver.maps.map.widget.LocationButtonView>
+
+        <Button
+            android:id="@+id/btn_refresh"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_refresh"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detox_time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -418,21 +444,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/menu" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/tv_detox_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="해독완료시간을 받아옵니다."
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:background="@color/colorLightAccent"
-            android:textAlignment="center"
-            android:fontFamily="@font/nanum_square_round_bold"
-            android:textSize="17dp"
-            android:gravity="center_horizontal"
-            android:textColor="@color/colorWarning"
-            app:layout_constraintTop_toBottomOf="@id/cl_toolbar" />
 
         <View
             android:id="@+id/view_layer"

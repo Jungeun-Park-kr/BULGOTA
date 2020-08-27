@@ -3,6 +3,7 @@ package com.example.bulgota;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -54,5 +55,15 @@ public class ReturnModelDialog extends Dialog {
                 setContentView(R.layout.dialog_fail_return);
         }
         show();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(context,DeviceMapActivity.class);
+                context.startActivity(intent);
+                dismiss();
+            }
+        }, 3000);
     }
 }
