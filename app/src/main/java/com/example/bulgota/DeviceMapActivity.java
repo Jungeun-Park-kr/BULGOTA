@@ -656,7 +656,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
-
             String modelNum = result.getContents();
             //return 모델 명 string
             if (result.getContents() == null) {
