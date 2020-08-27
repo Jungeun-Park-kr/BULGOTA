@@ -1,13 +1,5 @@
 package com.example.bulgota;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -16,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +18,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
 import com.example.bulgota.api.BullgoTAService;
 import com.example.bulgota.api.Marker_list;
@@ -96,6 +95,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private Button btnInfoZoomIn;
     private Button btnInfoZoomOut;
     private Button btnReturn;
+    private Button btnRefresh;
 
     private ImageView btnHamberger;
 
@@ -181,6 +181,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         curTime[CURDATE] = cal.get(Calendar.DATE);
         curTime[CURMONTH] = cal.get(Calendar.MONDAY) + 1;
         curTime[CURYEAR] = cal.get(Calendar.YEAR);
+
         //현재시간 문자열로 바꿔 저장
         cTime = Integer.toString(curTime[5]) + "-" + Integer.toString(curTime[4]) + "-" + Integer.toString(curTime[3]) + " " +
                 Integer.toString(curTime[2]) + ":" + Integer.toString(curTime[1]) + ":" + Integer.toString(curTime[0]); //해독시간을 문자열로 변경
@@ -262,13 +263,13 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
 
         //현재시간 변수 값 설정
-        Calendar cal = Calendar.getInstance();
-        curTime[CURSECOND] = cal.get(Calendar.SECOND);
-        curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
-        curTime[CURHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
-        curTime[CURDATE] = cal.get(Calendar.DATE);
-        curTime[CURMONTH] = cal.get(Calendar.MONDAY) + 1;
-        curTime[CURYEAR] = cal.get(Calendar.YEAR);
+//        Calendar cal = Calendar.getInstance();
+//        curTime[CURSECOND] = cal.get(Calendar.SECOND);
+//        curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
+//        curTime[CURHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
+//        curTime[CURDATE] = cal.get(Calendar.DATE);
+//        curTime[CURMONTH] = cal.get(Calendar.MONDAY) + 1;
+//        curTime[CURYEAR] = cal.get(Calendar.YEAR);
         //
 
 
@@ -426,6 +427,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         btnInfoZoomIn = findViewById(R.id.btn_info_zoom_in);
         btnInfoZoomOut = findViewById(R.id.btn_info_zoom_out);
         btnReturn = findViewById(R.id.btn_return);
+        btnRefresh =findViewById(R.id.btn_refresh);
 
         qrScan = new IntentIntegrator(this);
 
@@ -470,6 +472,12 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
             qrScan.setCaptureActivity(QReaderReturnActivity.class);
             qrScan.setOrientationLocked(false);
             qrScan.initiateScan();
+        });
+
+        btnRefresh.setOnClickListener(l -> {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
         });
     }
 
@@ -769,13 +777,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                         Log.e("fail", "fail");
                     }
                 });
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        returnModelDialog.dismiss();
-                    }
-                }, 3000);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
