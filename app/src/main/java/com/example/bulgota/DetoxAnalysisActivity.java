@@ -117,7 +117,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         timer = (int)(bac * 60 * 60 / 0.015); // 초단위로 바꿈
         //intent 추가
 
-        sTimer = makeStringTimer(timer);
+        //sTimer = makeStringTimer(timer);
         tvtimer.setText(sTimer);
 
         rlAlarm.setOnClickListener(new RelativeLayout.OnClickListener(){
@@ -174,7 +174,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         //차트 설정값 세팅 메서드
 
         //TODO  알콜농도에서 구한 timer값 string 변수로 변경하는 메서드
-        sTimer =  makeStringTimer(timer);
+        //sTimer =  makeStringTimer(timer);
 
 
         //해독시간 변수 값 설정
