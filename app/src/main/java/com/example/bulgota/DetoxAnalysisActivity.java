@@ -295,7 +295,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
     //TODO 아두이노에서 받아온 알콜농도에서 해독시간까지 걸리는 시간을 string 값으로 변경하는 메서드
     private String makeStringTimer(int[] dTime) {
-        dTime[DTSECOND];
+        int a = dTime[DTSECOND];
 
         return sTimer;
     }
