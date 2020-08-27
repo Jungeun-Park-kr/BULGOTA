@@ -20,7 +20,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class QRCodeDialog extends Dialog implements View.OnClickListener{
+public class QRCodeReturnDialog extends Dialog implements View.OnClickListener{
 
     private Button btnOk;
     private Button btnCancle;
@@ -36,7 +36,7 @@ public class QRCodeDialog extends Dialog implements View.OnClickListener{
 
     private CustomDialogListener customDialogListener;
 
-    public QRCodeDialog(Context context) {
+    public QRCodeReturnDialog(Context context) {
         super(context);
         this.context = context;
     }
@@ -44,7 +44,7 @@ public class QRCodeDialog extends Dialog implements View.OnClickListener{
 
     //인터페이스 설정
     interface CustomDialogListener{
-        void onPositiveClicked(String model);
+        void onPositiveClicked(String model, int data, int status);
         void onNegativeClicked();
     }
 
@@ -88,10 +88,50 @@ public class QRCodeDialog extends Dialog implements View.OnClickListener{
                 public void onResponse(Call<ResponseSelectModel> call, Response<ResponseSelectModel> response) {
                     if (response.body().getSuccess()) {
                         //유효한 모델이면
-                        Object data = null;
-                        int status = 0;
-                        customDialogListener.onPositiveClicked(modelNum);
-                        dismiss();
+                        gpsTracker = new GpsTracker(context);
+
+                        double latitude = gpsTracker.getLatitude();
+                        double longitude = gpsTracker.getLongitude();
+                        Log.e("latitude", String.valueOf(latitude));
+                        Log.e("longitude", String.valueOf(longitude));
+
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(BullgoTAService.BASE_URL)
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+                        BullgoTAService bullgoTAService = retrofit.create(BullgoTAService.class);
+                        bullgoTAService.returnModel(modelNum, new RequestReturnModel(latitude, longitude)).enqueue(new Callback<ResponseReturnModel>() {
+                            @Override
+                            public void onResponse(Call<ResponseReturnModel> call, Response<ResponseReturnModel> response) {
+                                int status = 2;
+                                int data = 0;
+                                if (response.body().getSuccess()) {
+                                    //유효한 모델이면
+                                    switch(response.body().getMessage()) {
+                                        case "킥보드 반납 성공":
+                                            data = (Integer) response.body().getData();
+                                            status = 0;
+                                            break;
+                                        case "이미 반납된 킥보드입니다.":
+                                            status = 1;
+                                            break;
+                                    }
+
+                                    customDialogListener.onPositiveClicked(modelNum, data, status);
+                                    dismiss();
+                                } else {
+                                    status = 2;
+                                    customDialogListener.onPositiveClicked(modelNum, data, status);
+                                    dismiss();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseReturnModel> call, Throwable t) {
+                                tvWarning.setText("오류가 발생했습니다. 다시 시도해주세요.");
+                                tvWarning.setVisibility(View.VISIBLE);
+                            }
+                        });
                     } else {
                         tvWarning.setText("유효하지않은 제품번호입니다. 다시입력해주세요.");
                         tvWarning.setVisibility(View.VISIBLE);

@@ -1,7 +1,5 @@
 package com.example.bulgota.api;
 
-import java.util.ArrayList;
-
 public class ResponseReturnModel {
     private final int status;
     private final boolean success;
