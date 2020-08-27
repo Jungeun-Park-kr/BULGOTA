@@ -465,7 +465,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private void mapLoad() {
         map.setLocationSource(locationSource);
 
-
         map.addOnLocationChangeListener(location -> {
             if(initMapLoad) {
                 map.moveCamera(CameraUpdate.scrollAndZoomTo(new LatLng(location.getLatitude(), location.getLongitude()), 14)
@@ -624,6 +623,5 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data); }    }
-
 
 }

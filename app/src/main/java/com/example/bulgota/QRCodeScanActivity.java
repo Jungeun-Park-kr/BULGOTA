@@ -87,7 +87,10 @@ public class QRCodeScanActivity extends AppCompatActivity {
                         .build();
                 BullgoTAService bullgoTAService = retrofit.create(BullgoTAService.class);
                 bullgoTAService.checkModel(result.getContents()).enqueue(new Callback<ResponseSelectModel>() {
-
+                //bulgotaservice return mode
+                    //responseReturnModel
+                    //95 getMessage()변경
+                    //반납가능시 0 이미반납된 모델이면 1 반납실패 2
                     @Override
                     public void onResponse(Call<ResponseSelectModel> call, Response<ResponseSelectModel> response) {
                         if (response.body().getSuccess()) {
