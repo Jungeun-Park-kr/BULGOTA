@@ -262,16 +262,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         
 
 
-        //현재시간 변수 값 설정
-        Calendar cal = Calendar.getInstance();
-        curTime[CURSECOND] = cal.get(Calendar.SECOND);
-        curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
-        curTime[CURHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
-        curTime[CURDATE] = cal.get(Calendar.DATE);
-        curTime[CURMONTH] = cal.get(Calendar.MONDAY)+1;
-        curTime[CURYEAR] = cal.get(Calendar.YEAR);
-        //
-
         //알람 메세지 클릭 시 map으로 이동 변경(firebasemessageservice)
         //firebasemessage service Intent
         //임시로 설정해둔 것이니 추후 논의 후 변경
