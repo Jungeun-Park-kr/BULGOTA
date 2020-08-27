@@ -204,10 +204,13 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
                             //TODO 해당 메서드 호출 전에 timer 변수 값 변경필요...
                             // 여기서 서버에 전달할 변수들이 저장되기 때문에 Onclick 메서드 호출 전에 해독시간 int값 저장 알고리즘 사용 후 저장 필요
                             sendRegistrationToServer(token);
+
+                            Toast.makeText(DetoxAnalysisActivity.this, DTHOUR+"시간"+DTMINUTE+"분"+" 후 알림을 받습니다.", Toast.LENGTH_SHORT).show();
                         }
                     });
             }
         });
+
 
 
         //TODO 타이머 객체 사용 X
