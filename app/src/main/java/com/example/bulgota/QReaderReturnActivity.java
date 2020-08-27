@@ -99,15 +99,15 @@ public class QReaderReturnActivity extends AppCompatActivity implements Decorate
             });
             qrCodeReturnDialog.show();
         });
-//        Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent intent = new Intent(CertCompletionActivity.this,DeviceMapActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        }, 3000);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(QReaderReturnActivity.this,DeviceMapActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }, 3000);
     }
 
     @Override
