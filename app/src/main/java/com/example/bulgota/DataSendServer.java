@@ -135,11 +135,6 @@ public class DataSendServer extends AsyncTask<Integer, Void, Void> {
         Timer = hour+"시"+min+"분"+sec+"초";
 
         setDBtimer(Timer);
-
-        DatabaseManager.sTimer = Timer;
-        //static 변수로 해독 시간 저장
-        DatabaseManager databaseManager = new DatabaseManager();
-        //객체 생성 -> 생성자로 데이터베이스 생성 및 수정 자동 완성 코드 구현
     }
 
 }
