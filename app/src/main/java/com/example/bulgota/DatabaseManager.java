@@ -11,7 +11,6 @@ public class DatabaseManager {
     SQLiteDatabase sqliteDB;
     String sqlCreateTable;
 
-
     public DatabaseManager() {
 
         sqliteDB =null;
@@ -36,7 +35,6 @@ public class DatabaseManager {
 
     }
 
-
     //TODO 데이터베이스에 ADD 기능  &     일반적으로 수정 시  UPDATE를 사용하는 것이 일반적이라고함
     //TODO 코드 줄이기 위해 REPLACE 기능도 있다하여 사용  -> 에러 시 UPDATE로 변경
     private void addTimer() {
@@ -45,19 +43,14 @@ public class DatabaseManager {
         sqliteDB.execSQL(sqlInsert);
     }
 
-
-
     //데이터 베이스 TIMER 모든 데이터 삭제
     public void deleteTimer(){
         String sqlDelete =  "DELETE FROM TIMER";
         sqliteDB.execSQL(sqlDelete);
     }
 
-
     public static String getsTimer() {
         return sTimer;
     }
-
-
 
 }

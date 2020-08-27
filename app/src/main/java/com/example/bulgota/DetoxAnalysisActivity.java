@@ -97,8 +97,10 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     int curTime[] = new int[6];
     //
 
+
     String detoxTime; //해독 시간 문자열
     Date detoxDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +135,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         Calendar cal = Calendar.getInstance();
         dTime[DTSECOND] = cal.get(Calendar.SECOND) + timer % 60;
         dTime[DTMINUTE] = cal.get(Calendar.MINUTE) + timer / 60 % 60;
+
         dTime[DTHOUR] = cal.get(Calendar.HOUR) + timer / 60 / 60; // 24시간 넘어가도 ㄱㅊ
         dTime[DTDATE] = cal.get(Calendar.DATE);
         dTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
@@ -163,6 +166,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         });
         Toast.makeText(this, "남은시간 : "+detoxTime, Toast.LENGTH_LONG).show();
         /* -----------------------------------정은 DB 부분 ---------------------------------------*/
+
 
         //현재시간 변수 값 설정
         curTime[DTSECOND] = cal.get(Calendar.SECOND);

@@ -6,13 +6,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.example.bulgota.api.BullgoTAService;
+import com.example.bulgota.api.ResponseReturnModel;
+import com.example.bulgota.api.ResponseSelectModel;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class QReaderReturnActivity extends AppCompatActivity implements DecoratedBarcodeView.TorchListener {
@@ -60,24 +72,42 @@ public class QReaderReturnActivity extends AppCompatActivity implements Decorate
         btCode = findViewById(R.id.btn_code);
 
         btCode.setOnClickListener(l -> {
-            QRCodeDialog dialog = new QRCodeDialog(this);
-            dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-            dialog.setDialogListener(new QRCodeDialog.CustomDialogListener() {
+            QRCodeReturnDialog qrCodeReturnDialog = new QRCodeReturnDialog(this);
+            qrCodeReturnDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+            qrCodeReturnDialog.setDialogListener(new QRCodeReturnDialog.CustomDialogListener() {
                 @Override
-                public void onPositiveClicked(String model) {
+                public void onPositiveClicked(String modelNum, int data, int status) {
+                    ReturnModelDialog returnModelDialog = new ReturnModelDialog(QReaderReturnActivity.this);
+                    int usageTime = 0;
 //                    //반납하기
-//                    Intent intent = new Intent(QReaderReturnActivity.this, DeviceMapActivity.class);
-//                    intent.putExtra("modelNum", model);
-//                    intent.putExtra("lendStatus", lendStatus);
-//                    startActivity(intent);
-//                    finish();
+                    switch(status) {
+                        case 0://반납 성공
+                            usageTime = data;
+                            Log.e("usageTime", String.valueOf(usageTime));
+                            break;
+                        case 1://이미 반납된 모델
+                            Log.e("status", String.valueOf(status));
+                            break;
+                        case 2://반납 오류
+                            break;
+                    }
+                    returnModelDialog.setReturnModelDialog(status, modelNum, usageTime);
                 }
                 @Override
                 public void onNegativeClicked() {
                 }
             });
-            dialog.show();
+            qrCodeReturnDialog.show();
         });
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Intent intent = new Intent(CertCompletionActivity.this,DeviceMapActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        }, 3000);
     }
 
     @Override

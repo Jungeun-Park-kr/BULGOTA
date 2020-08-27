@@ -139,6 +139,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private Date detoxDate; //해독 시간 Date
     private String cTime; //현재 시간 문자열
     private Date curDate; //현재 시간 Date
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +169,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         //해독시간 텍스트뷰
         tvDetoxTime = findViewById(R.id.tv_detox_time);
+
 
         /* -----------------------------------정은 DB부분 ---------------------------------------*/
 //현재시간 변수 값 설정
@@ -257,7 +259,18 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         mapView.getMapAsync(this::onMapReady);
 
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+        
 
+
+        //현재시간 변수 값 설정
+        Calendar cal = Calendar.getInstance();
+        curTime[CURSECOND] = cal.get(Calendar.SECOND);
+        curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
+        curTime[CURHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
+        curTime[CURDATE] = cal.get(Calendar.DATE);
+        curTime[CURMONTH] = cal.get(Calendar.MONDAY)+1;
+        curTime[CURYEAR] = cal.get(Calendar.YEAR);
+        //
 
         //알람 메세지 클릭 시 map으로 이동 변경(firebasemessageservice)
         //firebasemessage service Intent
@@ -725,25 +738,26 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
                 bullgoTAService.returnModel(modelNum, new RequestReturnModel(latitude,longitude)).enqueue(new Callback<ResponseReturnModel>() {
 
+
                     @Override
                     public void onResponse(Call<ResponseReturnModel> call, Response<ResponseReturnModel> response) {
                         Log.e("getSuccess", String.valueOf(response.body().getSuccess()));
 
                         String message = response.body().getMessage();
-                        Object object = response.body().getData();
+
+                        ReturnModelDialog returnModelDialog = new ReturnModelDialog(DeviceMapActivity.this);
 
 
                         if (message.equals("킥보드 반납 성공")) {
-                            ReturnModelDialog returnModelDialog = new ReturnModelDialog(getApplicationContext());
-                            returnModelDialog.setReturnModelDialog(0,modelNum, (int)object);
+                            double data = (double) response.body().getData();
+                            int object = (int) data;
+                            returnModelDialog.setReturnModelDialog(0,modelNum, object);
 
                         } else if(message.equals("이미 반납된 킥보드입니다.")){
-                            ReturnModelDialog returnModelDialog = new ReturnModelDialog(getApplicationContext());
-                            returnModelDialog.setReturnModelDialog(0,modelNum,0);
+                            returnModelDialog.setReturnModelDialog(1,modelNum,0);
                         }
                         else if(message.equals("킥보드 반납 실패")){
-                            ReturnModelDialog returnModelDialog = new ReturnModelDialog(getApplicationContext());
-                            returnModelDialog.setReturnModelDialog(0,modelNum,0);
+                            returnModelDialog.setReturnModelDialog(2,modelNum,0);
                         }
                         else{
                             Log.e("retrofit2 message :", message +"이건 서버담당자가 잘못한거임 ! 반성하세요. ");
@@ -751,6 +765,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                     }
 
                     @Override
+
                     public void onFailure(Call<ResponseReturnModel> call, Throwable t) {
                         Log.e("fail", "fail");
                     }
