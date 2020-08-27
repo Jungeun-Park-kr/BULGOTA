@@ -90,7 +90,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/nanum_square_round_bold"
             android:textSize="20sp"
-            android:text="주행까지 남은시간"
+            android:text="예상 주행 가능 시간은"
             app:layout_constraintTop_toBottomOf="@id/ll_state"
             android:textAlignment="center"
             />

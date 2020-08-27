@@ -114,10 +114,32 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         tvAlcholLevel.setText(String.format("%.2f", bac));
 
-        timer = (int)(bac * 60 * 60 / 0.015); // 초단위로 바꿈
+        timer = (int)(bac * 60 * 4000); // 초단위로 바꿈
+        if(timer % 60>0){
+            timer += 600 - timer%600;
+        }
+        Log.d("timer:",timer+"");
         //intent 추가
 
-        //sTimer = makeStringTimer(timer);
+        //해독시간 변수 값 설정
+        Calendar cal = Calendar.getInstance();
+        dTime[DTSECOND] = cal.get(Calendar.SECOND) + timer % 60;
+        dTime[DTMINUTE] = cal.get(Calendar.MINUTE) + timer / 60 % 60;
+        dTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY) + timer / 60 / 60; // 24시간 넘어가도 ㄱㅊ
+        dTime[DTDATE] = cal.get(Calendar.DATE);
+        dTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
+        dTime[DTYEAR] = cal.get(Calendar.YEAR);
+        //현재시간 변수 값 설정
+        curTime[DTSECOND] = cal.get(Calendar.SECOND);
+        curTime[DTMINUTE] = cal.get(Calendar.MINUTE);
+        curTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
+        curTime[DTDATE] = cal.get(Calendar.DATE);
+        curTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
+        curTime[DTYEAR] = cal.get(Calendar.YEAR);
+        //시간
+
+        //dTime[DTHOUR] = 27; // 다음날 디버깅 용
+        sTimer = makeStringTimer(dTime);
         tvtimer.setText(sTimer);
 
         rlAlarm.setOnClickListener(new RelativeLayout.OnClickListener(){
@@ -165,7 +187,6 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         //그래프에 들어갈 ArrayList 자료구조 데이터 추가 메서드
 
         LineDataSet lineDataSet = new LineDataSet(entry_chart, "주행 불가능");
-        //////// 테스트용
         LineDataSet lineDataSetEnable = new LineDataSet(entry_chart_enable, "주행 가능");
 
         chartSetting(lineChart,lineDataSet,chartData, false); // 주행 불가능 시 그래프
@@ -174,24 +195,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         //차트 설정값 세팅 메서드
 
         //TODO  알콜농도에서 구한 timer값 string 변수로 변경하는 메서드
-        //sTimer =  makeStringTimer(timer);
-
-
-        //해독시간 변수 값 설정
-        Calendar cal = Calendar.getInstance();
-        dTime[DTSECOND] = cal.get(Calendar.SECOND) + timer % 60;
-        dTime[DTMINUTE] = cal.get(Calendar.MINUTE) + timer / 60 % 60;
-        dTime[DTHOUR] = cal.get(Calendar.HOUR) + timer / 60 / 60; // 24시간 넘어가도 ㄱㅊ
-        dTime[DTDATE] = cal.get(Calendar.DATE);
-        dTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
-        dTime[DTYEAR] = cal.get(Calendar.YEAR);
-        //현재시간 변수 값 설정
-        curTime[DTSECOND] = cal.get(Calendar.SECOND);
-        curTime[DTMINUTE] = cal.get(Calendar.MINUTE);
-        curTime[DTHOUR] = cal.get(Calendar.HOUR); // 24시간 넘어가도 ㄱㅊ
-        curTime[DTDATE] = cal.get(Calendar.DATE);
-        curTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
-        curTime[DTYEAR] = cal.get(Calendar.YEAR);
+        sTimer =  makeStringTimer(dTime);
     }
 
     void sendRegistrationToServer(String token) {
@@ -295,7 +299,13 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
     //TODO 아두이노에서 받아온 알콜농도에서 해독시간까지 걸리는 시간을 string 값으로 변경하는 메서드
     private String makeStringTimer(int[] dTime) {
-        int a = dTime[DTSECOND];
+        sTimer = "";
+        if(dTime[DTHOUR] > 24){
+            sTimer += "다음날 ";
+        }
+
+        sTimer += (dTime[DTHOUR] % 24) + "시 ";
+        sTimer += dTime[DTMINUTE] + "분 입니다.";
 
         return sTimer;
     }

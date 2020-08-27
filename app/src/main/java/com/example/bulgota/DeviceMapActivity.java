@@ -161,7 +161,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         tvDetoxTime = (TextView)findViewById(R.id.tv_detox_time);
 
         //임시 데이터
-        int tmpHour = 26;
+        int tmpHour = 26; //임시 시 분 초 입니다.
         int tmpMinute = 44;
         int tmpSecond = 25;
 
@@ -176,7 +176,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
             strDetoxTime += "다음날 ";
         }
 
-        strDetoxTime += tmpHour + "시 ";
+        strDetoxTime += (tmpHour % 24) + "시 ";
         strDetoxTime += tmpMinute + "분 입니다.";
         tvDetoxTime.setText(strDetoxTime);
         //
@@ -200,7 +200,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         Calendar cal = Calendar.getInstance();
         curTime[CURSECOND] = cal.get(Calendar.SECOND);
         curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
-        curTime[CURHOUR] = cal.get(Calendar.HOUR); // 24시간 넘어가도 ㄱㅊ
+        curTime[CURHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
         curTime[CURDATE] = cal.get(Calendar.DATE);
         curTime[CURMONTH] = cal.get(Calendar.MONDAY)+1;
         curTime[CURYEAR] = cal.get(Calendar.YEAR);
