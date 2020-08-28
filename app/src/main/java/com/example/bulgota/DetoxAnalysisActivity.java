@@ -120,7 +120,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         //intent 추가
         Intent intent = getIntent();
-        bac = intent.getDoubleExtra("bac",0.06);
+        bac = intent.getDoubleExtra("bac",0.09);
 
         tvAlcholLevel.setText(String.format("%.2f %%", bac));
 
@@ -298,7 +298,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         XAxis xAxis = lineChart.getXAxis(); // x 축 설정
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //x 축 표시에 대한 위치 설정
-        xAxis.setLabelCount(5, true); //X축의 데이터를 최대 몇개 까지 나타낼지에 대한 설정 5개 force가 true 이면 반드시 보여줌
+        xAxis.setLabelCount(timer / 60 / 60 +1, true); //X축의 데이터를 최대 몇개 까지 나타낼지에 대한 설정 5개 force가 true 이면 반드시 보여줌
         xAxis.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)); // X축 텍스트컬러설정
         xAxis.setGridColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)); // X축 줄의 컬러 설정
         xAxis.setAxisMinValue(0.0f);
