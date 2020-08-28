@@ -65,6 +65,7 @@ public class QReaderActivity extends AppCompatActivity implements DecoratedBarco
                     Intent intent = new Intent(QReaderActivity.this, CertCompletionActivity.class);
                     intent.putExtra("modelName", model);
                     startActivity(intent);
+                    finish();
                 }
                 @Override
                 public void onNegativeClicked() {
