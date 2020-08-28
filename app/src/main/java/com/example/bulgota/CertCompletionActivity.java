@@ -18,6 +18,7 @@ import com.example.bulgota.api.BullgoTAService;
 import com.example.bulgota.api.ResponseLendModel;
 import com.example.bulgota.api.ResponseSelectModel;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,8 +42,22 @@ public class CertCompletionActivity extends AppCompatActivity {
         btnUse = findViewById(R.id.btn_use);
         imgCheckLine = findViewById(R.id.img_check_line);
 
-        Log.d("modelName", getIntent().getStringExtra("modelName")); //모델이름 확인용
-        modelName = getIntent().getStringExtra("modelName"); //모델네임 저장
+
+        
+
+        //Realm 객체 선언
+        Realm.init(this);
+        Realm mRealm = Realm.getDefaultInstance();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) { //인증 화면으로 넘어온 경우, 이전에 있던 남은 해독시간 데이터 삭제
+                mRealm.delete(TimeVO.class); //모든 데이터 삭제
+            }
+        });
+
+       Log.d("modelName", getIntent().getStringExtra("modelName")); //모델이름 확인용
+       modelName = getIntent().getStringExtra("modelName"); //모델네임 저장
+       
 
         btnUse.setOnClickListener(l -> {
             if(!checkSafety.isChecked()) {
