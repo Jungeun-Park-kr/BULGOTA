@@ -6,7 +6,7 @@
 
 ## Arduino Codes
 
-### Breathe Testing Using Ultrasonic waves & RGB module
+### Breathe Testing Using Ultrasonic waves & RGB modul
 
 ```c
 /* MQ-3 Alcohol Sensor Circuit with Arduino */
@@ -74,24 +74,17 @@ void loop()
      그럼 시간 * 17 / 1000이라는 공식이 나옵니다.
   */
 
-  if (0 <=distance &&distance <= 10) { //10cm이내에 있을 때만 측정 하기
+  if (0 <= distance &&distance <= 10) { //10cm이내에 있을 때만 측정 하기
     Serial.print("------ distance : ");
     Serial.print(distance);
     Serial.println(" cm ------");
-      /* 알코올 센서 측정 시작 */
+    /* 알코올 센서 측정 시작 */
     sensor_volt = (float)sensorValue/1024*5.0;
     RS_gas = ((5.0 * R2)/sensor_volt) + R2;
     R0 = 2000;
     ratio = RS_gas/R0; //ratio = RS/R0
     double x = 0.4*ratio;
     BAC = pow(x,-1.431); //BAC in mg/L
-  
-    if(btSerial.available()) { //블루투스와 연결 되어있으면 시리얼 모니터에 BAC, AOut값 출력
-     Serial.write(btSerial.read());
-    }
-    if (Serial.available()) { //시리얼 연결이 되어있으면 블루투스로 BAC 값 전송
-      btSerial.write(Serial.read());
-    }
     
     DigitShield.setValue(sensorValue); //BAC값 디지털 실드에 출력
     btSerial.println(BAC*0.1); //블루투스로 BAC 값 전송
@@ -100,23 +93,32 @@ void loop()
     Serial.print("mg/100mL   -------  SensorValue = ");
     Serial.println(sensorValue);
 
-    if(BAC*0.1 < 0.03) { //운전 가능일경우
-      digitalWrite(LED_Green, HIGH);
-      delay(1000);
-      digitalWrite(LED_Green, LOW);
-    }
-    else { //음주 불가일 경우
-      digitalWrite(LED_Red, HIGH);
-      delay(2000);
-      digitalWrite(LED_Red, LOW);
-    }
-    
+    if(btSerial.available()) { //블루투스와 연결 되어있으면 시리얼 모니터에 BAC, AOut값 출력
+      //Serial.write(btSerial.read());
+      byte receiveData = btSerial.read();
+      Serial.print("Android Data:");
+      Serial.println(receiveData);
+        if (receiveData == 0x30) {
+          if(BAC*0.1 < 0.03) { //운전 가능일경우
+            delay(2000); //2초 딜레이
+            digitalWrite(LED_Green, HIGH);
+            delay(3000);
+            digitalWrite(LED_Green, LOW);
+          }
+          else { //음주 불가일 경우
+            delay(2000); //2초 딜레이
+            digitalWrite(LED_Red, HIGH);
+            delay(3000);
+            digitalWrite(LED_Red, LOW);
+          }
+        }
+    } 
     //Serial.print(BAC*0.0001); //convert to g/dL
     //Serial.print(" g/DL\n\n");
   }
   else {
     Serial.println("@@@10cm보다 멀리 있습니다.@@@");
-    //Serial.println(-999);
+    //Serial.println(-999);s
     btSerial.println(-999);
   }
 //   else if (distance >= 200 || distance <= 0)       // 거리가 200cm가 넘거나 0보다 작으면
