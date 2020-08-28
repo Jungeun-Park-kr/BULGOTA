@@ -122,7 +122,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         Intent intent = getIntent();
         bac = intent.getDoubleExtra("bac",0.06);
 
-        tvAlcholLevel.setText(String.format("%.2f", bac));
+        tvAlcholLevel.setText(String.format("%.2f %%", bac));
 
         timer = (int)(bac * 60 * 4000); // 초단위로 바꿈
         if(timer % 60>0){
@@ -133,11 +133,18 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         //해독시간 변수 값 설정
         Calendar cal = Calendar.getInstance();
-        dTime[DTSECOND] = cal.get(Calendar.SECOND) + timer % 60;
-        dTime[DTMINUTE] = cal.get(Calendar.MINUTE) + timer / 60 % 60;
-        dTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY) + timer / 60 / 60 % 24;
-        dTime[DTDATE] = cal.get(Calendar.DATE) + timer / 60 / 60 / 24 ;
-        dTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
+
+        cal.add(Calendar.YEAR, 0);
+        cal.add(Calendar.MONTH, 1);
+        cal.add(Calendar.DATE, timer / 60 / 60 / 24);
+        cal.add(Calendar.HOUR_OF_DAY, timer / 60 / 60 % 24);
+        cal.add(Calendar.MINUTE, timer / 60 % 60);
+        cal.add(Calendar.SECOND, timer % 60);
+        dTime[DTSECOND] = cal.get(Calendar.SECOND);
+        dTime[DTMINUTE] = cal.get(Calendar.MINUTE);
+        dTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY);
+        dTime[DTDATE] = cal.get(Calendar.DATE);
+        dTime[DTMONTH] = cal.get(Calendar.MONTH);
         dTime[DTYEAR] = cal.get(Calendar.YEAR);
 
         /* -----------------------------------정은 DB 부분 ---------------------------------------*/
@@ -169,13 +176,13 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         //현재시간 변수 값 설정
         curTime[DTSECOND] = cal.get(Calendar.SECOND);
         curTime[DTMINUTE] = cal.get(Calendar.MINUTE);
-        curTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
+        curTime[DTHOUR] = cal.get(Calendar.HOUR_OF_DAY);
         curTime[DTDATE] = cal.get(Calendar.DATE);
         curTime[DTMONTH] = cal.get(Calendar.MONDAY)+1;
         curTime[DTYEAR] = cal.get(Calendar.YEAR);
+        //curTime[DTDATE] -=1;//디버그용
         //시간
 
-        //dTime[DTHOUR] = 27; // 다음날 디버깅 용
         sTimer = makeStringTimer(dTime);
         tvtimer.setText(sTimer);
 
@@ -203,11 +210,14 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
                             //서버에서 json값 전송
                             //TODO 해당 메서드 호출 전에 timer 변수 값 변경필요...
                             // 여기서 서버에 전달할 변수들이 저장되기 때문에 Onclick 메서드 호출 전에 해독시간 int값 저장 알고리즘 사용 후 저장 필요
-                            sendRegistrationToServer(token);
+                            sendRegistrationToServer(token,timer);
+
+                            Toast.makeText(DetoxAnalysisActivity.this, dTime[DTHOUR]+"시"+dTime[DTMINUTE]+"분"+"에 알림을 받습니다.", Toast.LENGTH_SHORT).show();
                         }
                     });
             }
         });
+
 
 
         //TODO 타이머 객체 사용 X
@@ -235,7 +245,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         sTimer =  makeStringTimer(dTime);
     }
 
-    void sendRegistrationToServer(String token) {
+    void sendRegistrationToServer(String token,int timer) {
         String serverUrl = "https://bullgota.ml/notification/push";
          new DataSendServer(serverUrl,token,timer).execute();
     }
@@ -337,7 +347,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     //TODO 아두이노에서 받아온 알콜농도에서 해독시간까지 걸리는 시간을 string 값으로 변경하는 메서드
     private String makeStringTimer(int[] dTime) {
         sTimer = "";
-        if(dTime[DTHOUR] > 24){
+        if(curTime[DTDATE] != dTime[DTDATE]){
             sTimer += "다음날 ";
         }
 

@@ -90,7 +90,9 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         btnTesting.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 btnTesting.setEnabled(false); //버튼 다시 못누르게 false
+
                 tvSmallInfoM.setText("3초 후에 측정을 시작합니다.");
                 myTimer = new MyTimer(3000, 1000);
                 myTimer.start();
@@ -151,7 +153,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
                     { //이름 같으면 마저 연결 진행
                     Toast.makeText(getApplicationContext()
                             , "Connected to " + name + "\n" + address
-                            , Toast.LENGTH_SHORT).show();
+                            , Toast.LENGTH_SHORT).show(); //연결 확인 토스트 띄우기
 
                     //연결완료시 화면 전환
                     if (!isPageSlide) { //화면 전환이 안된 경우
@@ -287,6 +289,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
 //                            , Toast.LENGTH_SHORT).show();
 
                     tvSmallInfoM.setText("측정기와의 거리를 10cm 이내로 해주세요.");
+
                     btnTesting.setEnabled(true); //버튼 다시 누를 수 있게 하기
                     btnTesting.setText("측 정 재 시 작");
                     if (btnTesting.getVisibility() == INVISIBLE) //측정중 버튼 다시 보이게 하기

@@ -127,7 +127,7 @@
             android:gravity="center"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:background="@drawable/rec_corner_box2"
+            android:background="@drawable/rec_btn_info"
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:clickable="true"
@@ -138,24 +138,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginRight="5dp"
                 android:fontFamily="@font/nanum_square_round_bold"
                 android:text="주행가능 시 알람받기"
+                android:textColor="@color/colorWhite"
                 android:layout_centerVertical="true"
                 android:textSize="18dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
                 android:layout_toRightOf="@+id/tv_alarm_text"
-                android:layout_centerInParent="true"
-                android:src="@drawable/img_alarmbell" />
+                android:outlineAmbientShadowColor="@color/colorWhite"
+                android:src="@drawable/img_alarmbell"
+                app:tint="@color/colorWhite" />
 
         </RelativeLayout>
 
