@@ -42,6 +42,9 @@ public class CertCompletionActivity extends AppCompatActivity {
         btnUse = findViewById(R.id.btn_use);
         imgCheckLine = findViewById(R.id.img_check_line);
 
+
+        
+
         //Realm 객체 선언
         Realm.init(this);
         Realm mRealm = Realm.getDefaultInstance();
@@ -52,9 +55,9 @@ public class CertCompletionActivity extends AppCompatActivity {
             }
         });
 
-//        Log.d("modelName", getIntent().getStringExtra("modelName")); //모델이름 확인용
-//        modelName = getIntent().getStringExtra("modelName"); //모델네임 저장
-        modelName = "BGT_004";
+       Log.d("modelName", getIntent().getStringExtra("modelName")); //모델이름 확인용
+       modelName = getIntent().getStringExtra("modelName"); //모델네임 저장
+       
 
         btnUse.setOnClickListener(l -> {
             if(!checkSafety.isChecked()) {

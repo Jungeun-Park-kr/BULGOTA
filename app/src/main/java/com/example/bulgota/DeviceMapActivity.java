@@ -129,6 +129,8 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private TextView tvGuide;
 
     private IntentIntegrator qrScan;
+    private GpsTracker gpsTracker;
+
 
     //현재시간 변수 추가
     final int CURSECOND = 0, CURMINUTE = 1, CURHOUR = 2, CURDATE = 3, CURMONTH = 4, CURYEAR = 5;
@@ -743,12 +745,12 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                         .build();
                 BullgoTAService bullgoTAService = retrofit.create(BullgoTAService.class);
                 Log.e("result.getContent2", result.getContents());
+                gpsTracker = new GpsTracker(this);
 
-                double latitude = locationSource.getLastLocation().getLatitude();   //위도
-                double longitude = locationSource.getLastLocation().getLongitude(); //경도
+                double latitude = gpsTracker.getLatitude();
+                double longitude = gpsTracker.getLongitude();
 
                 bullgoTAService.returnModel(modelNum, new RequestReturnModel(latitude, longitude)).enqueue(new Callback<ResponseReturnModel>() {
-
 
                     @Override
                     public void onResponse(Call<ResponseReturnModel> call, Response<ResponseReturnModel> response) {

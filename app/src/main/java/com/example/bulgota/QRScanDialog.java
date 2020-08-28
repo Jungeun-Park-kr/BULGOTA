@@ -50,6 +50,7 @@ public class QRScanDialog extends Dialog implements View.OnClickListener {
     public void onClick(View view) {
         if(view.getId() == R.id.btn_retry) {
             qrScanDialogListener.onRetryClicked();
+            dismiss();
         }
     }
 

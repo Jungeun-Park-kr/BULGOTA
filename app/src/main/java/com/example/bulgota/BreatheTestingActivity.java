@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -19,9 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.bulgota.api.BullgoTAService;
+import com.example.bulgota.api.ResponseSelectModel;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -54,6 +64,7 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
     private boolean result = true; //음주 측정 결과값 저장
     double dValue; ////측정값 가져오기 (mg/L) , 혈중알코올 농도:mg/100mL
 
+    private IntentIntegrator qrScan;
 
 
     @Override
@@ -245,19 +256,79 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
-            if (resultCode == Activity.RESULT_OK)
-                btSpp.connect(data);
-        } else if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
-            if (resultCode == Activity.RESULT_OK) {
-                btSpp.setupService();
-                btSpp.startService(BluetoothState.DEVICE_OTHER);
-                // setup();
-            } else {
-                Toast.makeText(getApplicationContext()
-                        , "Bluetooth was not enabled."
-                        , Toast.LENGTH_SHORT).show();
-                //finish();
+        Log.e("qrcode data", String.valueOf(data));
+        Log.e("qrcode requestCode", String.valueOf(requestCode));
+        Log.e("qrcode resultCode", String.valueOf(resultCode));
+        if(requestCode == 49374) {
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if(result != null) {
+                //qrcode가 없으면
+                if (result.getContents() == null) {
+
+                } else {
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(BullgoTAService.BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    BullgoTAService bullgoTAService = retrofit.create(BullgoTAService.class);
+                    Log.e("result.getContent2", result.getContents());
+                    bullgoTAService.checkModel(result.getContents()).enqueue(new Callback<ResponseSelectModel>() {
+                        //bulgotaservice return mode
+                        //responseReturnModel
+                        //95 getMessage()변경
+                        //반납가능시 0 이미반납된 모델이면 1 반납실패 2
+                        @Override
+                        public void onResponse(Call<ResponseSelectModel> call, Response<ResponseSelectModel> response) {
+                            Log.e("getSuccess", String.valueOf(response.body().getSuccess()));
+
+                            if (response.body().getSuccess()) {
+                                //유효한 모델이면
+                                Intent intent = new Intent(BreatheTestingActivity.this, CertCompletionActivity.class);
+                                intent.putExtra("modelName", result.getContents());
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                QRScanDialog qrScanDialog = new QRScanDialog(BreatheTestingActivity.this);
+                                qrScanDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+                                qrScanDialog.setDialogListener(new QRScanDialog.QRScanDialogListener() {
+                                    @Override
+                                    public void onRetryClicked() {
+                                        scanQRcode();
+                                    }
+
+                                    @Override
+                                    public void onCancleClicked() {
+                                        qrScanDialog.dismiss();
+                                    }
+                                });
+                                qrScanDialog.show();
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<ResponseSelectModel> call, Throwable t) {
+                            Log.e("fail", "fail");
+                        }
+
+                    });
+                }
+            }
+        }
+
+        else {
+            if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
+                if (resultCode == Activity.RESULT_OK)
+                    btSpp.connect(data);
+            } else if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
+                if (resultCode == Activity.RESULT_OK) {
+                    btSpp.setupService();
+                    btSpp.startService(BluetoothState.DEVICE_OTHER);
+                    // setup();
+                } else {
+                    Toast.makeText(getApplicationContext()
+                            , "Bluetooth was not enabled."
+                            , Toast.LENGTH_SHORT).show();
+                    //finish();
+                }
             }
         }
     }
@@ -359,12 +430,8 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
     private void analysisResult() { //측정 결과 확인후 처리하는 메소드
         //큐알코드 화면 이동 or 분석화면 이동
         if (result) { //측정결과 - 운전 가능
-            Toast.makeText(this, "분석결과 정상입니다.", Toast.LENGTH_LONG).show();
-            //Intent intent = new Intent(this,QRCodeScanActivity.class);
-            Intent intent = new Intent(this, QReaderActivity.class);
-            intent.putExtra("modelName", modelName); //QRcode Activity로 모델이름 전달
-            startActivity(intent);
-            finish();
+            //initializing scan object
+            scanQRcode();
         }
         else { //측정결과 - 운전 불가
             Toast.makeText(this, "분석결과 운전 불가합니다.", Toast.LENGTH_LONG).show();
@@ -373,6 +440,16 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
             startActivity(intent);
             finish();
         }
+    }
+
+    private void scanQRcode() {
+        qrScan = new IntentIntegrator(this);
+
+        //scan option
+        qrScan.setBeepEnabled(false);
+        qrScan.setCaptureActivity(QReaderActivity.class);
+        qrScan.setOrientationLocked(false);
+        qrScan.initiateScan();
     }
 
     class MyTimer extends CountDownTimer {
