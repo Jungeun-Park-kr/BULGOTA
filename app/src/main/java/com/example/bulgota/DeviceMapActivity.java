@@ -1,13 +1,5 @@
 package com.example.bulgota;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,9 +19,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+
 import com.example.bulgota.api.BullgoTAService;
 import com.example.bulgota.api.Marker_list;
+import com.example.bulgota.api.RequestReturnModel;
+import com.example.bulgota.api.ResponseReturnModel;
 import com.example.bulgota.api.ResponseWithMarkerData;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraUpdate;
@@ -43,8 +48,13 @@ import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.LocationButtonView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,6 +94,8 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private Button btnHomeZoomOut;
     private Button btnInfoZoomIn;
     private Button btnInfoZoomOut;
+    private Button btnReturn;
+    private Button btnRefresh;
 
     private ImageView btnHamberger;
 
@@ -108,6 +120,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private int pageValue;
     private String modelName;
 
+    private ReturnModelDialog returnModelDialog;
     private SlidingPageAnimationListener animationListener;
 
     //기획 배경 등 텍스트를 클릭하면 해당 항목의 공지사항으로 이동할 예정.
@@ -115,6 +128,21 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private TextView tvLegal;
     private TextView tvGuide;
 
+    private IntentIntegrator qrScan;
+
+    //현재시간 변수 추가
+    final int CURSECOND = 0, CURMINUTE = 1, CURHOUR = 2, CURDATE = 3, CURMONTH = 4, CURYEAR = 5;
+    int curTime[] = new int[6];
+    //해독시간 텍스트뷰
+    TextView tvDetoxTime;
+    //
+
+    private String detoxTime; //해독 시간 문자열
+    private Date detoxDate; //해독 시간 Date
+    private String cTime; //현재 시간 문자열
+    private Date curDate; //현재 시간 Date
+
+    boolean isDTNeed; // tv_detox_time 을 킬지 말지 결정
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,27 +150,106 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         setContentView(R.layout.activity_device_map);
 
+
         //퍼미션 확인
-        if(DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                &&(DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION))
-                &&(DeviceMapActivity.checkPermissions(this, Manifest.permission.CAMERA))) {
+        if (DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                && (DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION))
+                && (DeviceMapActivity.checkPermissions(this, Manifest.permission.CAMERA))) {
             //권한 있음 - 원하는 메소드 사용
-            Toast.makeText(this, "권한 설정이 완료되었습니다.", Toast.LENGTH_LONG).show();
-        }
-        else {
-            Toast.makeText(this, "권한 하나이상 없음.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "권한 설정이 완료되었습니다.", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "불고타 이용을 위한 권한을 설정해주세요.", Toast.LENGTH_LONG).show();
             DeviceMapActivity.requestExternalPermissions(this);
         }
 
         //기획 배경 등 텍스트를 클릭하면 해당 항목의 공지사항으로 이동할 예정.
-        tvPlanBackground = (TextView)findViewById(R.id.tv_tab_list_1);
+        tvPlanBackground = (TextView) findViewById(R.id.tv_tab_list_1);
         tvPlanBackground.setOnClickListener(this);
-        tvLegal = (TextView)findViewById(R.id.tv_tab_list_2);
+        tvLegal = (TextView) findViewById(R.id.tv_tab_list_2);
         tvLegal.setOnClickListener(this);
-        tvGuide = (TextView)findViewById(R.id.tv_tab_list_3);
+        tvGuide = (TextView) findViewById(R.id.tv_tab_list_3);
         tvGuide.setOnClickListener(this);
 
+        //해독시간 텍스트뷰
+        tvDetoxTime = findViewById(R.id.tv_detox_time);
 
+
+        /* -----------------------------------정은 DB부분 ---------------------------------------*/
+        //현재시간 변수 값 설정
+        Calendar cal = Calendar.getInstance();
+        curTime[CURSECOND] = cal.get(Calendar.SECOND);
+        curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
+        curTime[CURHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
+        curTime[CURDATE] = cal.get(Calendar.DATE);
+        curTime[CURMONTH] = cal.get(Calendar.MONDAY) + 1;
+        curTime[CURYEAR] = cal.get(Calendar.YEAR);
+
+        isDTNeed = false;
+        //현재시간 문자열로 바꿔 저장
+        cTime = Integer.toString(curTime[5]) + "-" + Integer.toString(curTime[4]) + "-" + Integer.toString(curTime[3]) + " " +
+                Integer.toString(curTime[2]) + ":" + Integer.toString(curTime[1]) + ":" + Integer.toString(curTime[0]); //해독시간을 문자열로 변경
+
+
+        //Realm 객체 선언
+        Realm.init(this);
+        Realm mRealm = Realm.getDefaultInstance();
+        TimeVO vo = mRealm.where(TimeVO.class).isNotNull("detoxTime").findFirst(); //detoxDate 있는경우 객체 얻기
+        if (vo != null) {
+            detoxTime = vo.detoxTime; //해독 시간 detoxTime String에 저장
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //날짜 포맷
+            try {
+                curDate = format.parse(cTime); //현재 시간(String)을 Date type으로 변경
+                detoxDate = format.parse(detoxTime); //해독 시간(String)을 Date 형으로 변경
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //Toast.makeText(this, "curDate :" + curDate, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "detoxDate :" + detoxDate, Toast.LENGTH_LONG).show();
+            int compare = curDate.compareTo(detoxDate);
+            if (compare > 0) { //curDate > detoxDate 인 경우
+                //해독시간이 현재 시간보다 이른 경우 해독시간 데이터 삭제
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        mRealm.delete(TimeVO.class); //모든 데이터 삭제
+
+                    }
+                });
+                //Toast.makeText(this, "데이터 삭제 완료", Toast.LENGTH_SHORT).show();
+                //남은 해독시간 보이지 않게 해주세요
+                isDTNeed = false;
+                // in here
+            } else { //curDate < detoxDate 인 경우 => 화면에 보이게 하기
+                //남은 해독시간 띄우는 코드 in here
+                isDTNeed = true;
+                //Toast.makeText(this, "해독예정시간 :" + detoxTime, Toast.LENGTH_LONG).show();
+            }
+        } else { //해독시간 데이터 존재하지 않음
+            //해독시간 텍스트뷰 보이지 않게 해주세요
+            isDTNeed = false;
+            //in here
+
+        }
+        /* -----------------------------------정은 DB부분 ---------------------------------------*/
+
+
+        if(isDTNeed){
+            String strDetoxTime = "해독 예상 시간은 ";
+
+            if (detoxDate.getDate() != curDate.getDate()) {
+                strDetoxTime += "다음날 ";
+            }
+
+            strDetoxTime += detoxDate.getHours() + "시 ";
+            strDetoxTime += detoxDate.getMinutes() + "분 입니다.";
+            tvDetoxTime.setText(strDetoxTime);
+            tvDetoxTime.setVisibility(View.VISIBLE);
+        } else {
+            tvDetoxTime.setVisibility(View.GONE);
+        }
+
+        //
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -158,10 +265,21 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
 
+        //현재시간 변수 값 설정
+//        Calendar cal = Calendar.getInstance();
+//        curTime[CURSECOND] = cal.get(Calendar.SECOND);
+//        curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
+//        curTime[CURHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
+//        curTime[CURDATE] = cal.get(Calendar.DATE);
+//        curTime[CURMONTH] = cal.get(Calendar.MONDAY) + 1;
+//        curTime[CURYEAR] = cal.get(Calendar.YEAR);
+        //
+
+
         //알람 메세지 클릭 시 map으로 이동 변경(firebasemessageservice)
         //firebasemessage service Intent
         //임시로 설정해둔 것이니 추후 논의 후 변경
-       receiveMessage();
+        receiveMessage();
 
     }
 
@@ -169,25 +287,23 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     //firebasemessage service Intent
     private void receiveMessage() {
         Intent intent = getIntent();
-        if(intent != null) {//푸시알림을 선택해서 실행한것이 아닌경우 예외처리
+        if (intent != null) {//푸시알림을 선택해서 실행한것이 아닌경우 예외처리
             String notificationData = intent.getStringExtra("test");
-            if(notificationData != null)
+            if (notificationData != null)
                 Log.d("FCM_TEST", notificationData);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if(isHambergerOpen) {
+        if (isHambergerOpen) {
             viewLayer.performClick();
             return;
-        } else if(isInfoPageOpen) {
-            map.getOnMapClickListener().onMapClick(new PointF(10,10), lastMarker.getPosition());
+        } else if (isInfoPageOpen) {
+            map.getOnMapClickListener().onMapClick(new PointF(10, 10), lastMarker.getPosition());
         } else {
             super.onBackPressed();
         }
-
-
     }
 
     @Override
@@ -198,6 +314,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         }
         return super.onOptionsItemSelected(item);
     }
+
     public static boolean checkPermissions(Activity activity, String permission) {
         int permissionResult = ActivityCompat.checkSelfPermission(activity, permission);
         if (permissionResult == PackageManager.PERMISSION_GRANTED)
@@ -208,8 +325,8 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == 0) { //if(requestCode == BreathTestingActivity.request_code)
-            if(DeviceMapActivity.verifyPermission(grantResults)) {
+        if (requestCode == 0) { //if(requestCode == BreathTestingActivity.request_code)
+            if (DeviceMapActivity.verifyPermission(grantResults)) {
                 //요청한 권한 얻음, 원하는 메소드 사용
                 Toast.makeText(this, "권한 설정이 모두 완료되었습니다.", Toast.LENGTH_LONG).show();
                 if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
@@ -220,13 +337,11 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                     map.setLocationTrackingMode(LocationTrackingMode.Follow);
                     return;
                 }
-            }
-            else {
+            } else {
                 //showRequestAgainDialog();
                 Toast.makeText(this, "불고타 서비스 이용을 위해 권한이 필요합니다.", Toast.LENGTH_LONG).show();
             }
-        }
-        else
+        } else
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
@@ -314,6 +429,10 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         btnHomeZoomOut = findViewById(R.id.btn_home_zoom_out);
         btnInfoZoomIn = findViewById(R.id.btn_info_zoom_in);
         btnInfoZoomOut = findViewById(R.id.btn_info_zoom_out);
+        btnReturn = findViewById(R.id.btn_return);
+        btnRefresh =findViewById(R.id.btn_refresh);
+
+        qrScan = new IntentIntegrator(this);
 
         UiSettings uiSettings = map.getUiSettings();
 
@@ -330,7 +449,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         });
 
         btnInfoLend.setOnClickListener(l -> {
-            Intent intent = new Intent(this,BreatheTestingActivity.class);
+            Intent intent = new Intent(this, BreatheTestingActivity.class);
             intent.putExtra("modelName", modelName);//측정중 액티비티로 선택한 모델명 전달
             startActivity(intent);
         });
@@ -350,10 +469,23 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         btnInfoZoomOut.setOnClickListener(l -> {
             btnZoomClickEvent(btnInfoZoomOut, false);
         });
+
+        btnReturn.setOnClickListener(l -> {
+            qrScan.setBeepEnabled(false);
+            qrScan.setCaptureActivity(QReaderReturnActivity.class);
+            qrScan.setOrientationLocked(false);
+            qrScan.initiateScan();
+        });
+
+        btnRefresh.setOnClickListener(l -> {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        });
     }
 
     private void btnZoomClickEvent(Button button, boolean zoom) {
-        if(zoom) {
+        if (zoom) {
             map.moveCamera(CameraUpdate.zoomIn().animate(CameraAnimation.Easing, 1500));
         } else {
             map.moveCamera(CameraUpdate.zoomOut().animate(CameraAnimation.Fly, 1500));
@@ -398,7 +530,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                         int finalI = i;
 
                         markerItems[i].setOnClickListener(overlay -> {
-                            if(lastMarker == null || lastMarker.getTag() != markerItems[finalI].getTag()) {
+                            if (lastMarker == null || lastMarker.getTag() != markerItems[finalI].getTag()) {
                                 LatLng coord = new LatLng(markerDataList.get(finalI).getLatitude(), markerDataList.get(finalI).getLongitude());
                                 map.moveCamera(CameraUpdate.scrollAndZoomTo(coord, 16)
                                         .animate(CameraAnimation.Easing, 1500));
@@ -411,12 +543,12 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                                     markerItems[finalI].setWidth(90);
                                     markerItems[finalI].setHeight(90);
                                     lastMarker = markerItems[finalI];
-                                    modelName = markerDataList.get(finalI).getModel();
+                                    modelName = markerDataList.get(finalI).getModelNum();
                                 } else {
                                     markerItems[finalI].setIcon(OverlayImage.fromResource(R.drawable.normal_marker));
                                 }
 
-                                tvModelNum.setText(markerDataList.get(finalI).getModel());
+                                tvModelNum.setText(markerDataList.get(finalI).getModelNum());
                                 tvBatteryValue.setText(String.valueOf(markerDataList.get(finalI).getBattery()) + "%");
                                 tvTimeValue.setText(markerDataList.get(finalI).getTime());
 
@@ -451,9 +583,8 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
     private void mapLoad() {
         map.setLocationSource(locationSource);
 
-
         map.addOnLocationChangeListener(location -> {
-            if(initMapLoad) {
+            if (initMapLoad) {
                 map.moveCamera(CameraUpdate.scrollAndZoomTo(new LatLng(location.getLatitude(), location.getLongitude()), 14)
                         .animate(CameraAnimation.Linear, 3000));
                 map.setLocationTrackingMode(LocationTrackingMode.Follow);
@@ -468,7 +599,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         map.setOnMapClickListener((point, coord) -> {
             //애니메이션
-            if(isInfoPageOpen) {
+            if (isInfoPageOpen) {
                 //애니메이션 준비
                 translateDownAim = AnimationUtils.loadAnimation(this, R.anim.translate_down);
                 translateDownAim.setAnimationListener(animationListener);
@@ -513,22 +644,22 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onClick(View v) {
-        if(v == tvPlanBackground){
-            Intent intent = new Intent(this,NoticeActivity.class);
-            Log.d("asdf1","1");
+        if (v == tvPlanBackground) {
+            Intent intent = new Intent(this, NoticeActivity.class);
+            Log.d("asdf1", "1");
             intent.putExtra("tag", PLAN_BACKGROUND);
-            Log.d("asdf2","2");
+            Log.d("asdf2", "2");
             viewLayer.performClick();
-            Log.d("asdf3","4");
+            Log.d("asdf3", "4");
             startActivity(intent);
-            Log.d("asdf4","4");
-        } else if(v == tvLegal){
-            Intent intent = new Intent(this,NoticeActivity.class);
+            Log.d("asdf4", "4");
+        } else if (v == tvLegal) {
+            Intent intent = new Intent(this, NoticeActivity.class);
             intent.putExtra("tag", LEGAL);
             viewLayer.performClick();
             startActivity(intent);
-        } else if(v == tvGuide){
-            Intent intent = new Intent(this,NoticeActivity.class);
+        } else if (v == tvGuide) {
+            Intent intent = new Intent(this, NoticeActivity.class);
             intent.putExtra("tag", GUIDE);
             viewLayer.performClick();
             startActivity(intent);
@@ -539,25 +670,25 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         @Override
         public void onAnimationStart(Animation animation) {
             switch (pageValue) {
-                case PAGE_DOWN : {
+                case PAGE_DOWN: {
                     isInfoPageOpen = false;
                     btnInfoLocation.setVisibility(View.GONE);
                     btnInfoZoomIn.setVisibility(View.GONE);
                     btnInfoZoomOut.setVisibility(View.GONE);
                     break;
                 }
-                case PAGE_UP : {
+                case PAGE_UP: {
                     isInfoPageOpen = true;
                     break;
                 }
-                case PAGE_LEFT : {
+                case PAGE_LEFT: {
                     clHamberger.setVisibility(View.GONE);
                     viewLayer.setVisibility(View.GONE);
                     clToolbar.setVisibility(View.VISIBLE);
                     isHambergerOpen = false;
                     break;
                 }
-                case PAGE_RIGHT : {
+                case PAGE_RIGHT: {
                     clToolbar.setVisibility(View.GONE);
                     viewLayer.setVisibility(View.VISIBLE);
                     isHambergerOpen = true;
@@ -568,11 +699,11 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         @Override
         public void onAnimationEnd(Animation animation) {
             switch (pageValue) {
-                case PAGE_DOWN : {
+                case PAGE_DOWN: {
                     clModelInfo.setVisibility(View.GONE);
                     break;
                 }
-                case PAGE_UP : {
+                case PAGE_UP: {
                     clModelInfo.setVisibility(View.VISIBLE);
                     btnInfoLocation.setVisibility(View.VISIBLE);
                     btnInfoZoomIn.setVisibility(View.VISIBLE);
@@ -580,11 +711,11 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                     btnInfoLocation.setMap(map);
                     break;
                 }
-                case PAGE_LEFT : {
+                case PAGE_LEFT: {
                     clHamberger.setVisibility(View.GONE);
                     break;
                 }
-                case PAGE_RIGHT : {
+                case PAGE_RIGHT: {
                     clHamberger.setVisibility(View.VISIBLE);
                 }
             }
@@ -593,6 +724,65 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         @Override
         public void onAnimationRepeat(Animation animation) {
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            String modelNum = result.getContents();
+            //return 모델 명 string
+            if (result.getContents() == null) {
+
+            } else {
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(BullgoTAService.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                BullgoTAService bullgoTAService = retrofit.create(BullgoTAService.class);
+                Log.e("result.getContent2", result.getContents());
+
+                double latitude = locationSource.getLastLocation().getLatitude();   //위도
+                double longitude = locationSource.getLastLocation().getLongitude(); //경도
+
+                bullgoTAService.returnModel(modelNum, new RequestReturnModel(latitude, longitude)).enqueue(new Callback<ResponseReturnModel>() {
+
+
+                    @Override
+                    public void onResponse(Call<ResponseReturnModel> call, Response<ResponseReturnModel> response) {
+                        String message = response.body().getMessage();
+                        returnModelDialog = new ReturnModelDialog(DeviceMapActivity.this);
+
+                        if (response.body().getSuccess()) {
+                            Log.e("getSuccess", String.valueOf(response.body().getSuccess()));
+
+                            if (message.equals("킥보드 반납 성공")) {
+                                double data = (double) response.body().getData();
+                                int object = (int) data;
+                                returnModelDialog.setReturnModelDialog(0, modelNum, object);
+
+                            } else if (message.equals("이미 반납된 킥보드입니다.")) {
+                                returnModelDialog.setReturnModelDialog(1, modelNum, 0);
+                            }
+                        } else {
+                            if (message.equals("킥보드 반납 실패")) {
+                                returnModelDialog.setReturnModelDialog(2, modelNum, 0);
+                            } else {
+                                Log.e("retrofit2 message :", message + "이건 서버담당자가 잘못한거임 ! 반성하세요. ");
+                            }
+                        }
+                    }
+
+                    @Override
+
+                    public void onFailure(Call<ResponseReturnModel> call, Throwable t) {
+                        Log.e("fail", "fail");
+                    }
+                });
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

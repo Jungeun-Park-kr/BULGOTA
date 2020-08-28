@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <ImageView
+        android:id="@+id/img_bullgota_icon"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="15dp"
+        app:srcCompat="@drawable/main_icon" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:paddingRight="30dp">
+
+        <ImageView
+            android:id="@+id/img_box_lend_modelNum"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/rec_corner_box" />
+
+        <TextView
+            android:id="@+id/tv_lend_modelNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:gravity="center"
+            android:text="모델명 : BGT_001"
+            android:textColor="@color/colorAccentDark"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_box_lend_modelNum"
+            app:layout_constraintStart_toEndOf="@+id/img_box_lend_modelNum"
+            app:layout_constraintTop_toTopOf="@+id/img_box_lend_modelNum" />
+
+        <ImageView
+            android:id="@+id/img_box_lend_lend_time"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@id/img_box_lend_modelNum"
+            app:layout_constraintTop_toBottomOf="@id/img_box_lend_modelNum"
+            app:srcCompat="@drawable/rec_corner_box" />
+
+        <TextView
+            android:id="@+id/tv_lend_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:gravity="center"
+            android:text="이용시작시간 : 2020-08-26 03:38"
+            android:textColor="@color/colorAccentDark"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_box_lend_lend_time"
+            app:layout_constraintStart_toEndOf="@+id/img_box_lend_lend_time"
+            app:layout_constraintTop_toTopOf="@+id/img_box_lend_lend_time" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_thanks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:gravity="center"
+        android:text="불고타를 이용해주셔서 감사합니다"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp" />
+
+</LinearLayout>
+

@@ -34,6 +34,24 @@
 
         </com.naver.maps.map.MapView>
 
+      
+        <TextView
+            android:id="@+id/tv_detox_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:background="@color/colorLightAccent"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:gravity="center_horizontal"
+            android:text="해독완료시간을 받아옵니다."
+            android:textAlignment="center"
+            android:textColor="@color/colorWarning"
+            android:textSize="17dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
         <com.naver.maps.map.widget.LocationButtonView
             android:id="@+id/btn_home_location"
             android:layout_width="35dp"
@@ -117,6 +135,18 @@
             app:layout_constraintStart_toStartOf="parent">
 
         </com.naver.maps.map.widget.LocationButtonView>
+
+        <Button
+            android:id="@+id/btn_refresh"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_refresh"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detox_time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -365,49 +395,70 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_gravity="top"
-        android:background="@android:color/white"
-        android:clickable="true">
+        android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="top"
+            android:background="@android:color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            android:clickable="true">
 
-        <TextView
-            android:id="@+id/tv_toolbar_title"
+            <Button
+                android:id="@+id/btn_return"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/rec_btn_info"
+                android:fontFamily="@font/nanum_square_round_bold"
+                android:text="반납"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/logo"
+                android:text="불고타"
+                android:textColor="@color/colorPrimary"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_hamberger"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/menu" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view_layer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/logo"
-            android:text="불고타"
-            android:textColor="@color/colorPrimary"
-            android:textSize="22sp"
+            android:background="#ADECECEC"
+            android:clickable="true"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/btn_hamberger"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/menu" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:id="@+id/view_layer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ADECECEC"
-        android:clickable="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_hamberger"
@@ -439,9 +490,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/nanum_square_round_regular"
-            android:text="OO한\n킥보드 공유 플랫폼"
+            android:text="불고타는\n킥보드 공유 플랫폼"
             android:textColor="@color/colorText"
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/tv_hamberger_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_hamberger_title" />
 
@@ -467,72 +518,74 @@
 
             <ImageView
                 android:id="@+id/img_tab_list_1"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/list_hamberger" />
+                app:srcCompat="@drawable/code_icon_1" />
 
             <TextView
                 android:id="@+id/tv_tab_list_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
+
                 android:clickable="true"
                 android:fontFamily="@font/nanum_square_round_bold"
                 android:text="기획배경"
                 android:textColor="@color/colorText"
-                android:textSize="10sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_tab_list_1"
                 app:layout_constraintStart_toEndOf="@+id/img_tab_list_1"
                 app:layout_constraintTop_toTopOf="@+id/img_tab_list_1" />
 
             <ImageView
                 android:id="@+id/img_tab_list_2"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="40dp"
                 app:layout_constraintStart_toStartOf="@id/img_tab_list_1"
                 app:layout_constraintTop_toBottomOf="@id/img_tab_list_1"
-                app:srcCompat="@drawable/list_hamberger" />
+                app:srcCompat="@drawable/judgement"
+                app:tint="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/tv_tab_list_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
+
                 android:clickable="true"
                 android:fontFamily="@font/nanum_square_round_bold"
                 android:text="음주관련법규"
                 android:textColor="@color/colorText"
-                android:textSize="10sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_tab_list_2"
                 app:layout_constraintStart_toEndOf="@+id/img_tab_list_2"
                 app:layout_constraintTop_toTopOf="@+id/img_tab_list_2" />
 
             <ImageView
                 android:id="@+id/img_tab_list_3"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="40dp"
                 app:layout_constraintStart_toStartOf="@id/img_tab_list_2"
                 app:layout_constraintTop_toBottomOf="@id/img_tab_list_2"
-                app:srcCompat="@drawable/list_hamberger" />
+                app:srcCompat="@drawable/guideicon"
+                app:tint="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/tv_tab_list_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
+
                 android:clickable="true"
                 android:fontFamily="@font/nanum_square_round_bold"
                 android:text="음주측정기 사용가이드"
                 android:textColor="@color/colorText"
-                android:textSize="10sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_tab_list_3"
                 app:layout_constraintStart_toEndOf="@+id/img_tab_list_3"
                 app:layout_constraintTop_toTopOf="@+id/img_tab_list_3" />

@@ -86,10 +86,16 @@ public class QRCodeScanActivity extends AppCompatActivity {
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
                 BullgoTAService bullgoTAService = retrofit.create(BullgoTAService.class);
+                Log.e("result.getContent2", result.getContents());
                 bullgoTAService.checkModel(result.getContents()).enqueue(new Callback<ResponseSelectModel>() {
-
+                //bulgotaservice return mode
+                    //responseReturnModel
+                    //95 getMessage()변경
+                    //반납가능시 0 이미반납된 모델이면 1 반납실패 2
                     @Override
                     public void onResponse(Call<ResponseSelectModel> call, Response<ResponseSelectModel> response) {
+                        Log.e("getSuccess", String.valueOf(response.body().getSuccess()));
+
                         if (response.body().getSuccess()) {
                             //유효한 모델이면
                             Intent intent = new Intent(QRCodeScanActivity.this, CertCompletionActivity.class);
@@ -114,6 +120,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(Call<ResponseSelectModel> call, Throwable t) {
+                        Log.e("fail", "fail");
                     }
 
                 });
