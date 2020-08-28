@@ -213,6 +213,9 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
                             sendRegistrationToServer(token,timer);
 
                             Toast.makeText(DetoxAnalysisActivity.this, dTime[DTHOUR]+"시"+dTime[DTMINUTE]+"분"+"에 알림을 받습니다.", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(DetoxAnalysisActivity.this,DeviceMapActivity.class);
+                            startActivity(intent);
+                            finish();
                         }
                     });
             }
