@@ -3,7 +3,6 @@ package com.example.bulgota;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -172,6 +170,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         lineChart.setData(chartData);
         lineChart.invalidate();
 
+        
         Legend legend = lineChart.getLegend(); //레전드 설정 (차트 밑에 색과 라벨을 나타내는 설정)
         legend.setDirection(Legend.LegendDirection.RIGHT_TO_LEFT);//색과 라벨 위치설정
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // 라벨 그래프와 수평
