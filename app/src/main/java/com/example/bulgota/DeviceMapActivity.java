@@ -158,6 +158,7 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
             //권한 있음 - 원하는 메소드 사용
             //Toast.makeText(this, "권한 설정이 완료되었습니다.", Toast.LENGTH_LONG).show();
         } else {
+
             Toast.makeText(this, "불고타 이용을 위한 권한을 설정해주세요.", Toast.LENGTH_LONG).show();
             DeviceMapActivity.requestExternalPermissions(this);
         }
