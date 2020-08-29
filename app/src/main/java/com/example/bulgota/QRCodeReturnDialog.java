@@ -107,22 +107,22 @@ public class QRCodeReturnDialog extends Dialog implements View.OnClickListener{
                                 int data = 0;
                                 if (response.body().getSuccess()) {
                                     //유효한 모델이면
-                                    switch(response.body().getMessage()) {
-                                        case "킥보드 반납 성공":
-                                            double result = (double) response.body().getData();
-                                            data = (int) result;
-                                            Log.e("Data", String.valueOf(data));
-                                            status = 0;
-                                            break;
-                                        case "이미 반납된 킥보드입니다.":
-                                            status = 1;
-                                            break;
-                                    }
+                                    double result = (double) response.body().getData();
+                                    data = (int) result;
+                                    status = 0;
 
                                     customDialogListener.onPositiveClicked(modelNum, data, status);
                                     dismiss();
                                 } else {
-                                    status = 2;
+                                    switch(response.body().getMessage()) {
+                                        case "이미 반납된 킥보드입니다.":
+                                            status = 1;
+                                            break;
+                                        case "킥보드 대여 실패":
+                                            status = 2;
+                                            break;
+                                    }
+
                                     customDialogListener.onPositiveClicked(modelNum, data, status);
                                     dismiss();
                                 }

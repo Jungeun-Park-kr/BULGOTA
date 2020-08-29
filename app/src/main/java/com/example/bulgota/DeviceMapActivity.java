@@ -758,18 +758,14 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
                         returnModelDialog = new ReturnModelDialog(DeviceMapActivity.this);
 
                         if (response.body().getSuccess()) {
-                            Log.e("getSuccess", String.valueOf(response.body().getSuccess()));
-
-                            if (message.equals("킥보드 반납 성공")) {
-                                double data = (double) response.body().getData();
-                                int object = (int) data;
-                                returnModelDialog.setReturnModelDialog(0, modelNum, object);
-
-                            } else if (message.equals("이미 반납된 킥보드입니다.")) {
+                            double data = (double) response.body().getData();
+                            int object = (int) data;
+                            returnModelDialog.setReturnModelDialog(0, modelNum, object);
+                        } else {
+                            if (message.equals("이미 반납된 킥보드입니다.")) {
                                 returnModelDialog.setReturnModelDialog(1, modelNum, 0);
                             }
-                        } else {
-                            if (message.equals("킥보드 반납 실패")) {
+                            else if (message.equals("킥보드 반납 실패")) {
                                 returnModelDialog.setReturnModelDialog(2, modelNum, 0);
                             } else {
                                 Log.e("retrofit2 message :", message + "이건 서버담당자가 잘못한거임 ! 반성하세요. ");
