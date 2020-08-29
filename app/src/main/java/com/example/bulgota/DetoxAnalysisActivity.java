@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -66,7 +67,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     ConstraintLayout clNoticeView;  //상단 전체 layout
     LinearLayout llState;   //주행가능 여부
 
-    RelativeLayout rlAlarm; //주행가능시 알람받기 layout
+    ImageView rlAlarm; //주행가능시 알람받기 layout
 
     TextView tvAlcholLevel; //현재 알콜 농도
     TextView tvMystate; //주행 가능 or 불가 텍스트
@@ -109,10 +110,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         countTime = findViewById(R.id.tv_timer);    //타이머
         lineChart = findViewById(R.id.chart);   //그래프
 
-        clNoticeView = findViewById(R.id.cl_notice_view);
-        llState = findViewById(R.id.ll_state);
-
-        rlAlarm = findViewById(R.id.rl_alarm);
+        rlAlarm = findViewById(R.id.btn_alarm);
 
         tvAlcholLevel = findViewById(R.id.tv_alchol_level);
         tvMystate = findViewById(R.id.tv_my_state);
@@ -193,31 +191,31 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
                 //서버로부터 예상 해독시간 및 사용자 토큰id 전달
 
                 FirebaseInstanceId.getInstance().getInstanceId()
-                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                            //토큰 값 전달 실패 시
-                            if(task.isSuccessful()==false){
-                                Log.e("토큰 id전달 실패","send token error",task.getException());
-                                return;
+                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                //토큰 값 전달 실패 시
+                                if(task.isSuccessful()==false){
+                                    Log.e("토큰 id전달 실패","send token error",task.getException());
+                                    return;
+                                }
+
+                                String token = task.getResult().getToken();
+
+                                //서버에서 json값 수신
+                                //getRegistrationToServer(token);
+
+                                //서버에서 json값 전송
+                                //TODO 해당 메서드 호출 전에 timer 변수 값 변경필요...
+                                // 여기서 서버에 전달할 변수들이 저장되기 때문에 Onclick 메서드 호출 전에 해독시간 int값 저장 알고리즘 사용 후 저장 필요
+                                sendRegistrationToServer(token,timer);
+
+                                Toast.makeText(DetoxAnalysisActivity.this, dTime[DTHOUR]+"시"+dTime[DTMINUTE]+"분"+"에 알림을 받습니다.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(DetoxAnalysisActivity.this,DeviceMapActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
-
-                            String token = task.getResult().getToken();
-
-                            //서버에서 json값 수신
-                            //getRegistrationToServer(token);
-
-                            //서버에서 json값 전송
-                            //TODO 해당 메서드 호출 전에 timer 변수 값 변경필요...
-                            // 여기서 서버에 전달할 변수들이 저장되기 때문에 Onclick 메서드 호출 전에 해독시간 int값 저장 알고리즘 사용 후 저장 필요
-                            sendRegistrationToServer(token,timer);
-
-                            Toast.makeText(DetoxAnalysisActivity.this, dTime[DTHOUR]+"시"+dTime[DTMINUTE]+"분"+"에 알림을 받습니다.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(DetoxAnalysisActivity.this,DeviceMapActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
+                        });
             }
         });
 
@@ -237,10 +235,10 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         //그래프에 들어갈 ArrayList 자료구조 데이터 추가 메서드
 
         LineDataSet lineDataSet = new LineDataSet(entry_chart, "주행 불가능");
-        LineDataSet lineDataSetEnable = new LineDataSet(entry_chart_enable, "주행 가능");
+        //LineDataSet lineDataSetEnable = new LineDataSet(entry_chart_enable, "주행 가능");
 
         chartSetting(lineChart,lineDataSet,chartData, false); // 주행 불가능 시 그래프
-        chartSetting(lineChart,lineDataSetEnable,chartData, true); // 주행 가능 시 그래프
+        //chartSetting(lineChart,lineDataSetEnable,chartData, true); // 주행 가능 시 그래프
 
         //차트 설정값 세팅 메서드
 
@@ -250,7 +248,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
     void sendRegistrationToServer(String token,int timer) {
         String serverUrl = "https://bullgota.ml/notification/push";
-         new DataSendServer(serverUrl,token,timer).execute();
+        new DataSendServer(serverUrl,token,timer).execute();
     }
 
     void getRegistrationToServer(String token){
@@ -278,7 +276,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
             Entry data = new Entry(xTime+(float)(yBac/0.015), 0.0f);
             entry_chart.add(data);
         }
-        entry_chart.add(new Entry((float)(bac/0.015 - 2),0.03f));
+        //entry_chart.add(new Entry((float)(bac/0.015 - 2),0.03f));
         entry_chart_enable.add(new Entry((float)(bac/0.015 - 2),0.03f));
     }
 
@@ -333,11 +331,11 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         legend.setForm(Legend.LegendForm.CIRCLE);   //차트 형태
         legend.setYOffset(20);  //라벨과 그래프 offset
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);   //라벨 위치
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);    //라벨 위치
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);    //라벨 위치
 
         //추가코드
         lineDataSet.setDrawFilled(true);
-        lineDataSet.setFillColor(lineColor);
+        //lineDataSet.setFillColor(lineColor);
         //색채우기
         lineDataSet.setDrawValues(false);
 

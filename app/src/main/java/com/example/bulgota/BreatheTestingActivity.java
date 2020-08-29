@@ -129,8 +129,10 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
             @Override
             public void onDataReceived(byte[] data, String msg) { //데이터 수신 받을 때
                 dValue = Double.parseDouble(msg); //수신받은 음주측정 값 저장
+                Log.e("isTestingFalse", "isTestingFalse");
                 //tvValue.setText("측정값:" + dValue);
                 if (isTesting) {
+                    Log.e("isTestingTrue", "isTetingTrue");
                     btSpp.send(new byte[] { 0x30}, false);
    //                 btSpp.send("1025",true); //테스트 중 메시지
 //                    Toast.makeText(getApplicationContext()
