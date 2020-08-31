@@ -1,12 +1,6 @@
 package com.example.bulgota;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,19 +10,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Timer;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.CandleData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -37,16 +28,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 import io.realm.Realm;
 
 
 public class DetoxAnalysisActivity extends AppCompatActivity{
-
-    //TODO  상민이 읽어보고 이해안되는 부분 있음 알려줘 ! 가장먼저 읽어볼 것 !
-    //TODO  STEP1. 카운트다운은 내부 SQLITE(DB)에서 적용불가 하기 때문에 삭제함 TEXTVIEW로 대체
-    //TODO  STEP2. DataSendSever에 int timer 클래스 변수가 유지해야함 -> 영현이 서버에 timer 받을 때 INT로 설정되있어서 분석 후 필요한 시간을 STRING 값이랑 INT값 둘 모두 필요함
-    //TODO  STEP3.  해당 액티비에서 내부DB에 저장할 String 시간 값 받아와야함    ->  DB저장하는 .java 클래스 생성   ->   해당 시간 string 변수를 저장할 static scope의 변수에 저장 -> 일반 변수에서는 생명주기가 끝나면 소멸
-    //TODO 이외 부분은 건드릴 필요 없들것 같음 STEP 3부터는 내가 해야되는 부분이니까 신경쓰지 않아도 됨
 
     //시간 저장 플로우 (상민, 정은)
     //상민 : 해독화면에서 해독완료시간정보 값을 주겠습니다. (그 아래에서 내부DB에 저장하는 과정을 실행해주세요.)
@@ -54,8 +45,6 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     //      값으로만 넘겨도 됨 배열 넘길 필요없음, 자리넘김 편하게 할려고 배열형태 만든 것
     //      이 정보를 나중에 맵화면에서 받아와서 상단에 띄울겁니다.
     //      (DB에는 정보를 하나만 저장하자. 현재시간이 시간보다 나중이면 상단 텍스트뷰를 gone으로, 시간보다 전이면 Enable로 하는 식)
-    //
-    //      이해안되는거 바로 전화 ㄱ
 
 
     private LineChart lineChart;
@@ -220,12 +209,6 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         });
 
 
-
-        //TODO 타이머 객체 사용 X
-        //TODO 해당 CUSTOM 객체 삭제해야함 TEXTVIEW로 시간 찍어줄 것임 우선 혹시몰라 주석처리함
-      /*  myTimer = new MyTimer(600000, 1000);
-        myTimer.start();*/
-
         LineData chartData = new LineData();
         // 그래프선언
         entry_chart = new ArrayList<>();
@@ -242,7 +225,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         //차트 설정값 세팅 메서드
 
-        //TODO  알콜농도에서 구한 timer값 string 변수로 변경하는 메서드
+        //  알콜농도에서 구한 timer값 string 변수로 변경하는 메서드
         sTimer =  makeStringTimer(dTime);
     }
 
@@ -345,7 +328,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     }
 
 
-    //TODO 아두이노에서 받아온 알콜농도에서 해독시간까지 걸리는 시간을 string 값으로 변경하는 메서드
+    //아두이노에서 받아온 알콜농도에서 해독시간까지 걸리는 시간을 string 값으로 변경하는 메서드
     private String makeStringTimer(int[] dTime) {
         sTimer = "";
         if(curTime[DTDATE] != dTime[DTDATE]){
@@ -357,24 +340,4 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         return sTimer;
     }
-
-    //TODO 타이머 객체 사용 X
-    //TODO 해당 CUSTOM 객체 삭제해야함 TEXTVIEW로 시간 찍어줄 것임       우선 혹시몰라 주석처리함
-/*    class MyTimer extends CountDownTimer
-    {
-        public MyTimer(long millisInFuture, long countDownInterval)
-        {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-            countTime.setText(millisUntilFinished /3600000 + " 시간 "+millisUntilFinished % 3600000 / 60000 +" 분 " + millisUntilFinished % 60 / 1000 + " 초");
-        }
-
-        @Override
-        public void onFinish() {
-            countTime.setText("0 초");
-        }
-    }*/
 }

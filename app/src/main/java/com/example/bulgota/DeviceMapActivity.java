@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -266,17 +265,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
         mapView.getMapAsync(this::onMapReady);
 
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
-
-
-        //현재시간 변수 값 설정
-//        Calendar cal = Calendar.getInstance();
-//        curTime[CURSECOND] = cal.get(Calendar.SECOND);
-//        curTime[CURMINUTE] = cal.get(Calendar.MINUTE);
-//        curTime[CURHOUR] = cal.get(Calendar.HOUR_OF_DAY); // 24시간 넘어가도 ㄱㅊ
-//        curTime[CURDATE] = cal.get(Calendar.DATE);
-//        curTime[CURMONTH] = cal.get(Calendar.MONDAY) + 1;
-//        curTime[CURYEAR] = cal.get(Calendar.YEAR);
-        //
 
 
         //알람 메세지 클릭 시 map으로 이동 변경(firebasemessageservice)

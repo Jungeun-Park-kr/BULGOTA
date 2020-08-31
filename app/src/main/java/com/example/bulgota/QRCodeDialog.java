@@ -3,15 +3,12 @@ package com.example.bulgota;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.bulgota.api.BullgoTAService;
-import com.example.bulgota.api.RequestReturnModel;
-import com.example.bulgota.api.ResponseReturnModel;
 import com.example.bulgota.api.ResponseSelectModel;
 
 import retrofit2.Call;

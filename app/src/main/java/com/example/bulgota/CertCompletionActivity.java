@@ -1,9 +1,6 @@
 package com.example.bulgota;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,11 +9,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bulgota.api.BullgoTAService;
 import com.example.bulgota.api.ResponseLendModel;
-import com.example.bulgota.api.ResponseSelectModel;
 
 import io.realm.Realm;
 import retrofit2.Call;

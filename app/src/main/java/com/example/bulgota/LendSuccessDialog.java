@@ -2,11 +2,7 @@ package com.example.bulgota;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
 import android.widget.TextView;
-
-import java.util.Timer;
 
 
 public class LendSuccessDialog {
