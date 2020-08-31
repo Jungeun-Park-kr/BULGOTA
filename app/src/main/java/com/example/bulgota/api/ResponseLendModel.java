@@ -4,9 +4,9 @@ public class ResponseLendModel {
     private final int status;
     private final boolean success;
     private final String message;
-    private final Object data;
+    private final LendData data;
 
-    public ResponseLendModel(int status, boolean success, String message, Object data) {
+    public ResponseLendModel(int status, boolean success, String message, LendData data) {
         this.status = status;
         this.success = success;
         this.message = message;
@@ -19,6 +19,6 @@ public class ResponseLendModel {
 
     public String getMessage() { return message; }
 
-    public Object getData() { return data; }
+    public LendData getData() { return data; }
 
 }
