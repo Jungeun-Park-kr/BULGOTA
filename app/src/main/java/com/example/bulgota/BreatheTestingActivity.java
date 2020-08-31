@@ -71,6 +71,14 @@ public class BreatheTestingActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_breathe_testing);
 
+        /*
+        //해독시간 분석 화면 디버깅용
+        dValue = 0.1;
+        Intent intent = new Intent(this,DetoxAnalysisActivity.class);
+        intent.putExtra("bac", dValue);
+        startActivity(intent);
+        //
+        */
 
         lottieBreathTesting = findViewById(R.id.lottie_breathing); //측정중 로띠
         lottieAnalyzing = findViewById(R.id.lottie_analyzing); //분석중 로띠

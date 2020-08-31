@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,7 +39,7 @@ import java.util.Date;
 import io.realm.Realm;
 
 
-public class DetoxAnalysisActivity extends AppCompatActivity{
+public class DetoxAnalysisActivity extends AppCompatActivity implements View.OnClickListener{
 
     //시간 저장 플로우 (상민, 정은)
     //상민 : 해독화면에서 해독완료시간정보 값을 주겠습니다. (그 아래에서 내부DB에 저장하는 과정을 실행해주세요.)
@@ -57,6 +59,8 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
     LinearLayout llState;   //주행가능 여부
 
     ImageView rlAlarm; //주행가능시 알람받기 layout
+
+    ImageButton btnBackToMap;
 
     TextView tvAlcholLevel; //현재 알콜 농도
     TextView tvMystate; //주행 가능 or 불가 텍스트
@@ -104,6 +108,9 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         tvAlcholLevel = findViewById(R.id.tv_alchol_level);
         tvMystate = findViewById(R.id.tv_my_state);
         tvtimer = findViewById(R.id.tv_timer);
+
+        btnBackToMap = findViewById(R.id.btn_back_to_map);
+        btnBackToMap.setOnClickListener(this);
 
         //intent 추가
         Intent intent = getIntent();
@@ -218,10 +225,10 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         //그래프에 들어갈 ArrayList 자료구조 데이터 추가 메서드
 
         LineDataSet lineDataSet = new LineDataSet(entry_chart, "주행 불가능");
-        //LineDataSet lineDataSetEnable = new LineDataSet(entry_chart_enable, "주행 가능");
+        LineDataSet lineDataSetEnable = new LineDataSet(entry_chart_enable, "주행 가능");
 
         chartSetting(lineChart,lineDataSet,chartData, false); // 주행 불가능 시 그래프
-        //chartSetting(lineChart,lineDataSetEnable,chartData, true); // 주행 가능 시 그래프
+        chartSetting(lineChart,lineDataSetEnable,chartData, true); // 주행 가능 시 그래프
 
         //차트 설정값 세팅 메서드
 
@@ -242,25 +249,10 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
     void graphDataAdd(ArrayList<Entry> entry_chart_enable,ArrayList<Entry> entry_chart)
     {
-        int xTime=0;
-        double yBac=bac;
-        while(yBac>=0.0){
-            Entry data = new Entry(xTime++, (float)(yBac));
-            if(yBac >=0.03) {
-                entry_chart.add(data);   //x y 좌표
-            }
-            if(yBac <=0.03){
-                entry_chart_enable.add(data);
-            }
-            yBac-=0.015;
-        }
-        if(yBac > -0.015){
-            yBac += 0.015;
-            Entry data = new Entry(xTime+(float)(yBac/0.015), 0.0f);
-            entry_chart.add(data);
-        }
-        //entry_chart.add(new Entry((float)(bac/0.015 - 2),0.03f));
-        entry_chart_enable.add(new Entry((float)(bac/0.015 - 2),0.03f));
+        entry_chart.add(new Entry(0,(float)bac));
+        entry_chart.add(new Entry((float)((bac-0.02)/0.015),(float)0.02));
+        entry_chart_enable.add(new Entry((float)((bac-0.02)/0.015),(float)0.02));
+        entry_chart_enable.add(new Entry((float)(bac/0.015),0));
     }
 
     void chartSetting(LineChart lineChart,LineDataSet lineDataSet, LineData chartData, boolean isDriveEnable)
@@ -271,6 +263,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         } else { //주행 불가 시 빨강색으로 색
             lineColor = ContextCompat.getColor(getApplicationContext(), R.color.colorWarning);
         }
+
         lineDataSet.setColor(lineColor); //LineChart에서 Line Color 설정
         lineDataSet.setCircleColor(lineColor); // LineChart에서 Line Circle Color 설정
         lineDataSet.setCircleHoleColor(lineColor); // LineChart에서 Line Hole Circle Color 설정
@@ -282,7 +275,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         XAxis xAxis = lineChart.getXAxis(); // x 축 설정
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //x 축 표시에 대한 위치 설정
-        xAxis.setLabelCount(timer / 60 / 60 +1, true); //X축의 데이터를 최대 몇개 까지 나타낼지에 대한 설정 5개 force가 true 이면 반드시 보여줌
+        xAxis.setLabelCount(timer / 60 / 60 + 1, true); //X축의 데이터를 최대 몇개 까지 나타낼지에 대한 설정 현재 0~해독시간 까지 (ex 6시간이면 0부터 6까지 7개)
         xAxis.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)); // X축 텍스트컬러설정
         xAxis.setGridColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)); // X축 줄의 컬러 설정
         xAxis.setAxisMinValue(0.0f);
@@ -300,8 +293,8 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         //y축의 활성화를 제거함
 
         Description description = new Description();
-        description.setTextSize(12);
-        description.setText("predicted by Withmark.");
+        description.setTextSize(13);
+        description.setText("예상 해독시간 (HOUR)   ");
         lineChart.setDescription(description); //오른쪽 하단에 description 설정
 
 
@@ -318,7 +311,7 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
 
         //추가코드
         lineDataSet.setDrawFilled(true);
-        //lineDataSet.setFillColor(lineColor);
+        lineDataSet.setFillColor(lineColor);
         //색채우기
         lineDataSet.setDrawValues(false);
 
@@ -339,5 +332,15 @@ public class DetoxAnalysisActivity extends AppCompatActivity{
         sTimer += dTime[DTMINUTE] + "분 입니다.";
 
         return sTimer;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == btnBackToMap){
+            Intent intent = new Intent(getApplicationContext(), DeviceMapActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
     }
 }

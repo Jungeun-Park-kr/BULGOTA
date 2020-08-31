@@ -26,7 +26,9 @@
 
         <activity android:name=".CertCompletionActivity"></activity>
         <activity android:name=".QRCodeScanActivity" />
-        <activity android:name=".DetoxAnalysisActivity" />
+        <activity
+            android:launchMode="singleTop"
+            android:name=".DetoxAnalysisActivity" />
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
