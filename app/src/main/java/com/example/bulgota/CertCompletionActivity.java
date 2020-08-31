@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bulgota.api.BullgoTAService;
+import com.example.bulgota.api.LendData;
 import com.example.bulgota.api.ResponseLendModel;
 
 import io.realm.Realm;
@@ -29,6 +30,7 @@ public class CertCompletionActivity extends AppCompatActivity {
 
     private String modelName;
     private String lendTime;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +74,20 @@ public class CertCompletionActivity extends AppCompatActivity {
                         if (response.body().getSuccess()) {
                             //대여 성공
 
-                            Object data = response.body().getData();
-                            lendTime = data.toString();
+                            LendData data = response.body().getData();
+                            lendTime = data.getLendTime();
+                            password = data.getPassword();
 
                             LendSuccessDialog lendSuccessDialog = new LendSuccessDialog(CertCompletionActivity.this);
-                            lendSuccessDialog.setLendSuccessDialog(modelName, lendTime);
+                            lendSuccessDialog.setLendSuccessDialog(modelName, lendTime, password);
+                            lendSuccessDialog.setDialogListener(new LendSuccessDialog.LendSuccessDialogListener() {
+                                @Override
+                                public void onOKClicked() {
+                                    Intent intent = new Intent(CertCompletionActivity.this, DeviceMapActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
                         } else {
                             //대여 실패
                             LendFailDialog lendFailDialog = new LendFailDialog(CertCompletionActivity.this);

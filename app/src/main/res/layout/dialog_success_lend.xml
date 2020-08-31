@@ -15,6 +15,48 @@
         android:layout_marginTop="15dp"
         app:srcCompat="@drawable/main_icon" />
 
+    <TextView
+        android:id="@+id/tv_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/nanum_square_round_bold"
+        android:gravity="center"
+        android:text="BGT_001 모델의 자물쇠 비밀번호는"
+        android:textColor="@color/colorText"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_pwd_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:gravity="center"
+            android:text="1234"
+            android:textColor="@color/colorText"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_pw_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:fontFamily="@font/nanum_square_round_bold"
+            android:gravity="center"
+            android:text="입니다."
+            android:textColor="@color/colorText"
+            android:textSize="12sp" />
+    </LinearLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +69,7 @@
             android:layout_height="10dp"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/rec_corner_box" />
@@ -75,15 +117,15 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/tv_thanks"
+        android:id="@+id/tv_ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         android:fontFamily="@font/nanum_square_round_bold"
         android:gravity="center"
-        android:text="불고타를 이용해주셔서 감사합니다"
+        android:text="확인"
         android:textColor="@color/colorPrimary"
         android:textSize="12sp" />
 
