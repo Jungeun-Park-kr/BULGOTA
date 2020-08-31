@@ -80,6 +80,14 @@ public class CertCompletionActivity extends AppCompatActivity {
 
                             LendSuccessDialog lendSuccessDialog = new LendSuccessDialog(CertCompletionActivity.this);
                             lendSuccessDialog.setLendSuccessDialog(modelName, lendTime, password);
+                            lendSuccessDialog.setDialogListener(new LendSuccessDialog.LendSuccessDialogListener() {
+                                @Override
+                                public void onOKClicked() {
+                                    Intent intent = new Intent(CertCompletionActivity.this, DeviceMapActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
                         } else {
                             //대여 실패
                             LendFailDialog lendFailDialog = new LendFailDialog(CertCompletionActivity.this);
