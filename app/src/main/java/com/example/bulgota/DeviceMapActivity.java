@@ -151,7 +151,6 @@ public class DeviceMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         setContentView(R.layout.activity_device_map);
 
-
         //퍼미션 확인
         if (DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 && (DeviceMapActivity.checkPermissions(this, Manifest.permission.ACCESS_COARSE_LOCATION))
